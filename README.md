@@ -3,6 +3,11 @@
 Two products, one operator: a shipped, revenue-facing SaaS (**Ran-Tevu**) and the deeper agentic
 research platform it's growing into (**OmniOS**, see [`omnios/`](./omnios)).
 
+> **On language:** these READMEs are in English. Code (function/variable names, architecture) is
+> English throughout. The patient- and doctor-facing product screens, and some code comments, are
+> in Greek — the real target market — because this is live software real Greek clinics use today,
+> not a demo dressed up for review.
+
 ---
 
 # Ran-Tevu

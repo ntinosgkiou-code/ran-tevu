@@ -9,6 +9,11 @@ when unsure** — no "0% hallucination" theater. An autopilot proposes no-show r
 actions for a clinician to approve; every decision is written to a tamper-evident, Merkle-anchored
 audit log any clinic can independently verify.
 
+> **On language:** this README is in English, and code (function/variable names, architecture) is
+> English throughout. Clinical note content, some code comments, and the gate/UI copy are Greek —
+> the actual target market — since this is a real system for Greek clinics, not an English-only
+> demo build.
+
 ## Architecture
 
 ```
