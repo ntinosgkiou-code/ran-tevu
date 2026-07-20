@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Ετοιμότητα & Σύνδεση Ιατρείου — Ran-Tevu</title>
+<style>
+  :root{--bg:#0a0a0f;--surface:#111827;--surface2:#1b2433;--border:rgba(255,255,255,.08);
+    --text:#e5e7eb;--muted:#9ca3af;--primary:#7c3aed;--gold:#fbbf24;--ok:#10b981;--bad:#ef4444;--blue:#60a5fa;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,system-ui,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);padding:22px;line-height:1.5}
+  .wrap{max-width:860px;margin:0 auto}
+  h1{color:#fff;font-size:24px;font-weight:800;margin-bottom:2px}
+  .sub{color:var(--muted);font-size:14px;margin-bottom:20px}
+  .gate{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px;text-align:center}
+  .gate input{background:#0b1220;border:1px solid var(--border);color:#fff;padding:10px 14px;border-radius:9px;width:260px;max-width:100%;font-size:14px}
+  .gate button,.btn{background:var(--primary);color:#fff;border:0;padding:10px 18px;border-radius:9px;font-weight:700;cursor:pointer;font-size:14px;font-family:inherit}
+  .btn.ghost{background:var(--surface2);border:1px solid var(--border)}
+  /* readiness banner */
+  .banner{border-radius:16px;padding:20px 22px;margin-bottom:18px;border:1px solid var(--border)}
+  .banner.good{background:linear-gradient(120deg,rgba(16,185,129,.14),transparent 70%),var(--surface)}
+  .banner.warn{background:linear-gradient(120deg,rgba(251,191,36,.14),transparent 70%),var(--surface)}
+  .banner h2{font-size:20px;color:#fff;margin-bottom:6px}
+  .banner .score{font-size:13px;color:var(--muted)}
+  .works{margin-top:14px;display:grid;gap:6px}
+  .works div{font-size:13.5px;color:#cbd5e1;display:flex;gap:8px;align-items:flex-start}
+  .works div::before{content:"✓";color:var(--ok);font-weight:800}
+  .sec-title{font-size:13px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:var(--muted);margin:22px 0 10px}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:13px;padding:15px 16px;margin-bottom:11px}
+  .card.miss{border-color:rgba(239,68,68,.35)}
+  .row{display:flex;gap:13px;align-items:flex-start}
+  .ic{font-size:27px;line-height:1}
+  .nm{font-weight:800;color:#fff;font-size:15.5px}
+  .unlocks{color:var(--muted);font-size:13px;margin-top:3px}
+  .badge{margin-left:auto;padding:4px 11px;border-radius:100px;font-size:11px;font-weight:800;white-space:nowrap;height:fit-content}
+  .badge.ok{background:rgba(16,185,129,.15);color:var(--ok)}
+  .badge.miss{background:rgba(239,68,68,.15);color:var(--bad)}
+  .how-btn{margin-top:10px;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:7px 12px;border-radius:8px;cursor:pointer;font-size:12px;font-family:inherit}
+  .how{display:none;background:#0b1220;border:1px solid var(--border);border-radius:9px;padding:13px;margin-top:10px;font-size:13px;color:#cbd5e1}
+  .how.show{display:block}
+  .how code{background:#1f2937;color:var(--gold);padding:1px 6px;border-radius:5px;font-size:12px}
+  .how a{color:var(--gold)}
+  .envrow{margin-top:9px;display:flex;flex-wrap:wrap;gap:6px}
+  .env{background:#1f2937;color:var(--blue);font-family:ui-monospace,monospace;font-size:11.5px;padding:3px 8px;border-radius:6px}
+  /* connect */
+  .connect{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-top:26px}
+  .connect h3{color:#fff;font-size:17px;margin-bottom:4px}
+  .connect .f{display:grid;gap:10px;margin-top:13px}
+  .connect input,.connect select{background:#0b1220;border:1px solid var(--border);color:#fff;padding:10px 12px;border-radius:9px;font-size:14px;width:100%;font-family:inherit}
+  .links{margin-top:14px;display:none;gap:9px;grid-template-columns:1fr}
+  .links.show{display:grid}
+  .lk{background:#0b1220;border:1px solid var(--border);border-radius:9px;padding:11px 12px}
+  .lk .t{font-size:12px;color:var(--muted);margin-bottom:4px}
+  .lk .u{display:flex;gap:8px;align-items:center}
+  .lk .u input{flex:1;background:transparent;border:0;color:var(--gold);font-size:12.5px;font-family:ui-monospace,monospace;padding:0}
+  .cp{background:var(--surface2);border:1px solid var(--border);color:#fff;padding:5px 10px;border-radius:7px;cursor:pointer;font-size:11px;white-space:nowrap}
+  .msg{margin-top:10px;font-size:13px}
+  .msg.err{color:var(--bad)} .msg.ok{color:var(--ok)}
+  .hint{font-size:12px;color:var(--muted);margin-top:6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>🚦 Ετοιμότητα & Σύνδεση Ιατρείου</h1>
+  <div class="sub">Δες με μια ματιά τι είναι έτοιμο, τι λείπει, και σύνδεσε νέο γιατρό — χωρίς να ξέρεις κώδικα.</div>
+
+  <div id="gate" class="gate">
+    <p style="margin-bottom:12px;color:var(--muted)">Βάλε τον admin κωδικό σου για να δεις τον πίνακα:</p>
+    <input id="tok" type="password" placeholder="admin token" />
+    <div style="margin-top:12px"><button onclick="saveTok()">Σύνδεση</button></div>
+    <p id="gerr" class="msg err" style="display:none"></p>
+  </div>
+
+  <div id="app" style="display:none">
+    <div id="banner"></div>
+    <div id="core"></div>
+    <div id="billing"></div>
+    <div id="channel"></div>
+
+    <div class="connect">
+      <h3>➕ Σύνδεσε νέο ιατρείο</h3>
+      <p class="sub" style="margin:0">Στήνει ΚΑΘΑΡΟ ιατρείο (μηδέν ψεύτικα νούμερα) και σου δίνει τα 4 links να στείλεις στον γιατρό.</p>
+      <div class="f">
+        <input id="c_name" placeholder="Όνομα ιατρείου (π.χ. Ιατρείο Δρ. Παπαδόπουλου)" />
+        <select id="c_vertical">
+          <option value="medical">Ιατρός / Ιατρείο</option>
+          <option value="dental">Οδοντίατρος</option>
+          <option value="dermatology">Δερματολόγος</option>
+          <option value="physio">Φυσικοθεραπευτής</option>
+        </select>
+        <input id="c_email" placeholder="Email γιατρού (προαιρετικό — για αυτόματο welcome email)" />
+        <button class="btn" onclick="connectClinic()">Στήσε το ιατρείο →</button>
+      </div>
+      <div id="c_links" class="links"></div>
+      <div id="c_msg" class="msg"></div>
+      <p class="hint">Έχασε ο γιατρός το email; Βάλε το slug του και πάτα «Ξαναδώσε links».</p>
+      <div class="f" style="grid-template-columns:1fr auto;margin-top:8px">
+        <input id="r_slug" placeholder="slug υπάρχοντος ιατρείου (π.χ. iatreio-papadopoulou)" />
+        <button class="btn ghost" onclick="resendLinks()">Ξαναδώσε links</button>
+      </div>
+
+      <p class="hint" style="margin-top:16px">🎙️ <b>Ενεργοποίηση φωνής (Vapi)</b> για ιατρείο — χρειάζεται πρώτα VAPI_API_KEY + ElevenLabs (δες πιο πάνω). Το «αγορά νέου νούμερου» <b>ξοδεύει λεφτά</b> στο Twilio.</p>
+      <div class="f" style="grid-template-columns:1fr auto;margin-top:6px">
+        <input id="v_slug" placeholder="slug ιατρείου για ενεργοποίηση φωνής" />
+        <button class="btn ghost" onclick="provisionVoice()">🎙️ Ενεργοποίησε φωνή</button>
+      </div>
+      <label class="hint" style="display:flex;gap:7px;align-items:center;margin-top:6px;cursor:pointer">
+        <input id="v_buy" type="checkbox" style="width:auto"/> Αγόρασε νέο <b>ελληνικό (+30)</b> νούμερο (κόστος Twilio)
+      </label>
+      <div class="f" style="grid-template-columns:auto 1fr;align-items:center;gap:8px;margin-top:6px">
+        <span class="hint" style="margin:0">Περιοχή νούμερου:</span>
+        <select id="v_area">
+          <option value="21">Αθήνα (+30 21…)</option>
+          <option value="2310">Θεσσαλονίκη (+30 2310…)</option>
+          <option value="281">Ηράκλειο (+30 281…)</option>
+          <option value="2831">Ρέθυμνο (+30 2831…)</option>
+          <option value="261">Πάτρα (+30 261…)</option>
+        </select>
+      </div>
+      <div id="v_msg" class="msg"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+let TOKEN = new URLSearchParams(location.search).get("token") || localStorage.getItem("admin_token") || "";
+const H = () => ({ "Authorization": "Bearer " + TOKEN });
+const esc = s => (s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+
+function saveTok(){ TOKEN = document.getElementById("tok").value.trim(); if(TOKEN){ localStorage.setItem("admin_token",TOKEN); load(); } }
+
+const GROUPS = {
+  core:    { el:"core",    title:"🔴 Βασικά — υποχρεωτικά για να πουλήσεις" },
+  billing: { el:"billing", title:"💳 Για να πληρώνεσαι εσύ" },
+  channel: { el:"channel", title:"📢 Επιπλέον κανάλια — προαιρετικά (αυξάνουν την αξία)" },
+};
+
+function card(it){
+  const ok = it.configured;
+  const envs = (it.env||[]).map(e=>`<span class="env">${esc(e)}</span>`).join("");
+  const link = it.get_url ? `<div style="margin-top:9px"><a href="${esc(it.get_url)}" target="_blank" rel="noopener">➜ Άνοιξε τη σελίδα του λογαριασμού</a></div>` : "";
+  return `<div class="card ${ok?'':'miss'}">
+    <div class="row">
+      <div class="ic">${it.icon}</div>
+      <div style="flex:1">
+        <div class="nm">${esc(it.label)}</div>
+        <div class="unlocks">${esc(it.unlocks)}</div>
+      </div>
+      <span class="badge ${ok?'ok':'miss'}">${ok?'✓ Ρυθμισμένο':'✕ Λείπει'}</span>
+    </div>
+    <button class="how-btn" onclick="this.nextElementSibling.classList.toggle('show')">${ok?'⚙️ Λεπτομέρειες':'📋 Πώς το βάζω;'}</button>
+    <div class="how">
+      <div>${esc(it.how)}</div>
+      <div class="envrow">${envs}</div>
+      ${link}
+    </div>
+  </div>`;
+}
+
+async function load(){
+  let data;
+  try{
+    const r = await fetch("/api/admin/integrations/status",{ headers:H() });
+    if(r.status===401){ gerr("Λάθος admin token."); return; }
+    data = await r.json();
+  }catch(e){ gerr("Πρόβλημα σύνδεσης: "+e); return; }
+  const rep = data.readiness; if(!rep){ gerr("Δεν ήρθε ο πίνακας ετοιμότητας."); return; }
+  document.getElementById("gate").style.display="none";
+  document.getElementById("app").style.display="block";
+
+  const s = rep.summary, good = s.sellable;
+  const missing = s.core_total - s.core_ready;
+  document.getElementById("banner").innerHTML = `
+    <div class="banner ${good?'good':'warn'}">
+      <h2>${good?'✅ Έτοιμο να το δείξεις σε γιατρό':'⚠️ Λείπουν '+missing+' βασικά πριν πουλήσεις'}</h2>
+      <div class="score">Βασικά κλειδιά: <b style="color:${good?'var(--ok)':'var(--gold)'}">${s.core_ready}/${s.core_total}</b> ρυθμισμένα${rep.on_railway?'':' · (τοπικό — τα νούμερα ισχύουν στο Railway)'}</div>
+      <div class="works">${(s.works_now||[]).map(w=>`<div>${esc(w)}</div>`).join("")}</div>
+    </div>`;
+
+  for(const g of Object.keys(GROUPS)){
+    const its = rep.items.filter(i=>i.group===g);
+    document.getElementById(GROUPS[g].el).innerHTML =
+      `<div class="sec-title">${GROUPS[g].title}</div>` + its.map(card).join("");
+  }
+}
+
+function gerr(m){ const e=document.getElementById("gerr"); e.textContent=m; e.style.display="block"; }
+
+async function connectClinic(){
+  const name=document.getElementById("c_name").value.trim();
+  const vertical=document.getElementById("c_vertical").value;
+  const email=document.getElementById("c_email").value.trim();
+  const msg=document.getElementById("c_msg"); const box=document.getElementById("c_links");
+  if(!name){ msg.className="msg err"; msg.textContent="Βάλε όνομα ιατρείου."; return; }
+  msg.className="msg"; msg.textContent="Στήνω το ιατρείο…"; box.classList.remove("show");
+  const q=new URLSearchParams({token:TOKEN,name,vertical}); if(email) q.set("email",email);
+  try{
+    const r=await fetch("/api/admin/setup-customer?"+q.toString());
+    const d=await r.json();
+    if(!d.ok){ msg.className="msg err"; msg.textContent="Σφάλμα: "+(d.error||"άγνωστο"); return; }
+    showLinks(d["ΣΤΗΣΙΜΟ_ΠΕΛΑΤΗ"]||d.links, d.welcome_email_sent);
+    msg.className="msg ok"; msg.textContent="✅ Έτοιμο! slug: "+d.slug+(d.welcome_email_sent?" · welcome email στάλθηκε":"");
+  }catch(e){ msg.className="msg err"; msg.textContent="Πρόβλημα: "+e; }
+}
+
+async function resendLinks(){
+  const slug=document.getElementById("r_slug").value.trim();
+  const msg=document.getElementById("c_msg"); const box=document.getElementById("c_links");
+  if(!slug){ msg.className="msg err"; msg.textContent="Βάλε slug."; return; }
+  msg.className="msg"; msg.textContent="Φέρνω τα links…"; box.classList.remove("show");
+  try{
+    const r=await fetch("/api/admin/resend-links?"+new URLSearchParams({token:TOKEN,slug}).toString());
+    const d=await r.json();
+    if(!d.ok){ msg.className="msg err"; msg.textContent="Σφάλμα: "+(d.error||"άγνωστο"); return; }
+    showLinks(d.links,false);
+    msg.className="msg ok"; msg.textContent="✅ Τα links του "+slug+" — αντίγραψέ τα και στείλ' τα.";
+  }catch(e){ msg.className="msg err"; msg.textContent="Πρόβλημα: "+e; }
+}
+
+async function provisionVoice(){
+  const slug=document.getElementById("v_slug").value.trim();
+  const buy=document.getElementById("v_buy").checked;
+  const msg=document.getElementById("v_msg");
+  if(!slug){ msg.className="msg err"; msg.textContent="Βάλε slug."; return; }
+  msg.className="msg"; msg.textContent="Ενεργοποιώ φωνή…";
+  const area=document.getElementById("v_area").value;
+  const q=new URLSearchParams({token:TOKEN,slug,area_code:area}); if(buy) q.set("purchase","1");
+  try{
+    const r=await fetch("/api/admin/provision-voice?"+q.toString());
+    const d=await r.json();
+    if(!d.ok){ msg.className="msg err"; msg.textContent=(d.error||"σφάλμα")+(d.how?" — "+d.how:""); return; }
+    msg.className="msg ok"; msg.textContent="✅ "+(d.next||("Φωνή ενεργή. Νούμερο: "+(d.voice_number||"—")));
+  }catch(e){ msg.className="msg err"; msg.textContent="Πρόβλημα: "+e; }
+}
+
+function showLinks(links, emailed){
+  const box=document.getElementById("c_links");
+  const map=[
+    ["1) Ρύθμιση ωρών & υπηρεσιών (στείλ' το πρώτο στον γιατρό)", links["1_setup_ωρες_υπηρεσιες"]||links.setup],
+    ["2) Back-office / Γραμματέας", links["2_back_office_γραμματεας"]||links.back_office],
+    ["3) Dashboard / Έσοδα", links["3_dashboard_εσοδα"]||links.dashboard],
+    ["4) Σελίδα κράτησης ασθενή", links["4_chat_ασθενη"]||links.chat],
+  ];
+  box.innerHTML = map.filter(m=>m[1]).map(m=>`
+    <div class="lk"><div class="t">${esc(m[0])}</div>
+      <div class="u"><input readonly value="${esc(m[1])}" onclick="this.select()"/>
+        <button class="cp" onclick="navigator.clipboard.writeText('${esc(m[1])}');this.textContent='✓'">Αντιγραφή</button></div>
+    </div>`).join("");
+  box.classList.add("show");
+}
+
+if(TOKEN){ document.getElementById("tok") && (document.getElementById("tok").value=TOKEN); load(); }
+</script>
+</body>
+</html>

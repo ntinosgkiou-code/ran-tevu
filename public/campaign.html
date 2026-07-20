@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cold Email Campaign — Admin</title>
+<style>
+  :root { --primary:#7C3AED; --primary-dark:#5B21B6; --text:#111827; --text-muted:#6B7280; --border:#E5E7EB; --bg:#F9FAFB; --success:#10B981; --error:#EF4444; --warn:#F59E0B; }
+  *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; color:var(--text); background:var(--bg); padding:24px; }
+  .container { max-width:1080px; margin:0 auto; }
+  h1 { font-size:26px; font-weight:800; letter-spacing:-.5px; margin-bottom:24px; }
+
+  .auth-box { background:#fff; border-radius:14px; padding:24px; box-shadow:0 2px 8px rgba(0,0,0,.04); max-width:420px; margin:0 auto; }
+  .auth-box h2 { font-size:18px; margin-bottom:14px; }
+  .auth-box input { width:100%; padding:12px 14px; border:1.5px solid var(--border); border-radius:10px; font-size:14px; font-family:inherit; outline:none; }
+  .auth-box input:focus { border-color:var(--primary); }
+  .auth-box button { margin-top:12px; width:100%; background:var(--primary); color:#fff; padding:12px; border:none; border-radius:10px; font-size:14px; font-weight:600; cursor:pointer; }
+
+  .grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:24px; }
+  @media(max-width:720px){ .grid{grid-template-columns:repeat(2,1fr);} }
+  .stat { background:#fff; padding:18px; border-radius:14px; box-shadow:0 2px 8px rgba(0,0,0,.04); }
+  .stat .label { font-size:12px; color:var(--text-muted); text-transform:uppercase; letter-spacing:.5px; margin-bottom:6px; }
+  .stat .value { font-size:28px; font-weight:800; }
+  .stat.ok .value { color:var(--success); }
+  .stat.warn .value { color:var(--warn); }
+  .stat.err .value { color:var(--error); }
+
+  .panel { background:#fff; padding:24px; border-radius:14px; box-shadow:0 2px 8px rgba(0,0,0,.04); margin-bottom:20px; }
+  .panel h2 { font-size:16px; font-weight:700; margin-bottom:16px; }
+
+  .row { display:flex; gap:12px; flex-wrap:wrap; align-items:end; }
+  .field { flex:1; min-width:120px; }
+  .field label { display:block; font-size:12px; color:var(--text-muted); margin-bottom:6px; font-weight:500; }
+  .field select, .field input { width:100%; padding:10px 12px; border:1.5px solid var(--border); border-radius:8px; font-size:14px; font-family:inherit; outline:none; background:#fff; }
+  .field select:focus, .field input:focus { border-color:var(--primary); }
+
+  button.btn { background:var(--primary); color:#fff; padding:11px 22px; border:none; border-radius:8px; font-size:14px; font-weight:600; cursor:pointer; font-family:inherit; }
+  button.btn:hover { background:var(--primary-dark); }
+  button.btn:disabled { opacity:.5; cursor:not-allowed; }
+  button.btn.ghost { background:transparent; color:var(--primary); border:1.5px solid var(--primary); }
+
+  .result { margin-top:16px; padding:14px; background:var(--bg); border-radius:10px; font-size:13px; font-family:monospace; white-space:pre-wrap; max-height:300px; overflow:auto; }
+
+  table { width:100%; border-collapse:collapse; font-size:13px; }
+  th { text-align:left; padding:10px 8px; border-bottom:1px solid var(--border); font-size:11px; color:var(--text-muted); text-transform:uppercase; letter-spacing:.5px; }
+  td { padding:10px 8px; border-bottom:1px solid var(--border); color:#374151; }
+  td.email { font-family:monospace; }
+  .badge { display:inline-block; padding:3px 8px; border-radius:6px; font-size:11px; font-weight:600; }
+  .badge.link { background:#EDE9FE; color:var(--primary); }
+  .empty { text-align:center; padding:40px 20px; color:var(--text-muted); font-size:14px; }
+  .warn { background:#FEF3C7; border-left:3px solid var(--warn); padding:12px 14px; border-radius:8px; font-size:13px; color:#92400E; margin-bottom:14px; }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>📧 Cold Email Campaign</h1>
+
+  <div id="authBox" class="auth-box">
+    <h2>Admin Token</h2>
+    <input type="password" id="tokenInput" placeholder="ADMIN_TOKEN" autofocus>
+    <button onclick="login()">Σύνδεση</button>
+  </div>
+
+  <div id="dashboard" style="display:none;">
+
+    <div class="grid">
+      <div class="stat ok"><div class="label">Σταλμένα</div><div class="value" id="sentCount">—</div></div>
+      <div class="stat"><div class="label">Σύνολο leads</div><div class="value" id="totalLeads">—</div></div>
+      <div class="stat warn"><div class="label">Διαθέσιμα</div><div class="value" id="eligibleCount">—</div></div>
+      <div class="stat err"><div class="label">Διαγραφές</div><div class="value" id="unsubCount">—</div></div>
+    </div>
+
+    <div class="panel">
+      <h2>Αποστολή batch</h2>
+      <div class="warn">⚠️ Στέλνει emails ΑΜΕΣΩΣ. Default: 50 emails. Resend free plan: 100/μέρα — μην ξεπεράσεις.</div>
+      <div class="row">
+        <div class="field">
+          <label>Λίστα</label>
+          <select id="listSelect">
+            <option value="leads.csv">leads.csv (υγεία)</option>
+            <option value="leads2.csv">leads2.csv (beauty/fitness/restaurant)</option>
+            <option value="leads_quality.csv">leads_quality.csv (quality picks)</option>
+          </select>
+        </div>
+        <div class="field"><label>Offset</label><input type="number" id="offsetInput" value="0" min="0"></div>
+        <div class="field"><label>Limit (max 100)</label><input type="number" id="limitInput" value="50" min="1" max="100"></div>
+        <div><button class="btn" id="sendBtn" onclick="sendBatch()">Αποστολή</button></div>
+        <div><button class="btn ghost" onclick="loadStats()">Ανανέωση</button></div>
+      </div>
+      <div id="result" class="result" style="display:none;"></div>
+    </div>
+
+    <div class="panel">
+      <h2>Διαγραφές (<span id="unsubTotal">0</span>)</h2>
+      <div id="unsubList">
+        <div class="empty">Φόρτωση…</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+let TOKEN = '';
+
+function login() {
+  const t = document.getElementById('tokenInput').value.trim();
+  if (!t) return;
+  TOKEN = t;
+  sessionStorage.setItem('admin_token', t);
+  document.getElementById('authBox').style.display = 'none';
+  document.getElementById('dashboard').style.display = 'block';
+  loadStats();
+}
+
+async function loadStats() {
+  try {
+    const r = await fetch(`/api/admin/campaign/stats?token=${encodeURIComponent(TOKEN)}`);
+    if (r.status === 403) {
+      alert('Λάθος token.');
+      sessionStorage.removeItem('admin_token');
+      location.reload();
+      return;
+    }
+    const d = await r.json();
+    document.getElementById('sentCount').textContent  = d.total_sent || 0;
+    document.getElementById('unsubCount').textContent = d.unsubscribe_count || 0;
+    document.getElementById('unsubTotal').textContent = d.unsubscribe_count || 0;
+    renderUnsubs(d.unsubscribes || []);
+  } catch (e) { alert('Σφάλμα: '+e); }
+}
+
+function renderUnsubs(list) {
+  const wrap = document.getElementById('unsubList');
+  if (!list.length) { wrap.innerHTML = '<div class="empty">Καμία διαγραφή ακόμα.</div>'; return; }
+  let html = '<table><thead><tr><th>Email</th><th>Πηγή</th><th>Ημ/νία</th></tr></thead><tbody>';
+  for (const u of list) {
+    html += `<tr><td class="email">${u.email}</td><td><span class="badge link">${u.source||'link'}</span></td><td>${u.created_at}</td></tr>`;
+  }
+  html += '</tbody></table>';
+  wrap.innerHTML = html;
+}
+
+async function sendBatch() {
+  const list   = document.getElementById('listSelect').value;
+  const offset = parseInt(document.getElementById('offsetInput').value || '0');
+  const limit  = parseInt(document.getElementById('limitInput').value || '50');
+  if (!confirm(`Στείλε ${limit} emails από ${list} (offset ${offset});`)) return;
+
+  const btn = document.getElementById('sendBtn');
+  btn.disabled = true;
+  btn.textContent = 'Αποστολή…';
+  const res = document.getElementById('result');
+  res.style.display = 'block';
+  res.textContent = 'Σε εξέλιξη… (μπορεί να πάρει 30-60δ)';
+
+  try {
+    const r = await fetch(`/api/admin/campaign?token=${encodeURIComponent(TOKEN)}&list=${list}&offset=${offset}&limit=${limit}`);
+    const d = await r.json();
+    res.textContent = JSON.stringify(d, null, 2);
+    document.getElementById('totalLeads').textContent    = d.total_leads || '—';
+    document.getElementById('eligibleCount').textContent = d.eligible    || '—';
+    document.getElementById('sentCount').textContent     = d.total_sent_alltime || 0;
+    if (d.sent_now) document.getElementById('offsetInput').value = offset + d.sent_now;
+  } catch (e) {
+    res.textContent = 'Σφάλμα: '+e;
+  }
+  btn.disabled = false;
+  btn.textContent = 'Αποστολή';
+  loadStats();
+}
+
+// auto-login αν έχουμε token
+const saved = sessionStorage.getItem('admin_token');
+if (saved) { document.getElementById('tokenInput').value = saved; login(); }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ran-Tevu · Growth Engine</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #f5f5f7;
+    color: #1a1a2e;
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+  header {
+    background: linear-gradient(135deg, #1a1a2e 0%, #4a148c 100%);
+    color: white;
+    padding: 24px 32px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  header h1 { font-size: 22px; margin-bottom: 4px; }
+  header p { font-size: 13px; opacity: 0.85; }
+
+  .container { max-width: 1280px; margin: 0 auto; padding: 24px 32px; }
+
+  .auth-bar {
+    background: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+  .auth-bar label { font-size: 13px; color: #666; }
+  .auth-bar input {
+    flex: 1; padding: 8px 12px; border: 1px solid #ddd;
+    border-radius: 6px; font-size: 13px; font-family: monospace;
+  }
+  .auth-bar button {
+    padding: 8px 16px; background: #1a1a2e; color: white;
+    border: none; border-radius: 6px; cursor: pointer; font-size: 13px;
+  }
+
+  .tabs {
+    display: flex; gap: 4px; margin-bottom: 20px;
+    border-bottom: 2px solid #e0e0e0;
+  }
+  .tab {
+    padding: 10px 20px; cursor: pointer;
+    background: transparent; border: none; font-size: 14px;
+    color: #666; border-bottom: 3px solid transparent;
+    margin-bottom: -2px; font-weight: 500;
+  }
+  .tab.active { color: #1a1a2e; border-bottom-color: #4a148c; }
+  .tab .badge {
+    background: #dc2626; color: white; font-size: 11px;
+    padding: 2px 7px; border-radius: 10px; margin-left: 6px;
+  }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px; margin-bottom: 24px;
+  }
+  .stat-card {
+    background: white; padding: 16px 20px;
+    border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+  .stat-card .label { font-size: 12px; color: #666; text-transform: uppercase; letter-spacing: 0.5px; }
+  .stat-card .value { font-size: 28px; font-weight: 600; margin-top: 4px; color: #1a1a2e; }
+  .stat-card .delta { font-size: 12px; color: #16a34a; margin-top: 2px; }
+
+  .filters { display: flex; gap: 8px; margin-bottom: 16px; }
+  .filters select, .filters button {
+    padding: 8px 14px; border: 1px solid #ddd; border-radius: 6px;
+    background: white; font-size: 13px; cursor: pointer;
+  }
+  .filters button.primary { background: #4a148c; color: white; border-color: #4a148c; }
+
+  .post-card {
+    background: white; padding: 20px;
+    border-radius: 10px; margin-bottom: 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+  .post-meta {
+    display: flex; gap: 8px; align-items: center;
+    margin-bottom: 12px; font-size: 12px; color: #666;
+  }
+  .pill {
+    padding: 3px 10px; border-radius: 12px; font-size: 11px;
+    font-weight: 600; text-transform: uppercase;
+  }
+  .pill.linkedin { background: #e1f5fe; color: #0277bd; }
+  .pill.instagram { background: #fce4ec; color: #c2185b; }
+  .pill.facebook { background: #e8eaf6; color: #283593; }
+  .pill.gr { background: #f0f0f0; color: #555; }
+  .pill.en { background: #fff3e0; color: #e65100; }
+
+  .post-body {
+    white-space: pre-wrap; font-size: 14px; line-height: 1.6;
+    margin: 12px 0; color: #1a1a2e;
+  }
+  .post-body[contenteditable="true"] {
+    border: 2px solid #4a148c; padding: 12px; border-radius: 6px;
+    outline: none; background: #faf8ff;
+  }
+  .post-hashtags { font-size: 12px; color: #4a148c; margin-bottom: 12px; }
+  .post-cta {
+    font-size: 12px; color: #666; margin-bottom: 12px;
+    background: #f8f9fa; padding: 6px 10px; border-radius: 4px;
+    display: inline-block;
+  }
+
+  .post-actions { display: flex; gap: 8px; margin-top: 12px; }
+  .post-actions button {
+    padding: 8px 16px; border: none; border-radius: 6px;
+    cursor: pointer; font-size: 13px; font-weight: 500;
+  }
+  .btn-approve { background: #16a34a; color: white; }
+  .btn-reject { background: #dc2626; color: white; }
+  .btn-edit { background: #1d4ed8; color: white; }
+  .btn-publish { background: #4a148c; color: white; }
+  .btn-cancel { background: #999; color: white; }
+
+  .empty {
+    text-align: center; padding: 40px 20px; color: #666;
+    background: white; border-radius: 8px;
+  }
+
+  .toast {
+    position: fixed; bottom: 24px; right: 24px;
+    background: #1a1a2e; color: white;
+    padding: 12px 20px; border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    transform: translateY(100px); transition: transform 0.3s;
+  }
+  .toast.show { transform: translateY(0); }
+  .toast.error { background: #dc2626; }
+  .toast.success { background: #16a34a; }
+
+  .quick-actions {
+    background: white; padding: 16px 20px;
+    border-radius: 8px; margin-bottom: 20px;
+    display: flex; gap: 12px; flex-wrap: wrap;
+  }
+  .quick-actions button {
+    padding: 10px 18px; background: #4a148c;
+    color: white; border: none; border-radius: 6px;
+    cursor: pointer; font-size: 13px;
+  }
+  .quick-actions button:hover { opacity: 0.9; }
+  .quick-actions button.secondary { background: #ddd; color: #1a1a2e; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Ran-Tevu · Growth Engine</h1>
+  <p>Content marketing automation · LinkedIn / Instagram / Facebook · GR + EU + US</p>
+</header>
+
+<div class="container">
+
+  <div class="auth-bar">
+    <label>Admin Token:</label>
+    <input id="token" type="password" placeholder="Bearer token..." />
+    <button onclick="saveToken()">Save</button>
+    <button onclick="loadAll()">Refresh</button>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('queue')">Approval Queue <span class="badge" id="badgePending">0</span></button>
+    <button class="tab" onclick="switchTab('approved')">Approved <span class="badge" id="badgeApproved" style="background:#16a34a">0</span></button>
+    <button class="tab" onclick="switchTab('published')">Published</button>
+    <button class="tab" onclick="switchTab('stats')">Stats & Funnel</button>
+    <button class="tab" onclick="switchTab('settings')">Settings</button>
+  </div>
+
+  <!-- TAB: Queue -->
+  <div class="panel active" id="panel-queue">
+    <div class="filters">
+      <select id="filterPlatform" onchange="loadPending()">
+        <option value="">All platforms</option>
+        <option value="linkedin">LinkedIn</option>
+        <option value="instagram">Instagram</option>
+        <option value="facebook">Facebook</option>
+      </select>
+    </div>
+    <div id="queueList"></div>
+  </div>
+
+  <!-- TAB: Approved -->
+  <div class="panel" id="panel-approved">
+    <div id="approvedList"></div>
+  </div>
+
+  <!-- TAB: Published -->
+  <div class="panel" id="panel-published">
+    <div id="publishedList"></div>
+  </div>
+
+  <!-- TAB: Stats -->
+  <div class="panel" id="panel-stats">
+    <div class="stats-grid" id="statsGrid"></div>
+    <div id="recentPublished"></div>
+  </div>
+
+  <!-- TAB: Settings -->
+  <div class="panel" id="panel-settings">
+    <div style="background:white;padding:24px;border-radius:8px;">
+      <h3 style="margin-bottom:12px;">Environment</h3>
+      <ul style="font-size:13px;color:#555;line-height:2;">
+        <li>GROWTH_ENABLED — set to "0" σε .env για kill switch</li>
+        <li>FOUNDER_EMAIL — receives daily approval queue</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const API = "";
+let TOKEN = localStorage.getItem("rt_admin_token") || "";
+
+document.getElementById("token").value = TOKEN;
+
+function saveToken() {
+  TOKEN = document.getElementById("token").value.trim();
+  localStorage.setItem("rt_admin_token", TOKEN);
+  toast("Token saved", "success");
+  loadAll();
+}
+
+function toast(msg, type="info") {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.className = "toast show " + type;
+  setTimeout(() => t.classList.remove("show"), 3000);
+}
+
+async function api(path, opts={}) {
+  const headers = opts.headers || {};
+  headers["Authorization"] = "Bearer " + TOKEN;
+  if (opts.body && typeof opts.body === "object") {
+    headers["Content-Type"] = "application/json";
+    opts.body = JSON.stringify(opts.body);
+  }
+  const r = await fetch(API + path, {...opts, headers});
+  if (!r.ok) {
+    const txt = await r.text();
+    throw new Error(`${r.status}: ${txt}`);
+  }
+  return r.json();
+}
+
+function switchTab(name) {
+  document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+  document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
+  event.target.classList.add("active");
+  document.getElementById("panel-" + name).classList.add("active");
+  if (name === "queue") loadPending();
+  else if (name === "approved") loadApproved();
+  else if (name === "published") loadPublished();
+  else if (name === "stats") loadStats();
+}
+
+async function loadPending() {
+  const platform = document.getElementById("filterPlatform").value;
+  try {
+    const data = await api(`/api/admin/growth/posts?status=pending${platform ? '&platform=' + platform : ''}`);
+    document.getElementById("badgePending").textContent = data.count;
+    renderPosts("queueList", data.posts, true);
+  } catch (e) { toast(e.message, "error"); }
+}
+
+async function loadApproved() {
+  try {
+    const data = await api("/api/admin/growth/posts?status=approved");
+    document.getElementById("badgeApproved").textContent = data.count;
+    renderPosts("approvedList", data.posts, false, true);
+  } catch (e) { toast(e.message, "error"); }
+}
+
+async function loadPublished() {
+  try {
+    const data = await api("/api/admin/growth/posts?status=published&limit=30");
+    renderPosts("publishedList", data.posts, false);
+  } catch (e) { toast(e.message, "error"); }
+}
+
+function renderPosts(containerId, posts, withActions = true, isApproved = false) {
+  const c = document.getElementById(containerId);
+  if (!posts || posts.length === 0) {
+    c.innerHTML = `<div class="empty">No posts here yet.</div>`;
+    return;
+  }
+  c.innerHTML = posts.map(p => `
+    <div class="post-card" data-id="${p.id}">
+      <div class="post-meta">
+        <span class="pill ${p.platform}">${p.platform}</span>
+        <span class="pill ${p.language}">${p.language === 'gr' ? '🇬🇷 GR' : '🇺🇸 EN'}</span>
+        <span class="pill" style="background:#f0f0f0;color:#666;">${p.target_region.toUpperCase()}</span>
+        <span style="margin-left:auto;color:#999;">#${p.id} · ${p.generated_at || ''}</span>
+      </div>
+      <div class="post-body" id="body-${p.id}">${escapeHtml(p.body)}</div>
+      ${p.hashtags ? `<div class="post-hashtags">${escapeHtml(p.hashtags)}</div>` : ''}
+      ${p.cta_url ? `<div class="post-cta">CTA → <a href="${p.cta_url}" target="_blank">${p.cta_url}</a></div>` : ''}
+      ${p.media_url ? `<div class="post-cta">📹 ${p.media_url}</div>` : ''}
+      ${withActions ? `
+        <div class="post-actions">
+          <button class="btn-approve" onclick="approvePost(${p.id})">✓ Approve</button>
+          <button class="btn-reject" onclick="rejectPost(${p.id})">✕ Reject</button>
+          <button class="btn-edit" onclick="enableEdit(${p.id})">✎ Edit</button>
+        </div>
+      ` : isApproved ? `
+        <div class="post-actions">
+          <button class="btn-reject" onclick="rejectPost(${p.id})">✕ Cancel</button>
+        </div>
+      ` : ''}
+    </div>
+  `).join("");
+}
+
+function escapeHtml(s) {
+  return (s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+async function approvePost(id) {
+  try {
+    await api(`/api/admin/growth/posts/${id}/approve`, {method: "POST"});
+    toast("Approved ✓", "success");
+    loadPending();
+  } catch (e) { toast(e.message, "error"); }
+}
+
+async function rejectPost(id) {
+  if (!confirm("Reject this post?")) return;
+  try {
+    await api(`/api/admin/growth/posts/${id}/reject`, {method: "POST"});
+    toast("Rejected", "success");
+    loadPending();
+    loadApproved();
+  } catch (e) { toast(e.message, "error"); }
+}
+
+function enableEdit(id) {
+  const body = document.getElementById("body-" + id);
+  body.contentEditable = true;
+  body.focus();
+  const card = body.closest(".post-card");
+  const actions = card.querySelector(".post-actions");
+  actions.innerHTML = `
+    <button class="btn-approve" onclick="saveEdit(${id})">💾 Save & Approve</button>
+    <button class="btn-cancel" onclick="loadPending()">Cancel</button>
+  `;
+}
+
+async function saveEdit(id) {
+  const body = document.getElementById("body-" + id).innerText;
+  try {
+    await api(`/api/admin/growth/posts/${id}/edit`, {method: "POST", body: {body, hashtags: ""}});
+    await api(`/api/admin/growth/posts/${id}/approve`, {method: "POST"});
+    toast("Saved & approved ✓", "success");
+    loadPending();
+  } catch (e) { toast(e.message, "error"); }
+}
+
+
+async function loadStats() {
+  try {
+    const r = await api("/api/admin/growth/stats");
+    let totalPending = 0, totalApproved = 0, totalPublished = 0;
+    (r.posts_breakdown || []).forEach(b => {
+      if (b.status === "pending") totalPending += b.cnt;
+      if (b.status === "approved") totalApproved += b.cnt;
+      if (b.status === "published") totalPublished += b.cnt;
+    });
+
+    let totalImpressions = 0, totalClicks = 0, totalSignups = 0;
+    Object.values(r.funnel || {}).forEach(src => {
+      totalImpressions += (src.impression || 0);
+      totalClicks += (src.click || 0);
+      totalSignups += (src.signup || 0) + (src.trial_start || 0);
+    });
+
+    document.getElementById("statsGrid").innerHTML = `
+      <div class="stat-card"><div class="label">Pending</div><div class="value">${totalPending}</div></div>
+      <div class="stat-card"><div class="label">Approved</div><div class="value">${totalApproved}</div></div>
+      <div class="stat-card"><div class="label">Published (30d)</div><div class="value">${totalPublished}</div></div>
+      <div class="stat-card"><div class="label">Impressions</div><div class="value">${totalImpressions}</div></div>
+      <div class="stat-card"><div class="label">Clicks</div><div class="value">${totalClicks}</div></div>
+      <div class="stat-card"><div class="label">Signups</div><div class="value">${totalSignups}</div></div>
+    `;
+    renderPosts("recentPublished", r.recent_published || [], false);
+  } catch (e) { toast(e.message, "error"); }
+}
+
+function loadAll() {
+  if (!TOKEN) { toast("Set token first", "error"); return; }
+  const active = document.querySelector(".tab.active").textContent.trim().split(" ")[0].toLowerCase();
+  if (active.includes("approval")) loadPending();
+  else if (active.includes("approved")) loadApproved();
+  else if (active.includes("published")) loadPublished();
+  else if (active.includes("stats")) loadStats();
+}
+
+// URL params: ?action=approve&id=123 (από email)
+const params = new URLSearchParams(window.location.search);
+if (params.get("action") && params.get("id")) {
+  setTimeout(() => {
+    const id = params.get("id");
+    const action = params.get("action");
+    if (action === "approve") approvePost(id);
+    else if (action === "reject") rejectPost(id);
+  }, 500);
+}
+
+if (TOKEN) loadPending();
+</script>
+
+</body>
+</html>

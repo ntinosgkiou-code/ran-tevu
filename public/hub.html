@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="robots" content="noindex" />
+<title>Ran-Tevu Hub</title>
+<style>
+  :root {
+    --bg: #060816;
+    --surface: rgba(17, 24, 39, 0.94);
+    --surface-2: rgba(31, 41, 55, 0.95);
+    --border: rgba(255,255,255,0.1);
+    --text: #f8fafc;
+    --muted: #9ca3af;
+    --primary: #7c3aed;
+    --primary-2: #3b82f6;
+    --ok: #10b981;
+    --gold: #fbbf24;
+    --danger: #ef4444;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: radial-gradient(circle at top left, rgba(124,58,237,0.28), transparent 34%), linear-gradient(135deg, #060816 0%, #0f172a 100%);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 24px;
+    line-height: 1.5;
+  }
+  a { color: inherit; text-decoration: none; }
+  button, input { font: inherit; }
+  .wrap { max-width: 980px; margin: 0 auto; }
+  .hero {
+    background: linear-gradient(135deg, rgba(124,58,237,0.22), rgba(59,130,246,0.16));
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 24px;
+    margin-bottom: 18px;
+    box-shadow: 0 24px 60px rgba(2, 6, 23, 0.35);
+  }
+  .hero h1 { font-size: 28px; font-weight: 800; margin-bottom: 6px; }
+  .hero .sub { color: var(--muted); font-size: 14px; max-width: 700px; }
+  .warn-banner {
+    margin: 0 0 18px; padding: 13px 16px; border-radius: 14px; border: 1px solid rgba(251,191,36,0.35);
+    background: rgba(251,191,36,0.08); color: #fde68a; font-size: 13px; display: none;
+  }
+  .warn-banner.show { display: block; }
+  .sec-title { font-size: 13px; font-weight: 800; letter-spacing: .4px; text-transform: uppercase; color: var(--muted); margin: 22px 0 10px; }
+  .login-row { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px; margin-bottom: 6px; }
+  @media (max-width: 700px) { .login-row { grid-template-columns: 1fr; } }
+  .login-card {
+    display: flex; gap: 12px; align-items: center; background: rgba(124,58,237,0.12); border: 1px solid rgba(124,58,237,0.35);
+    border-radius: 16px; padding: 15px 16px;
+  }
+  .login-card .icon { font-size: 22px; }
+  .login-card .title { font-weight: 800; color: #fff; font-size: 14.5px; }
+  .login-card .desc { color: var(--muted); font-size: 12px; margin-top: 2px; }
+  .login-card .go { margin-left: auto; color: var(--primary-2); font-weight: 800; font-size: 18px; }
+  .token-bar {
+    display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 18px 0 10px;
+    padding: 14px 16px; border: 1px solid var(--border); border-radius: 16px; background: rgba(15, 23, 42, 0.72);
+  }
+  .token-bar input {
+    flex: 1; min-width: 220px; background: rgba(255,255,255,0.05); color: white; border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; outline: none;
+  }
+  .token-bar input:focus { border-color: var(--primary); }
+  .token-bar button {
+    background: linear-gradient(135deg, var(--primary), var(--primary-2)); color: white; border: none; border-radius: 10px; padding: 10px 14px; font-weight: 700; cursor: pointer;
+  }
+  .token-bar .status { font-size: 12px; color: var(--muted); }
+  .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+  @media (max-width: 760px) { .grid { grid-template-columns: 1fr; } }
+  .card {
+    display: flex; gap: 14px; align-items: flex-start; background: var(--surface); border: 1px solid var(--border); border-radius: 18px; padding: 16px; transition: transform 0.16s, border-color 0.16s, background 0.16s;
+  }
+  .card:hover { transform: translateY(-2px); border-color: rgba(124,58,237,0.45); background: var(--surface-2); }
+  .icon { width: 46px; height: 46px; border-radius: 14px; display: grid; place-items: center; font-size: 20px; background: rgba(124,58,237,0.16); flex-shrink: 0; }
+  .card .meta { flex: 1; min-width: 0; }
+  .card .title { font-weight: 800; color: white; font-size: 15px; margin-bottom: 4px; }
+  .card .desc { color: var(--muted); font-size: 13px; }
+  .card .go { margin-left: auto; color: var(--primary); font-weight: 800; font-size: 18px; }
+  .tag { display: inline-block; font-size: 10.5px; font-weight: 800; padding: 2px 7px; border-radius: 999px; margin-left: 7px; vertical-align: middle; }
+  .tag.live { background: rgba(16,185,129,0.18); color: var(--ok); }
+  .tag.token { background: rgba(251,191,36,0.16); color: var(--gold); }
+  .tag.lock { background: rgba(239,68,68,0.16); color: var(--danger); }
+  .note { margin-top: 18px; padding: 14px 16px; border-radius: 16px; border: 1px solid var(--border); background: rgba(15,23,42,0.68); color: var(--muted); font-size: 13px; }
+  .note strong { color: white; }
+  .status-box { margin: 0 0 16px; padding: 14px 16px; border-radius: 16px; border: 1px solid var(--border); background: rgba(15,23,42,0.72); display:flex; flex-wrap:wrap; gap:12px; align-items:center; justify-content:space-between; }
+  .status-box .dot { width:10px; height:10px; border-radius:999px; background:var(--ok); box-shadow:0 0 0 4px rgba(16,185,129,0.14); }
+  .status-box .meta { font-size:12px; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <section class="hero">
+    <div class="pill" style="display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border-radius:999px;font-size:12px;font-weight:700;background:rgba(16,185,129,0.16);color:var(--ok);border:1px solid rgba(16,185,129,0.25);margin-bottom:10px">⚡ Live · 2 συστήματα</div>
+    <h1>Ran-Tevu + OmniOS Hub</h1>
+    <div class="sub">Μία πόρτα και για τα δύο συστήματα. Το back-office/agents/backend είναι <strong style="color:#fff">ιδιωτικά</strong> — χρειάζονται σύνδεση, δεν τα βλέπει κανένας άλλος. Η σελίδα κράτησης του ασθενή μένει δημόσια (αυτό δείχνεις σε υποψήφιους γιατρούς).</div>
+  </section>
+
+  <div id="fileWarn" class="warn-banner">⚠️ Αυτή η σελίδα ανοίχτηκε ως τοπικό αρχείο. Τα links από κάτω είναι πλήρη (ran-tevu.gr / railway.app) οπότε δουλεύουν κανονικά — αλλά καλύτερα πρόσθεσέ το στα αγαπημένα σου ως <b>https://www.ran-tevu.gr/admin/hub</b> για να βλέπεις και ζωντανό κατάσταση υγείας.</div>
+
+  <div class="sec-title">🔑 Πρώτα — Σύνδεση (μία φορά, μένει 30 μέρες)</div>
+  <div class="login-row">
+    <a class="login-card" href="https://www.ran-tevu.gr/owner" target="_blank">
+      <div class="icon">🩺</div>
+      <div><div class="title">Ran-Tevu — Owner login</div><div class="desc">Ξεκλειδώνει back-office/agents όλων των ιατρείων. Password: δες στο chat/σημειώσεις σου.</div></div>
+      <div class="go">→</div>
+    </a>
+    <a class="login-card" href="https://omnios-production.up.railway.app/" target="_blank">
+      <div class="icon">🧠</div>
+      <div><div class="title">OmniOS — Private login</div><div class="desc">User: omnios. Password: δες στο chat/σημειώσεις σου.</div></div>
+      <div class="go">→</div>
+    </a>
+  </div>
+
+  <div class="token-bar">
+    <input id="tok" type="password" placeholder="ADMIN_TOKEN (για Integrations/Testing/Architecture)" />
+    <button onclick="saveTok()">Αποθήκευση</button>
+    <span id="st" class="status">χωρίς token αυτά τα 3 εργαλεία μένουν κλειστά</span>
+  </div>
+
+  <div class="status-box">
+    <div style="display:flex;align-items:center;gap:10px">
+      <span class="dot"></span>
+      <div>
+        <div id="runtime-title" style="font-weight:800">Runtime: live</div>
+        <div id="runtime-meta" class="meta">loading runtime status…</div>
+      </div>
+    </div>
+    <div id="runtime-pill" style="padding:7px 10px;border-radius:999px;background:rgba(16,185,129,0.16);color:var(--ok);font-size:12px;font-weight:800">LIVE</div>
+  </div>
+
+  <div class="sec-title">🩺 Ran-Tevu</div>
+  <div class="grid">
+    <a class="card" href="https://www.ran-tevu.gr/demo/back-office" target="_blank">
+      <div class="icon">🗂️</div>
+      <div class="meta">
+        <div class="title">Back-office / Γραμματέας <span class="tag lock">ιδιωτικό</span></div>
+        <div class="desc">Ραντεβού, φάκελοι ασθενών, τιμολόγια, «ποιος μου χρωστάει», agents. Θέλει owner login (πάνω).</div>
+      </div>
+      <div class="go">→</div>
+    </a>
+
+    <a class="card" href="https://www.ran-tevu.gr/physio-demo" target="_blank">
+      <div class="icon">💬</div>
+      <div class="meta">
+        <div class="title">Σελίδα κράτησης ασθενή <span class="tag live">δημόσιο</span></div>
+        <div class="desc">Αυτό δείχνεις σε υποψήφιο γιατρό. Ο ασθενής γράφει και ο AI κλείνει ραντεβού.</div>
+      </div>
+      <div class="go">→</div>
+    </a>
+
+    <a class="card" href="https://www.ran-tevu.gr/demo/dashboard" target="_blank">
+      <div class="icon">📊</div>
+      <div class="meta">
+        <div class="title">Dashboard εσόδων <span class="tag lock">ιδιωτικό</span></div>
+        <div class="desc">€ ανακτημένα, ραντεβού vs no-shows, 6μηνο γράφημα. Θέλει owner login.</div>
+      </div>
+      <div class="go">→</div>
+    </a>
+
+    <a class="card" id="lnk_int" href="https://www.ran-tevu.gr/admin/integrations" target="_blank">
+      <div class="icon">🔌</div>
+      <div class="meta">
+        <div class="title">Ετοιμότητα & Σύνδεση ιατρείου <span class="tag token">admin token</span></div>
+        <div class="desc">Ποια keys λείπουν, σύνδεση νέου γιατρού, ενεργοποίηση φωνής.</div>
+      </div>
+      <div class="go">→</div>
+    </a>
+
+    <a class="card" id="lnk_test" href="https://www.ran-tevu.gr/admin/testing" target="_blank">
+      <div class="icon">🧪</div>
+      <div class="meta">
+        <div class="title">Testing / live πίνακες <span class="tag token">admin token</span></div>
+        <div class="desc">Προσομοίωση ραντεβού βήμα-βήμα σε πραγματικό χρόνο.</div>
+      </div>
+      <div class="go">→</div>
+    </a>
+
+    <a class="card" id="lnk_arch" href="https://www.ran-tevu.gr/admin/architecture" target="_blank">
+      <div class="icon">🗺️</div>
+      <div class="meta">
+        <div class="title">Τεχνικός χάρτης <span class="tag token">admin token</span></div>
+        <div class="desc">Live dependency graph — ποιο αρχείο συνδέεται με ποιο.</div>
+      </div>
+      <div class="go">→</div>
+    </a>
+  </div>
+
+  <div class="sec-title">🧠 OmniOS (next-gen μηχανή)</div>
+  <div class="grid">
+    <a class="card" href="https://omnios-production.up.railway.app/" target="_blank">
+      <div class="icon">🖥️</div>
+      <div class="meta">
+        <div class="title">OmniOS UI <span class="tag lock">ιδιωτικό</span></div>
+        <div class="desc">11 tabs: κλινικά, agents, autonomous loops, FHIR bridges. Θέλει login (πάνω, user: omnios).</div>
+      </div>
+      <div class="go">→</div>
+    </a>
+    <a class="card" href="https://omnios-production.up.railway.app/health" target="_blank">
+      <div class="icon">💚</div>
+      <div class="meta">
+        <div class="title">Health check <span class="tag live">δημόσιο</span></div>
+        <div class="desc">Ζωντανό status: πόσες κλινικές, ακεραιότητα audit-log.</div>
+      </div>
+      <div class="go">→</div>
+    </a>
+  </div>
+
+  <div class="note">
+    <strong>Ιδιωτικότητα:</strong> back-office/agents/backend ΔΕΝ είναι δημόσια πλέον — 403 χωρίς σύνδεση. Μόνο η σελίδα κράτησης ασθενή (πάνω) μένει ανοιχτή σε όλους — αυτή δείχνεις σε υποψήφιους γιατρούς. Το admin token/passwords ΔΕΝ αποθηκεύονται μέσα σε αυτό το αρχείο — μπαίνουν στον browser σου (localStorage/cookie), κράτησέ τα σε password manager.
+  </div>
+</div>
+
+<script>
+if (location.protocol === "file:") document.getElementById("fileWarn").classList.add("show");
+
+let TOKEN = new URLSearchParams(location.search).get("token") || localStorage.getItem("admin_token") || "";
+
+function applyToken() {
+  const st = document.getElementById("st");
+  const tokInput = document.getElementById("tok");
+  if (TOKEN) {
+    tokInput.value = TOKEN;
+    ["lnk_int", "lnk_test", "lnk_arch"].forEach((id) => {
+      const a = document.getElementById(id);
+      const base = a.getAttribute("href").split("?")[0];
+      a.setAttribute("href", base + "?token=" + encodeURIComponent(TOKEN));
+    });
+    st.textContent = "✓ token ενεργό";
+    st.style.color = "var(--ok)";
+  } else {
+    st.textContent = "χωρίς token αυτά τα 3 εργαλεία μένουν κλειστά";
+    st.style.color = "var(--muted)";
+  }
+}
+
+function saveTok() {
+  TOKEN = document.getElementById("tok").value.trim();
+  if (TOKEN) localStorage.setItem("admin_token", TOKEN);
+  applyToken();
+}
+
+async function refreshRuntime() {
+  try {
+    const r = await fetch('https://www.ran-tevu.gr/health');
+    const data = await r.json();
+    const pill = document.getElementById('runtime-pill');
+    const title = document.getElementById('runtime-title');
+    const meta = document.getElementById('runtime-meta');
+    const ok = data && data.ok;
+    title.textContent = ok ? 'Runtime: live' : 'Runtime: degraded';
+    meta.textContent = ok ? `scheduler ${data.scheduler && data.scheduler.running ? 'running' : 'idle'} · ${data.autonomous ? data.autonomous.runs : 0} runs` : 'runtime unavailable';
+    pill.textContent = ok ? 'LIVE' : 'DEGRADED';
+    pill.style.background = ok ? 'rgba(16,185,129,0.16)' : 'rgba(251,191,36,0.16)';
+    pill.style.color = ok ? 'var(--ok)' : 'var(--gold)';
+  } catch (e) {
+    document.getElementById('runtime-title').textContent = 'Runtime: degraded';
+    document.getElementById('runtime-meta').textContent = 'health endpoint unavailable';
+    document.getElementById('runtime-pill').textContent = 'DEGRADED';
+  }
+}
+
+applyToken();
+refreshRuntime();
+setInterval(refreshRuntime, 15000);
+</script>
+</body>
+</html>

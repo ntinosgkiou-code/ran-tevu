@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Email Campaigns — Ran-Tevu Admin</title>
+<style>
+  :root { --bg:#0a0a0f; --surface:#111827; --surface-2:#1f2937; --border:rgba(255,255,255,0.08); --text:#e5e7eb; --muted:#9ca3af; --primary:#7c3aed; --accent:#ec4899; --gold:#fbbf24; --success:#10b981; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, system-ui, sans-serif; background: var(--bg); color: var(--text); padding: 24px; }
+  .wrap { max-width: 1100px; margin: 0 auto; }
+  header { margin-bottom: 24px; }
+  h1 { color: white; font-size: 26px; font-weight: 800; }
+  .back { color: var(--primary); font-size: 14px; text-decoration: none; }
+  .layout { display: grid; grid-template-columns: 280px 1fr; gap: 18px; }
+  @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
+  .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px; }
+  .panel h3 { color: white; font-size: 14px; margin-bottom: 12px; }
+  .template-list { display: flex; flex-direction: column; gap: 6px; }
+  .template-item {
+    padding: 10px 12px; border-radius: 8px; cursor: pointer;
+    border: 1px solid var(--border); background: var(--surface-2);
+    transition: all 0.15s; font-size: 13px;
+  }
+  .template-item:hover { border-color: var(--primary); }
+  .template-item.active { background: linear-gradient(90deg, rgba(124,58,237,0.2), transparent); border-color: var(--primary); }
+  label { display: block; font-size: 12px; color: var(--muted); margin: 12px 0 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+  select, input, textarea { width: 100%; padding: 10px 12px; background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; color: white; font-size: 14px; font-family: inherit; }
+  textarea { min-height: 220px; resize: vertical; font-family: monospace; font-size: 13px; }
+  .btn { padding: 12px 22px; border-radius: 8px; border: none; font-weight: 700; cursor: pointer; }
+  .btn-primary { background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; }
+  .btn-ghost { background: var(--surface-2); color: var(--text); border: 1px solid var(--border); }
+  .actions { display: flex; gap: 8px; margin-top: 16px; }
+  .preview-meta { color: var(--muted); font-size: 13px; padding: 12px; background: var(--surface-2); border-radius: 8px; margin-top: 12px; }
+  .alert { padding: 12px; border-radius: 8px; margin-top: 12px; font-size: 13px; }
+  .alert.success { background: rgba(16,185,129,0.1); border: 1px solid var(--success); color: #34d399; }
+  .alert.error { background: rgba(239,68,68,0.1); border: 1px solid #ef4444; color: #f87171; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a href="javascript:history.back()" class="back">← Back</a>
+    <h1>📧 Email Campaigns</h1>
+    <p style="color:var(--muted);font-size:14px;margin-top:4px">Στείλε templated emails σε όλους τους πελάτες σου με ένα click.</p>
+  </header>
+
+  <div class="layout">
+    <div class="panel">
+      <h3>📋 Templates</h3>
+      <div class="template-list" id="template-list">Loading...</div>
+    </div>
+
+    <div class="panel">
+      <h3>✍️ Compose</h3>
+
+      <label>👥 Audience</label>
+      <select id="audience" onchange="preview()">
+        <option value="all_clients">Όλοι οι πελάτες</option>
+        <option value="inactive_30d">Ανενεργοί 30+ ημέρες</option>
+        <option value="recent_bookings">Πρόσφατα ραντεβού (7 ημέρες)</option>
+      </select>
+
+      <label>📝 Subject</label>
+      <input id="subject" type="text" />
+
+      <label>✉️ Body</label>
+      <textarea id="body"></textarea>
+
+      <div class="preview-meta" id="audience-info">
+        Αποστολή σε <strong id="recipient-count">—</strong> παραλήπτες.
+      </div>
+
+      <div class="actions">
+        <button class="btn btn-ghost" onclick="preview()">👁️ Preview</button>
+        <button class="btn btn-primary" onclick="send()" id="send-btn">📤 Send Campaign</button>
+      </div>
+
+      <div id="result"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const SLUG = location.pathname.split("/")[2];
+const TOKEN = new URLSearchParams(location.search).get("token") || localStorage.getItem("admin_token") || "";
+if (TOKEN) localStorage.setItem("admin_token", TOKEN);
+let templates = {};
+let currentTemplate = "welcome";
+
+async function loadTemplates() {
+  const r = await fetch("/api/admin/campaigns/templates", { headers: { "Authorization": "Bearer " + TOKEN } });
+  templates = await r.json();
+  document.getElementById("template-list").innerHTML = Object.entries(templates).map(([id, t]) => `
+    <div class="template-item ${id===currentTemplate?'active':''}" onclick="selectTemplate('${id}')">${t.name}</div>
+  `).join("");
+  selectTemplate(currentTemplate);
+}
+
+function selectTemplate(id) {
+  currentTemplate = id;
+  document.querySelectorAll(".template-item").forEach(el => el.classList.remove("active"));
+  document.querySelectorAll(".template-item").forEach((el, i) => {
+    if (Object.keys(templates)[i] === id) el.classList.add("active");
+  });
+  document.getElementById("subject").value = templates[id].subject;
+  document.getElementById("body").value = templates[id].body;
+  preview();
+}
+
+async function preview() {
+  const r = await fetch(`/api/admin/campaigns/${SLUG}/preview`, {
+    method: "POST", headers: { "Authorization": "Bearer " + TOKEN, "Content-Type": "application/json" },
+    body: JSON.stringify({ template_id: currentTemplate, audience: document.getElementById("audience").value }),
+  });
+  const data = await r.json();
+  if (data.subject) document.getElementById("subject").value = data.subject;
+  if (data.body) document.getElementById("body").value = data.body;
+  document.getElementById("recipient-count").textContent = data.estimated_recipients || 0;
+}
+
+async function send() {
+  if (!confirm(`Στείλε σε ${document.getElementById("recipient-count").textContent} παραλήπτες;`)) return;
+  document.getElementById("send-btn").disabled = true;
+  document.getElementById("send-btn").textContent = "⏳ Sending...";
+  try {
+    const r = await fetch(`/api/admin/campaigns/${SLUG}/send`, {
+      method: "POST", headers: { "Authorization": "Bearer " + TOKEN, "Content-Type": "application/json" },
+      body: JSON.stringify({ template_id: currentTemplate, audience: document.getElementById("audience").value }),
+    });
+    const data = await r.json();
+    if (data.ok) {
+      document.getElementById("result").innerHTML = `<div class="alert success">✅ Στάλθηκαν ${data.sent} emails (failed: ${data.failed})</div>`;
+    } else {
+      document.getElementById("result").innerHTML = `<div class="alert error">❌ ${data.error || "Σφάλμα"}</div>`;
+    }
+  } catch (e) {
+    document.getElementById("result").innerHTML = `<div class="alert error">❌ ${e.message}</div>`;
+  }
+  document.getElementById("send-btn").disabled = false;
+  document.getElementById("send-btn").textContent = "📤 Send Campaign";
+}
+
+loadTemplates();
+</script>
+</body>
+</html>

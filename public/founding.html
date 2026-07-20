@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Founding Members — Πρώτοι 5 πελάτες · 50% off 3 μήνες | Ran-Tevu</title>
+<meta name="description" content="Founding Member Program: οι πρώτοι 5 πελάτες παίρνουν 50% off στις τιμές για τους πρώτους 3 μήνες + founder support. Δωρεάν 15-min consultation.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://www.ran-tevu.gr/founding">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="el_GR">
+<meta property="og:title" content="Ran-Tevu Founding Members — 50% off 3 μήνες + founder support">
+<meta property="og:description" content="Πρώτοι 5 πελάτες παίρνουν 50% off τους πρώτους 3 μήνες. Δωρεάν 15-min consultation.">
+<meta property="og:url" content="https://www.ran-tevu.gr/founding">
+<meta property="og:site_name" content="Ran-Tevu">
+
+<style>
+  *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #050510;
+    color: #E5E7EB; line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  a { color: inherit; text-decoration: none; }
+
+  /* ─── Animated cosmic background ─── */
+  .bg-glow {
+    position: fixed; inset: 0; z-index: -1; pointer-events: none;
+    background:
+      radial-gradient(ellipse 800px 600px at 20% 0%, rgba(124,58,237,0.25), transparent 60%),
+      radial-gradient(ellipse 700px 500px at 80% 30%, rgba(251,191,36,0.12), transparent 60%),
+      radial-gradient(ellipse 900px 700px at 50% 100%, rgba(139,92,246,0.18), transparent 70%);
+    animation: bg-shift 20s ease-in-out infinite;
+  }
+  @keyframes bg-shift {
+    0%, 100% { transform: scale(1) rotate(0deg); }
+    50% { transform: scale(1.1) rotate(2deg); }
+  }
+  .bg-stars {
+    position: fixed; inset: 0; z-index: -1; pointer-events: none;
+    background-image:
+      radial-gradient(1px 1px at 20px 30px, rgba(255,255,255,0.5), transparent),
+      radial-gradient(1px 1px at 60px 70px, rgba(255,255,255,0.3), transparent),
+      radial-gradient(2px 2px at 110px 50px, rgba(255,255,255,0.6), transparent),
+      radial-gradient(1px 1px at 200px 100px, rgba(251,191,36,0.4), transparent),
+      radial-gradient(1px 1px at 250px 200px, rgba(124,58,237,0.5), transparent);
+    background-size: 300px 300px;
+    background-repeat: repeat;
+    opacity: 0.5;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(5,5,16,0.7); backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    padding: 16px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .logo {
+    display: flex; align-items: center; gap: 10px;
+    font-weight: 800; font-size: 22px; letter-spacing: -0.5px; color: white;
+  }
+  .logo-icon {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, #7C3AED, #C084FC);
+    border-radius: 10px; display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    box-shadow: 0 4px 16px rgba(124,58,237,0.5);
+  }
+  .logo span { background: linear-gradient(135deg, #C084FC, #FBBF24); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  nav a.back { color: rgba(255,255,255,0.6); font-size: 14px; }
+
+  /* ─── HERO ─── */
+  header {
+    text-align: center; padding: 80px 24px 48px;
+    max-width: 920px; margin: 0 auto;
+    position: relative;
+  }
+
+  .badge-glow {
+    display: inline-block;
+    padding: 8px 18px;
+    background: rgba(251,191,36,0.12);
+    border: 1px solid rgba(251,191,36,0.4);
+    border-radius: 100px;
+    color: #FBBF24;
+    font-size: 12px; font-weight: 800; letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    box-shadow: 0 0 24px rgba(251,191,36,0.3);
+    animation: badge-pulse 2.5s ease-in-out infinite;
+  }
+  @keyframes badge-pulse {
+    0%, 100% { box-shadow: 0 0 24px rgba(251,191,36,0.3); }
+    50% { box-shadow: 0 0 40px rgba(251,191,36,0.6); }
+  }
+
+  h1 {
+    font-size: clamp(40px, 7vw, 72px); line-height: 1.05;
+    font-weight: 900; letter-spacing: -2px; margin-bottom: 24px;
+    color: white;
+  }
+  h1 .gradient-text {
+    background: linear-gradient(135deg, #FBBF24 0%, #C084FC 50%, #7C3AED 100%);
+    background-size: 200% 200%;
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradient-shift 4s ease infinite;
+  }
+  @keyframes gradient-shift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+
+  .lead {
+    font-size: clamp(16px, 2vw, 19px);
+    color: rgba(255,255,255,0.75);
+    max-width: 720px; margin: 0 auto 36px;
+  }
+
+  /* ─── LIVE SPOTS COUNTER (the WOW element) ─── */
+  .spots-widget {
+    max-width: 560px; margin: 0 auto 36px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(251,191,36,0.3);
+    border-radius: 24px;
+    padding: 32px;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 16px 48px rgba(124,58,237,0.2),
+                0 0 64px rgba(251,191,36,0.1) inset;
+    position: relative;
+    overflow: hidden;
+  }
+  .spots-widget::before {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(45deg, transparent, rgba(251,191,36,0.05), transparent);
+    animation: shimmer 3s ease infinite;
+  }
+  @keyframes shimmer {
+    0%, 100% { transform: translateX(-100%); }
+    50% { transform: translateX(100%); }
+  }
+
+  .spots-label {
+    font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase;
+    color: #FBBF24; font-weight: 800; margin-bottom: 12px;
+    position: relative;
+  }
+  .spots-label::before {
+    content: "● "; color: #4ADE80;
+    animation: dot-pulse 1.5s ease infinite;
+  }
+  @keyframes dot-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  .spots-display {
+    font-size: clamp(48px, 8vw, 84px); line-height: 1;
+    font-weight: 900; color: white;
+    display: flex; align-items: baseline; justify-content: center; gap: 8px;
+    margin-bottom: 8px;
+    text-shadow: 0 0 40px rgba(251,191,36,0.4);
+    position: relative;
+  }
+  .spots-num {
+    background: linear-gradient(135deg, #FBBF24, #F59E0B);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .spots-of { color: rgba(255,255,255,0.4); font-size: 0.5em; font-weight: 700; }
+  .spots-msg {
+    color: rgba(255,255,255,0.85);
+    font-size: 15px; position: relative;
+  }
+  .spots-progress {
+    margin-top: 20px;
+    height: 8px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 100px;
+    overflow: hidden;
+    position: relative;
+  }
+  .spots-progress-bar {
+    height: 100%; width: 0%;
+    background: linear-gradient(90deg, #FBBF24, #F59E0B, #EF4444);
+    border-radius: 100px;
+    transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 0 16px rgba(251,191,36,0.6);
+  }
+
+  /* ─── BUTTONS ─── */
+  .btn {
+    display: inline-block; padding: 18px 36px;
+    border-radius: 14px; font-weight: 800; font-size: 16px;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 2px solid transparent; cursor: pointer;
+    position: relative; overflow: hidden;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, #FBBF24, #F59E0B);
+    color: #050510;
+    box-shadow: 0 8px 32px rgba(251,191,36,0.4),
+                0 0 0 1px rgba(251,191,36,0.2);
+  }
+  .btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 16px 48px rgba(251,191,36,0.6),
+                0 0 0 1px rgba(251,191,36,0.4);
+    color: #050510;
+  }
+  .btn-secondary {
+    background: rgba(255,255,255,0.05);
+    border-color: rgba(255,255,255,0.15);
+    color: white;
+    backdrop-filter: blur(10px);
+  }
+  .btn-secondary:hover {
+    background: rgba(255,255,255,0.1);
+    border-color: rgba(255,255,255,0.3);
+    color: white;
+  }
+
+  /* ─── CONTAINER ─── */
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 24px 80px; }
+
+  /* ─── CARDS ─── */
+  .grid {
+    display: grid; grid-template-columns: 1.1fr 1fr; gap: 32px;
+    margin-bottom: 60px;
+  }
+  @media (max-width: 880px) { .grid { grid-template-columns: 1fr; } }
+
+  .card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 20px;
+    padding: 36px;
+    backdrop-filter: blur(20px);
+    transition: border-color 0.3s, transform 0.3s;
+    position: relative; overflow: hidden;
+  }
+  .card:hover {
+    border-color: rgba(124,58,237,0.4);
+    transform: translateY(-4px);
+  }
+  .card.pricing {
+    background: linear-gradient(135deg, rgba(124,58,237,0.08), rgba(251,191,36,0.05));
+    border-color: rgba(251,191,36,0.3);
+  }
+
+  .card h2 {
+    font-size: 24px;
+    margin-bottom: 18px;
+    color: #C084FC;
+    font-weight: 800;
+  }
+
+  .card ul { list-style: none; padding: 0; }
+  .card li {
+    padding: 12px 0 12px 32px;
+    position: relative;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: 15px;
+    color: rgba(255,255,255,0.85);
+  }
+  .card li:last-child { border-bottom: none; }
+  .card li::before {
+    content: "✓"; position: absolute; left: 0; top: 12px;
+    color: #4ADE80; font-weight: 800;
+    font-size: 18px;
+  }
+  .card li.cross::before { content: "✗"; color: rgba(255,255,255,0.3); }
+  .card li strong { color: #FBBF24; }
+
+  .price-row {
+    padding: 20px 0;
+    border-bottom: 1px solid rgba(251,191,36,0.15);
+  }
+  .price-row:last-child { border-bottom: none; }
+
+  .tier-name {
+    font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+    color: #FBBF24; font-weight: 800; margin-bottom: 8px;
+  }
+  .tier-price {
+    font-size: 22px; font-weight: 800; color: white;
+    margin-bottom: 6px;
+  }
+  .tier-price s { color: rgba(255,255,255,0.3); font-weight: 400; font-size: 14px; }
+  .tier-price strong { color: #FBBF24; }
+  .tier-desc { font-size: 13px; color: rgba(255,255,255,0.6); }
+
+  /* ─── TIMELINE ─── */
+  .timeline {
+    margin: 32px 0;
+    position: relative;
+  }
+  .timeline::before {
+    content: ""; position: absolute;
+    left: 23px; top: 16px; bottom: 16px;
+    width: 2px;
+    background: linear-gradient(180deg, #FBBF24 0%, #C084FC 50%, #7C3AED 100%);
+    opacity: 0.4;
+  }
+  .timeline-item {
+    display: flex; gap: 20px; padding: 16px 0;
+    position: relative;
+  }
+  .timeline-day {
+    width: 48px; height: 48px;
+    background: linear-gradient(135deg, #FBBF24, #F59E0B);
+    color: #050510;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 900; font-size: 18px;
+    flex-shrink: 0; z-index: 2;
+    box-shadow: 0 4px 16px rgba(251,191,36,0.4);
+  }
+  .timeline-content { padding-top: 8px; }
+  .timeline-content h3 { color: white; margin-bottom: 4px; font-size: 16px; }
+  .timeline-content p { color: rgba(255,255,255,0.65); font-size: 14px; }
+
+  /* ─── CTA SECTION ─── */
+  .cta-box {
+    background: linear-gradient(135deg, rgba(124,58,237,0.15), rgba(251,191,36,0.08));
+    border: 1px solid rgba(251,191,36,0.3);
+    border-radius: 24px;
+    padding: 56px 32px;
+    text-align: center;
+    margin-top: 48px;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 24px 64px rgba(124,58,237,0.2);
+  }
+  .cta-box h2 {
+    font-size: clamp(28px, 4vw, 40px);
+    margin-bottom: 16px;
+    color: white;
+    font-weight: 900;
+  }
+  .cta-box p {
+    color: rgba(255,255,255,0.85); margin-bottom: 32px;
+    max-width: 600px; margin-left: auto; margin-right: auto;
+    font-size: 16px;
+  }
+  .cta-box .small {
+    font-size: 13px; color: rgba(255,255,255,0.5);
+    margin-top: 24px;
+  }
+  .cta-box .small a { color: #FBBF24; font-weight: 600; }
+
+  /* ─── BOOKING IFRAME ─── */
+  .booking-frame {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    margin: 32px 0;
+    min-height: 720px;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.4);
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    padding: 48px 24px 28px;
+    text-align: center;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    color: rgba(255,255,255,0.5);
+    font-size: 13px;
+  }
+  footer a {
+    color: rgba(255,255,255,0.5); margin: 0 12px;
+    transition: color 0.2s;
+  }
+  footer a:hover { color: #FBBF24; }
+</style>
+</head>
+<body>
+
+<div class="bg-glow"></div>
+<div class="bg-stars"></div>
+
+<nav>
+  <a href="/" class="logo">
+    <div class="logo-icon">📅</div>
+    Ran<span>-Tevu</span>
+  </a>
+  <a href="/" class="back">← Επιστροφή</a>
+</nav>
+
+<header>
+  <div class="badge-glow">⚡ Founding Member Program</div>
+
+  <h1>50% off τους <span class="gradient-text">πρώτους 3 μήνες</span><br>+ Direct founder access</h1>
+
+  <p class="lead">
+    Οι πρώτοι 5 πελάτες παίρνουν <strong style="color:#FBBF24;">μισή τιμή τους πρώτους 3 μήνες</strong>
+    + άμεσο WhatsApp στον founder για questions/customization.
+    Μετά τους 3 μήνες, standard pricing — αλλά μένετε priority customers <strong style="color:#FBBF24;">για πάντα</strong>.
+  </p>
+
+  <!-- LIVE SPOTS COUNTER -->
+  <div class="spots-widget">
+    <div class="spots-label" id="spots-label">Live · Founding Spots</div>
+    <div class="spots-display">
+      <span class="spots-num" id="spots-num">5</span>
+      <span class="spots-of">/ 5</span>
+    </div>
+    <div class="spots-msg" id="spots-msg">Γίνε ο πρώτος founding member · Όλα τα spots ανοιχτά</div>
+    <div class="spots-progress"><div class="spots-progress-bar" id="spots-bar"></div></div>
+  </div>
+
+  <a href="#book" class="btn btn-primary">Κλείσε δωρεάν 15-min consultation →</a>
+</header>
+
+<div class="container">
+
+  <div class="grid">
+
+    <div class="card pricing">
+      <h2>💎 Founding Member Pricing (3 μήνες)</h2>
+
+      <div class="price-row">
+        <div class="tier-name">Tier 1 — Chat (Web + WhatsApp + IG + FB)</div>
+        <div class="tier-price"><s>€99 setup + €2/booking</s> <strong>€49 setup + €1/booking</strong></div>
+        <div class="tier-desc">50% off setup + per-booking · 3 μήνες</div>
+      </div>
+
+      <div class="price-row">
+        <div class="tier-name">Tier 2 — Voice Receptionist</div>
+        <div class="tier-price"><s>€99 + €49/μήνα + €3/booking</s> <strong>€49 + €25/μήνα + €1.50/booking</strong></div>
+        <div class="tier-desc">50% off τα πρώτα 3 μήνες · Greek phone + ElevenLabs voice</div>
+      </div>
+
+      <div class="price-row">
+        <div class="tier-name">Tier 3 — Unlimited Flat</div>
+        <div class="tier-price"><s>€49 (text) ή €99 (+voice) /μήνα</s> <strong>€25 ή €49 /μήνα</strong></div>
+        <div class="tier-desc">50% off flat · Ιδανικό για >50 bookings/μήνα</div>
+      </div>
+
+      <div style="margin-top:24px;padding:14px;background:rgba(251,191,36,0.1);border-radius:10px;font-size:13px;text-align:center;color:rgba(255,255,255,0.85);">
+        Μετά τους 3 μήνες: αυτόματη μετάβαση σε standard. 30-day notice πριν.
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>🎯 Τι παίρνετε σαν Founding Member</h2>
+      <ul>
+        <li><strong>50% off τους πρώτους 3 μήνες</strong> (όλες οι τιμές)</li>
+        <li>Custom branded URL: ran-tevu.gr/η-επιχείρησή-σας</li>
+        <li>5 κανάλια: Web + Chat + WhatsApp + IG + FB</li>
+        <li>Voice add-on (αν θέλετε): ElevenLabs Greek voice</li>
+        <li>Πραγματικό booking στο ημερολόγιό σας</li>
+        <li>SMS confirmations + reminders 24ω/4ω πριν</li>
+        <li>Custom AI personality για την επιχείρησή σας</li>
+        <li>Admin dashboard με bookings + analytics</li>
+        <li><strong>Direct WhatsApp στον founder · 90 μέρες</strong></li>
+        <li><strong>Priority queue σε νέα features</strong></li>
+        <li><strong>Lifetime priority customer status</strong></li>
+        <li class="cross">Χωρίς penalty αν φύγετε</li>
+        <li class="cross">14-day money back ισχύει κανονικά</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom: 48px;">
+    <h2>⚡ Από demo σε live customer — 5 μέρες</h2>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-day">1</div>
+        <div class="timeline-content">
+          <h3>Δωρεάν 15-min Zoom consultation</h3>
+          <p>Καταλαβαίνω την επιχείρησή σας, services, ώρες, στόχους. Live demo.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-day">2</div>
+        <div class="timeline-content">
+          <h3>Setup του δικού σας bot</h3>
+          <p>Custom URL, services, prices, AI personality. 24-48 ώρες max.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-day">3</div>
+        <div class="timeline-content">
+          <h3>Testing μαζί</h3>
+          <p>Δοκιμάζετε με δικά σας test calls/messages. Tweaks αν χρειαστεί.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-day">4</div>
+        <div class="timeline-content">
+          <h3>Go-live</h3>
+          <p>Bot ζωντανό στο website σας / WhatsApp / phone.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-day">5</div>
+        <div class="timeline-content">
+          <h3>Optimization</h3>
+          <p>Tweaks based on real usage. Μετάβαση σε φυσιολογική λειτουργία.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cta-box" id="book">
+    <h2>Ξεκινήστε δωρεάν consultation</h2>
+    <p>15 λεπτά. 0 πίεση πώλησης. Σας δείχνω πώς δουλεύει για τη δική σας περίπτωση. Αν δε ταιριάζει, ευχαριστώ και προχωράμε.</p>
+    <a href="https://cal.com/randevu-konstantinois/15min" target="_blank" rel="noopener" class="btn btn-primary">📅 Διάλεξε ώρα τώρα →</a>
+    <p class="small">
+      Ή στείλε email: <a href="mailto:ntinosgkiou@gmail.com">ntinosgkiou@gmail.com</a> ·
+      Καλέστε: <a href="tel:+306987747434">6987 747 434</a>
+    </p>
+  </div>
+
+  <div class="booking-frame">
+    <iframe
+      src="https://cal.com/randevu-konstantinois/15min?embed=true&theme=light"
+      width="100%"
+      height="720"
+      frameborder="0"
+      style="display:block;border:none;"
+      title="Book 15-min consultation"></iframe>
+  </div>
+
+</div>
+
+<footer>
+  <a href="/">Αρχική</a>
+  <a href="/services/voice-receptionist">Voice</a>
+  <a href="/how-it-works">How it works</a>
+  <a href="/calculator">Calculator</a>
+  <a href="/privacy">Απόρρητο</a>
+  <a href="/terms">Όροι</a>
+  <p style="margin-top:18px;">© 2026 Ran-Tevu · Founder Κωνσταντίνος Γκιουλμπαξιώτης · Ρέθυμνο, Κρήτη</p>
+  <p style="margin-top:6px;font-size:12px;opacity:0.6;">Founding offer ισχύει για τους πρώτους 5 πελάτες. Όταν φτάσουμε στους 5, κλείνει.</p>
+</footer>
+
+<script>
+// ─── Live Founding Spots Counter ───
+async function updateSpots() {
+  try {
+    const r = await fetch('/api/founding/spots', { cache: 'no-store' });
+    if (!r.ok) return;
+    const d = await r.json();
+    const remaining = d.remaining || 0;
+    const taken = d.taken || 0;
+    const total = d.total || 5;
+
+    const numEl = document.getElementById('spots-num');
+    const msgEl = document.getElementById('spots-msg');
+    const labelEl = document.getElementById('spots-label');
+    const barEl = document.getElementById('spots-bar');
+
+    // Animate number
+    numEl.textContent = remaining;
+
+    // Progress bar (taken/total)
+    const pct = (taken / total) * 100;
+    barEl.style.width = pct + '%';
+
+    // Message based on remaining
+    let msg, labelText;
+    if (remaining === 5) {
+      msg = '🥇 Γίνε ο πρώτος founding member · Όλα τα spots ανοιχτά';
+      labelText = 'Live · Founding Spots';
+    } else if (remaining === 4) {
+      msg = '⚡ 1 πελάτης μόλις κλείδωσε · 4 spots μένουν';
+      labelText = 'Live · 1 spot taken';
+    } else if (remaining === 3) {
+      msg = '⚡ Γρήγορα γεμίζει · 3 spots μένουν';
+      labelText = 'Live · 2 spots taken';
+    } else if (remaining === 2) {
+      msg = '🔥 Σχεδόν τελείωσε · 2 spots μένουν';
+      labelText = 'Live · 3 spots taken';
+    } else if (remaining === 1) {
+      msg = '🔥 ΤΕΛΕΥΤΑΙΟ SPOT · Άρπαξέ το';
+      labelText = 'Live · 4 spots taken';
+    } else {
+      msg = '❌ Founding closed · Standard pricing ισχύει';
+      labelText = 'Closed · 5/5 taken';
+    }
+    msgEl.textContent = msg;
+    labelEl.textContent = labelText;
+  } catch (e) { /* silent */ }
+}
+updateSpots();
+setInterval(updateSpots, 30000); // refresh every 30 sec
+</script>
+
+</body>
+</html>

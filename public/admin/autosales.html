@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AutoSales — Ran-Tevu Admin</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  .gradient { background: linear-gradient(135deg, #7C3AED 0%, #4F46E5 100%); }
+  .tab.active { color: #7C3AED; border-bottom-color: #7C3AED; }
+  .badge-positive { background: #10b981; color: white; }
+  .badge-negative { background: #ef4444; color: white; }
+  .badge-unsubscribe { background: #dc2626; color: white; }
+  .badge-autoreply { background: #9ca3af; color: white; }
+  .badge-question { background: #3b82f6; color: white; }
+  .badge-unknown { background: #6b7280; color: white; }
+  .pulse { animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+  .fade-in { animation: fadeIn 0.2s ease-out; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+  .modal-bg { background: rgba(0,0,0,0.5); }
+</style>
+</head>
+<body class="bg-slate-50 min-h-screen">
+
+<!-- ── HEADER ─────────────────────────────────────────── -->
+<div class="gradient text-white shadow">
+  <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <span class="text-2xl">🚀</span>
+      <div>
+        <h1 class="text-xl font-bold">AutoSales</h1>
+        <p class="text-xs text-white/70">Cold outreach pipeline · Ran-Tevu</p>
+      </div>
+    </div>
+    <div class="flex items-center gap-3 text-sm">
+      <span id="auth-indicator" class="flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-red-400" id="auth-dot"></span>
+        <span id="auth-text">Not authenticated</span>
+      </span>
+      <button id="auth-btn" class="px-3 py-1.5 bg-white/20 hover:bg-white/30 rounded text-xs font-medium">
+        Set Token
+      </button>
+      <button id="refresh-btn" class="px-3 py-1.5 bg-white/20 hover:bg-white/30 rounded text-xs font-medium">
+        ⟳ Refresh
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ── MAIN ─────────────────────────────────────────── -->
+<div class="max-w-7xl mx-auto px-4 py-6">
+
+  <!-- STATS CARDS -->
+  <div id="stats-section" class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+      <div class="text-xs text-slate-500 uppercase tracking-wide">Leads</div>
+      <div class="text-3xl font-bold text-purple-600 mt-1" id="stat-leads">—</div>
+      <div class="text-xs text-slate-400 mt-1" id="stat-leads-breakdown"></div>
+    </div>
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+      <div class="text-xs text-slate-500 uppercase tracking-wide">Sent (7d)</div>
+      <div class="text-3xl font-bold text-blue-600 mt-1" id="stat-sent">—</div>
+      <div class="text-xs text-slate-400 mt-1" id="stat-pending"></div>
+    </div>
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+      <div class="text-xs text-slate-500 uppercase tracking-wide">Replies</div>
+      <div class="text-3xl font-bold text-green-600 mt-1" id="stat-replies">—</div>
+      <div class="text-xs text-slate-400 mt-1" id="stat-replies-breakdown"></div>
+    </div>
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+      <div class="text-xs text-slate-500 uppercase tracking-wide">Unhandled</div>
+      <div class="text-3xl font-bold text-orange-600 mt-1" id="stat-unhandled">—</div>
+      <div class="text-xs text-slate-400 mt-1">need your attention</div>
+    </div>
+  </div>
+
+  <!-- CHANNELS GRID -->
+  <div class="bg-white rounded-xl shadow-sm border border-slate-200 mb-6">
+    <div class="px-4 py-3 border-b border-slate-200 flex items-center justify-between">
+      <h2 class="font-semibold text-slate-700">📡 Channels</h2>
+      <span class="text-xs text-slate-400" id="channels-summary"></span>
+    </div>
+    <div id="channels-grid" class="grid grid-cols-2 md:grid-cols-4 gap-3 p-4"></div>
+  </div>
+
+  <!-- TABS -->
+  <div class="bg-white rounded-xl shadow-sm border border-slate-200">
+    <div class="flex border-b border-slate-200 overflow-x-auto">
+      <button class="tab active px-4 py-3 font-medium text-slate-600 border-b-2 border-transparent" data-tab="leads">
+        👥 Leads <span id="tab-count-leads" class="ml-1 text-xs text-slate-400"></span>
+      </button>
+      <button class="tab px-4 py-3 font-medium text-slate-600 border-b-2 border-transparent" data-tab="messages">
+        ✉️ Messages
+      </button>
+      <button class="tab px-4 py-3 font-medium text-slate-600 border-b-2 border-transparent" data-tab="replies">
+        💬 Replies <span id="tab-count-replies" class="ml-1 px-1.5 py-0.5 bg-orange-100 text-orange-700 rounded text-xs"></span>
+      </button>
+      <button class="tab px-4 py-3 font-medium text-slate-600 border-b-2 border-transparent" data-tab="blacklist">
+        🚫 Blacklist
+      </button>
+      <button class="tab px-4 py-3 font-medium text-slate-600 border-b-2 border-transparent" data-tab="tools">
+        🛠 Tools
+      </button>
+    </div>
+
+    <!-- ── LEADS TAB ─────────────────────────────── -->
+    <div id="tab-leads" class="tab-pane p-4">
+      <div class="flex flex-wrap gap-2 mb-3">
+        <input id="leads-search" placeholder="🔍 Search business name / email / website..."
+               class="flex-1 min-w-[200px] px-3 py-2 border border-slate-300 rounded text-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
+        <select id="leads-status" class="px-3 py-2 border border-slate-300 rounded text-sm">
+          <option value="">All statuses</option>
+          <option value="new">new</option>
+          <option value="enriched">enriched</option>
+          <option value="active">active</option>
+          <option value="converted">converted</option>
+          <option value="dead">dead</option>
+          <option value="already_contacted_manual">already contacted (manual)</option>
+        </select>
+        <select id="leads-industry" class="px-3 py-2 border border-slate-300 rounded text-sm">
+          <option value="">All industries</option>
+          <option value="physio">physio</option>
+          <option value="dental">dental</option>
+          <option value="psycho">psycho</option>
+          <option value="vet">vet</option>
+          <option value="doctor">doctor</option>
+          <option value="hair">hair</option>
+          <option value="beauty">beauty</option>
+          <option value="fitness">fitness</option>
+        </select>
+        <button id="add-lead-btn" class="px-3 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded text-sm font-medium">
+          + New Lead
+        </button>
+      </div>
+
+      <!-- Inline create-lead form (hidden by default) -->
+      <div id="add-lead-form" class="hidden bg-purple-50 border border-purple-200 rounded-lg p-4 mb-3">
+        <h3 class="font-semibold text-slate-700 mb-2">➕ Add new lead manually</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 mb-3">
+          <input id="al-business" placeholder="Business name *" class="px-3 py-2 border border-slate-300 rounded text-sm">
+          <input id="al-email" placeholder="Email" class="px-3 py-2 border border-slate-300 rounded text-sm">
+          <input id="al-phone" placeholder="Phone (E.164)" class="px-3 py-2 border border-slate-300 rounded text-sm">
+          <input id="al-instagram" placeholder="Instagram handle (no @)" class="px-3 py-2 border border-slate-300 rounded text-sm">
+          <input id="al-facebook" placeholder="Facebook page URL or ID" class="px-3 py-2 border border-slate-300 rounded text-sm">
+          <input id="al-website" placeholder="Website URL" class="px-3 py-2 border border-slate-300 rounded text-sm">
+          <select id="al-industry" class="px-3 py-2 border border-slate-300 rounded text-sm">
+            <option value="">-- industry --</option>
+            <option value="physio">physio</option>
+            <option value="dental">dental</option>
+            <option value="psycho">psycho</option>
+            <option value="vet">vet</option>
+            <option value="doctor">doctor</option>
+            <option value="hair">hair</option>
+            <option value="beauty">beauty</option>
+            <option value="fitness">fitness</option>
+          </select>
+          <input id="al-city" placeholder="City" class="px-3 py-2 border border-slate-300 rounded text-sm">
+          <input id="al-notes" placeholder="Notes (optional)" class="px-3 py-2 border border-slate-300 rounded text-sm">
+        </div>
+        <div class="flex gap-2">
+          <button id="al-save-btn" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded text-sm font-medium">
+            💾 Save & set status=new
+          </button>
+          <button id="al-cancel-btn" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded text-sm">
+            Cancel
+          </button>
+          <span class="text-xs text-slate-500 self-center">* = required. Lead γίνεται eligible άμεσα για outreach.</span>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead class="bg-slate-50 text-slate-600 text-xs uppercase">
+            <tr>
+              <th class="text-left px-3 py-2">Business</th>
+              <th class="text-left px-3 py-2">Email</th>
+              <th class="text-left px-3 py-2">Phone</th>
+              <th class="text-left px-3 py-2">City</th>
+              <th class="text-left px-3 py-2">Industry</th>
+              <th class="text-left px-3 py-2">Status</th>
+              <th class="text-left px-3 py-2">Score</th>
+              <th class="text-right px-3 py-2"></th>
+            </tr>
+          </thead>
+          <tbody id="leads-tbody" class="divide-y divide-slate-100"></tbody>
+        </table>
+      </div>
+
+      <div class="flex justify-between items-center mt-3 text-sm text-slate-500">
+        <span id="leads-info">—</span>
+        <div class="flex gap-2">
+          <button id="leads-prev" class="px-3 py-1 border border-slate-300 rounded hover:bg-slate-50">← Prev</button>
+          <button id="leads-next" class="px-3 py-1 border border-slate-300 rounded hover:bg-slate-50">Next →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── MESSAGES TAB ─────────────────────────── -->
+    <div id="tab-messages" class="tab-pane hidden p-4">
+      <div class="flex gap-2 mb-3">
+        <select id="messages-channel" class="px-3 py-2 border border-slate-300 rounded text-sm">
+          <option value="">All channels</option>
+          <option value="email">email</option><option value="instagram">instagram</option>
+          <option value="facebook">facebook</option><option value="whatsapp">whatsapp</option>
+          <option value="viber">viber</option><option value="sms">sms</option>
+          <option value="linkedin">linkedin</option><option value="voice">voice</option>
+        </select>
+        <select id="messages-status" class="px-3 py-2 border border-slate-300 rounded text-sm">
+          <option value="">All statuses</option>
+          <option value="pending">pending</option>
+          <option value="sent">sent</option>
+          <option value="failed">failed</option>
+        </select>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead class="bg-slate-50 text-slate-600 text-xs uppercase">
+            <tr>
+              <th class="text-left px-3 py-2">When</th>
+              <th class="text-left px-3 py-2">Channel</th>
+              <th class="text-left px-3 py-2">Lead</th>
+              <th class="text-left px-3 py-2">Subject / Body</th>
+              <th class="text-left px-3 py-2">Step</th>
+              <th class="text-left px-3 py-2">Status</th>
+            </tr>
+          </thead>
+          <tbody id="messages-tbody" class="divide-y divide-slate-100"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── REPLIES TAB ──────────────────────────── -->
+    <div id="tab-replies" class="tab-pane hidden p-4">
+      <div class="flex justify-between items-center mb-3">
+        <label class="flex items-center gap-2 text-sm text-slate-600">
+          <input type="checkbox" id="replies-show-handled" class="rounded">
+          Show handled
+        </label>
+        <button id="poll-now-btn" class="px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white rounded text-sm">
+          📥 Poll IMAP now
+        </button>
+      </div>
+      <div id="replies-list" class="space-y-3"></div>
+    </div>
+
+    <!-- ── BLACKLIST TAB ───────────────────────── -->
+    <div id="tab-blacklist" class="tab-pane hidden p-4">
+      <div class="flex flex-wrap gap-2 mb-3">
+        <input id="bl-identifier" placeholder="email or handle"
+               class="flex-1 min-w-[200px] px-3 py-2 border border-slate-300 rounded text-sm">
+        <select id="bl-channel" class="px-3 py-2 border border-slate-300 rounded text-sm">
+          <option value="all">all channels</option>
+          <option value="email">email</option><option value="instagram">instagram</option>
+          <option value="facebook">facebook</option><option value="whatsapp">whatsapp</option>
+          <option value="sms">sms</option>
+        </select>
+        <input id="bl-reason" placeholder="reason (optional)"
+               class="px-3 py-2 border border-slate-300 rounded text-sm">
+        <button id="bl-add-btn" class="px-3 py-2 bg-red-600 hover:bg-red-700 text-white rounded text-sm font-medium">
+          + Add to blacklist
+        </button>
+      </div>
+      <div id="blacklist-list" class="space-y-1"></div>
+    </div>
+
+    <!-- ── TOOLS TAB ───────────────────────────── -->
+    <div id="tab-tools" class="tab-pane hidden p-4 space-y-6">
+      <div class="border border-slate-200 rounded-lg p-4">
+        <h3 class="font-semibold text-slate-700 mb-2">📥 Import existing CSVs</h3>
+        <p class="text-sm text-slate-500 mb-3">
+          Imports scraper/leads.csv (459) + leads2.csv (175) + leads_quality.csv (77) ως
+          <code class="bg-slate-100 px-1 rounded">already_contacted_manual</code>.
+          Αυτά τα leads ΔΕΝ θα ληφθούν αυτόματα από το AutoSales.
+        </p>
+        <button id="import-csvs-btn" class="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded font-medium">
+          Import 711 leads
+        </button>
+        <div id="import-result" class="mt-3 text-sm"></div>
+      </div>
+
+      <div class="border border-slate-200 rounded-lg p-4">
+        <h3 class="font-semibold text-slate-700 mb-2">🔎 Manual scrape (Google Maps)</h3>
+        <p class="text-sm text-slate-500 mb-3">
+          Sync scrape (~30-60s). Για heavy scraping χρησιμοποίησε το CLI.
+        </p>
+        <div class="flex flex-wrap gap-2">
+          <input id="scrape-query" placeholder='π.χ. "φυσιοθεραπεία"'
+                 class="flex-1 min-w-[150px] px-3 py-2 border border-slate-300 rounded text-sm">
+          <input id="scrape-location" placeholder='π.χ. "Ρέθυμνο"'
+                 class="flex-1 min-w-[150px] px-3 py-2 border border-slate-300 rounded text-sm">
+          <input id="scrape-max" type="number" value="20" min="1" max="50"
+                 class="w-20 px-3 py-2 border border-slate-300 rounded text-sm">
+          <button id="scrape-btn" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded font-medium">
+            Scrape
+          </button>
+        </div>
+        <div id="scrape-result" class="mt-3 text-sm"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── LEAD DETAIL MODAL ─────────────────────── -->
+<div id="lead-modal" class="hidden fixed inset-0 modal-bg z-50 flex items-center justify-center p-4">
+  <div class="bg-white rounded-xl shadow-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+    <div class="px-5 py-4 border-b border-slate-200 flex items-center justify-between sticky top-0 bg-white">
+      <h2 class="font-semibold text-slate-800" id="lead-modal-title">Lead detail</h2>
+      <button onclick="closeLeadModal()" class="text-slate-400 hover:text-slate-700 text-xl">×</button>
+    </div>
+    <div id="lead-modal-content" class="p-5"></div>
+  </div>
+</div>
+
+<!-- ── PREVIEW MODAL ─────────────────────────── -->
+<div id="preview-modal" class="hidden fixed inset-0 modal-bg z-50 flex items-center justify-center p-4">
+  <div class="bg-white rounded-xl shadow-xl max-w-2xl w-full">
+    <div class="px-5 py-4 border-b border-slate-200 flex items-center justify-between">
+      <h2 class="font-semibold text-slate-800">Message Preview</h2>
+      <button onclick="document.getElementById('preview-modal').classList.add('hidden')"
+              class="text-slate-400 hover:text-slate-700 text-xl">×</button>
+    </div>
+    <div id="preview-content" class="p-5"></div>
+  </div>
+</div>
+
+<!-- ── TOAST ──────────────────────────────────── -->
+<div id="toast" class="fixed bottom-6 right-6 bg-slate-900 text-white px-4 py-2 rounded-lg shadow-lg opacity-0 pointer-events-none transition-all z-50 text-sm"></div>
+
+<script>
+// ════════════════════════════════════════════════════════════════
+//  Token + API
+// ════════════════════════════════════════════════════════════════
+
+const TOKEN_KEY = 'autosales_admin_token';
+function getToken() { return localStorage.getItem(TOKEN_KEY) || ''; }
+function setToken(t) { localStorage.setItem(TOKEN_KEY, t); }
+function clearToken() { localStorage.removeItem(TOKEN_KEY); }
+
+async function api(path, opts = {}) {
+  const token = getToken();
+  if (!token) {
+    showToast('⚠ No token set. Click "Set Token".');
+    throw new Error('no_token');
+  }
+  const headers = { 'Authorization': `Bearer ${token}`, ...(opts.headers || {}) };
+  if (opts.body && !headers['Content-Type']) headers['Content-Type'] = 'application/json';
+  const res = await fetch('/api/admin/autosales' + path, { ...opts, headers });
+  if (res.status === 401) {
+    setAuthIndicator(false);
+    showToast('🔒 Unauthorized — check token');
+    throw new Error('unauthorized');
+  }
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error || `HTTP ${res.status}`);
+  }
+  return res.json();
+}
+
+function setAuthIndicator(ok) {
+  const dot = document.getElementById('auth-dot');
+  const txt = document.getElementById('auth-text');
+  dot.className = 'w-2 h-2 rounded-full ' + (ok ? 'bg-green-400 pulse' : 'bg-red-400');
+  txt.textContent = ok ? 'Connected' : 'Not authenticated';
+}
+
+// ════════════════════════════════════════════════════════════════
+//  UI helpers
+// ════════════════════════════════════════════════════════════════
+
+function escapeHtml(s) {
+  return String(s ?? '').replace(/[&<>"']/g, c =>
+    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+function showToast(msg, durationMs = 2200) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.opacity = '1';
+  setTimeout(() => t.style.opacity = '0', durationMs);
+}
+
+function fmtDate(s) {
+  if (!s) return '';
+  const d = new Date(s.replace(' ', 'T'));
+  if (isNaN(d)) return s;
+  const today = new Date();
+  if (d.toDateString() === today.toDateString()) {
+    return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  }
+  return d.toLocaleDateString([], { day: '2-digit', month: 'short' });
+}
+
+// ════════════════════════════════════════════════════════════════
+//  Stats + Channels
+// ════════════════════════════════════════════════════════════════
+
+let CHANNEL_STATES = {};
+
+async function loadStats() {
+  try {
+    const data = await api('/stats');
+    setAuthIndicator(true);
+    document.getElementById('stat-leads').textContent = data.leads.total;
+    const breakdown = Object.entries(data.leads.by_status)
+      .map(([s, n]) => `${s}: ${n}`).join(' · ') || '—';
+    document.getElementById('stat-leads-breakdown').textContent = breakdown;
+
+    document.getElementById('stat-sent').textContent = data.messages_7d.sent || 0;
+    document.getElementById('stat-pending').textContent =
+      `${data.messages_7d.pending || 0} pending · ${data.messages_7d.failed || 0} failed`;
+
+    document.getElementById('stat-replies').textContent = data.replies.total;
+    document.getElementById('stat-replies-breakdown').textContent =
+      `${data.replies.positive} positive`;
+
+    document.getElementById('stat-unhandled').textContent = data.replies.unhandled;
+    document.getElementById('tab-count-replies').textContent = data.replies.unhandled || '';
+
+    renderChannels(data.by_channel);
+  } catch (e) {
+    if (e.message !== 'no_token' && e.message !== 'unauthorized') {
+      console.error(e); showToast('❌ ' + e.message);
+    }
+  }
+}
+
+function renderChannels(channels) {
+  CHANNEL_STATES = channels;
+  const grid = document.getElementById('channels-grid');
+  grid.innerHTML = '';
+  let activeCount = 0, pausedCount = 0;
+  const order = ['email', 'instagram', 'facebook', 'whatsapp', 'viber', 'sms', 'linkedin', 'voice'];
+  order.forEach(name => {
+    const ch = channels[name] || {};
+    if (!ch.paused && ch.enabled) activeCount++;
+    if (ch.paused) pausedCount++;
+    const card = document.createElement('div');
+    const statusColor = ch.paused ? 'bg-amber-50 border-amber-300' :
+                        ch.enabled ? 'bg-emerald-50 border-emerald-300' :
+                        'bg-slate-50 border-slate-300';
+    card.className = `border ${statusColor} rounded-lg p-3`;
+    const sentToday = ch.sent_today || 0;
+    const limit = ch.daily_limit || 0;
+    const pct = limit > 0 ? Math.min(100, (sentToday / limit) * 100) : 0;
+    card.innerHTML = `
+      <div class="flex items-center justify-between mb-2">
+        <span class="font-semibold text-slate-700">${name}</span>
+        <span class="text-xs ${ch.paused ? 'text-amber-700' : ch.enabled ? 'text-emerald-700' : 'text-slate-500'}">
+          ${ch.paused ? '⏸ paused' : ch.enabled ? '● active' : '○ off'}
+        </span>
+      </div>
+      <div class="text-xs text-slate-600 mb-1">${sentToday} / ${limit} today</div>
+      <div class="h-1.5 bg-slate-200 rounded-full overflow-hidden mb-2">
+        <div class="h-full bg-purple-500" style="width: ${pct}%"></div>
+      </div>
+      <div class="text-xs text-slate-500 mb-2">7d: ${ch.sent_7d || 0} sent · ${ch.failed_7d || 0} failed</div>
+      ${ch.pause_reason ? `<div class="text-xs text-amber-700 mb-2 truncate" title="${escapeHtml(ch.pause_reason)}">⚠ ${escapeHtml(ch.pause_reason)}</div>` : ''}
+      <div class="flex gap-1">
+        ${ch.paused
+          ? `<button onclick="resumeChannel('${name}')" class="flex-1 px-2 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded text-xs">▶ Resume</button>`
+          : `<button onclick="pauseChannel('${name}')" class="flex-1 px-2 py-1 bg-amber-500 hover:bg-amber-600 text-white rounded text-xs">⏸ Pause 24h</button>`
+        }
+        <button onclick="runChannel('${name}')" class="flex-1 px-2 py-1 bg-purple-600 hover:bg-purple-700 text-white rounded text-xs">▶ Run</button>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+  document.getElementById('channels-summary').textContent =
+    `${activeCount} active · ${pausedCount} paused`;
+}
+
+async function pauseChannel(name) {
+  try {
+    await api(`/channel/${name}/pause`, { method: 'POST', body: JSON.stringify({ hours: 24, reason: 'manual' }) });
+    showToast(`⏸ ${name} paused 24h`);
+    loadStats();
+  } catch (e) { showToast('❌ ' + e.message); }
+}
+
+async function resumeChannel(name) {
+  try {
+    await api(`/channel/${name}/resume`, { method: 'POST' });
+    showToast(`▶ ${name} resumed`);
+    loadStats();
+  } catch (e) { showToast('❌ ' + e.message); }
+}
+
+async function runChannel(name) {
+  const limit = parseInt(prompt(`Run ${name} batch — how many?`, '5'));
+  if (!limit) return;
+  const dry = confirm('Dry-run only? (OK = dry-run, Cancel = REAL send)');
+  showToast(`Running ${name}...`, 4000);
+  try {
+    const res = await api(`/channel/${name}/run`, { method: 'POST',
+      body: JSON.stringify({ limit, dry_run: dry }) });
+    showToast(`✅ ${dry ? 'DRY' : 'SENT'}: ${res.sent} ok · ${res.failed} failed · ${res.skipped} skipped`, 4000);
+    loadStats();
+    loadLeads();
+  } catch (e) { showToast('❌ ' + e.message); }
+}
+
+// ════════════════════════════════════════════════════════════════
+//  Tabs
+// ════════════════════════════════════════════════════════════════
+
+document.querySelectorAll('.tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-pane').forEach(p => p.classList.add('hidden'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + btn.dataset.tab).classList.remove('hidden');
+    if (btn.dataset.tab === 'leads') loadLeads();
+    if (btn.dataset.tab === 'messages') loadMessages();
+    if (btn.dataset.tab === 'replies') loadReplies();
+    if (btn.dataset.tab === 'blacklist') loadBlacklist();
+  });
+});
+
+// ════════════════════════════════════════════════════════════════
+//  Leads
+// ════════════════════════════════════════════════════════════════
+
+let leadsOffset = 0;
+const LEADS_LIMIT = 20;
+
+async function loadLeads() {
+  const search = document.getElementById('leads-search').value.trim();
+  const status = document.getElementById('leads-status').value;
+  const industry = document.getElementById('leads-industry').value;
+  const params = new URLSearchParams({ limit: LEADS_LIMIT, offset: leadsOffset });
+  if (search) params.set('q', search);
+  if (status) params.set('status', status);
+  if (industry) params.set('industry', industry);
+
+  try {
+    const data = await api('/leads?' + params);
+    setAuthIndicator(true);
+    renderLeads(data);
+    document.getElementById('tab-count-leads').textContent = `(${data.total})`;
+  } catch (e) {
+    if (e.message !== 'no_token' && e.message !== 'unauthorized') showToast('❌ ' + e.message);
+  }
+}
+
+function renderLeads({ leads, total }) {
+  const tbody = document.getElementById('leads-tbody');
+  tbody.innerHTML = '';
+  if (!leads.length) {
+    tbody.innerHTML = '<tr><td colspan="8" class="text-center py-8 text-slate-400">No leads</td></tr>';
+  }
+  leads.forEach(l => {
+    const tr = document.createElement('tr');
+    tr.className = 'hover:bg-slate-50 cursor-pointer fade-in';
+    const statusColor = {
+      new: 'text-emerald-700 bg-emerald-50',
+      enriched: 'text-blue-700 bg-blue-50',
+      active: 'text-purple-700 bg-purple-50',
+      converted: 'text-green-700 bg-green-100 font-bold',
+      dead: 'text-slate-500 bg-slate-100',
+      already_contacted_manual: 'text-amber-700 bg-amber-50',
+    }[l.status] || 'text-slate-500';
+    tr.innerHTML = `
+      <td class="px-3 py-2 font-medium text-slate-800">${escapeHtml(l.business_name).slice(0, 40)}</td>
+      <td class="px-3 py-2 text-slate-600">${escapeHtml(l.email || '—')}</td>
+      <td class="px-3 py-2 text-slate-600">${escapeHtml(l.phone || '—')}</td>
+      <td class="px-3 py-2 text-slate-600">${escapeHtml(l.city || '')}</td>
+      <td class="px-3 py-2 text-slate-600">${escapeHtml(l.industry || '')}</td>
+      <td class="px-3 py-2"><span class="px-2 py-0.5 rounded text-xs ${statusColor}">${l.status}</span></td>
+      <td class="px-3 py-2 text-slate-600">${l.score}</td>
+      <td class="px-3 py-2 text-right">
+        <button onclick="event.stopPropagation(); openLead(${l.id})" class="text-purple-600 hover:underline text-xs">Detail</button>
+        <button onclick="event.stopPropagation(); previewMessage(${l.id})" class="text-blue-600 hover:underline text-xs ml-2">Preview</button>
+      </td>
+    `;
+    tr.onclick = () => openLead(l.id);
+    tbody.appendChild(tr);
+  });
+  document.getElementById('leads-info').textContent =
+    `Showing ${leadsOffset + 1}-${Math.min(leadsOffset + leads.length, total)} of ${total}`;
+  document.getElementById('leads-prev').disabled = leadsOffset === 0;
+  document.getElementById('leads-next').disabled = leadsOffset + leads.length >= total;
+}
+
+// Add Lead form toggle + save
+document.getElementById('add-lead-btn').addEventListener('click', () => {
+  const form = document.getElementById('add-lead-form');
+  form.classList.toggle('hidden');
+  if (!form.classList.contains('hidden')) document.getElementById('al-business').focus();
+});
+document.getElementById('al-cancel-btn').addEventListener('click', () => {
+  document.getElementById('add-lead-form').classList.add('hidden');
+});
+document.getElementById('al-save-btn').addEventListener('click', async () => {
+  const data = {
+    source: 'manual',
+    business_name: document.getElementById('al-business').value.trim(),
+    email: document.getElementById('al-email').value.trim().toLowerCase(),
+    phone: document.getElementById('al-phone').value.trim(),
+    instagram: document.getElementById('al-instagram').value.trim().replace(/^@/, ''),
+    facebook: document.getElementById('al-facebook').value.trim(),
+    website: document.getElementById('al-website').value.trim(),
+    industry: document.getElementById('al-industry').value,
+    city: document.getElementById('al-city').value.trim(),
+    notes: document.getElementById('al-notes').value.trim(),
+    status: 'new',
+  };
+  if (!data.business_name) { showToast('⚠ Business name απαιτείται'); return; }
+  try {
+    const r = await api('/leads', { method: 'POST', body: JSON.stringify(data) });
+    showToast(`✓ Lead created (id=${r.id})`);
+    // Clear form
+    ['al-business','al-email','al-phone','al-instagram','al-facebook','al-website','al-city','al-notes']
+      .forEach(id => document.getElementById(id).value = '');
+    document.getElementById('al-industry').value = '';
+    document.getElementById('add-lead-form').classList.add('hidden');
+    loadLeads(); loadStats();
+  } catch (e) { showToast('❌ ' + e.message); }
+});
+
+document.getElementById('leads-prev').addEventListener('click', () => {
+  leadsOffset = Math.max(0, leadsOffset - LEADS_LIMIT); loadLeads();
+});
+document.getElementById('leads-next').addEventListener('click', () => {
+  leadsOffset += LEADS_LIMIT; loadLeads();
+});
+['leads-search', 'leads-status', 'leads-industry'].forEach(id => {
+  document.getElementById(id).addEventListener('input', () => {
+    leadsOffset = 0; loadLeads();
+  });
+});
+
+async function openLead(id) {
+  try {
+    const data = await api(`/leads/${id}`);
+    const lead = data.lead;
+    const html = `
+      <div class="grid grid-cols-2 gap-3 mb-4 text-sm">
+        <div><strong>Business:</strong> ${escapeHtml(lead.business_name)}</div>
+        <div><strong>Status:</strong> ${lead.status} (score ${lead.score})</div>
+        <div><strong>Email:</strong> ${escapeHtml(lead.email || '—')}</div>
+        <div><strong>Phone:</strong> ${escapeHtml(lead.phone || '—')}</div>
+        <div><strong>City:</strong> ${escapeHtml(lead.city || '—')}</div>
+        <div><strong>Industry:</strong> ${escapeHtml(lead.industry || '—')}</div>
+        <div class="col-span-2"><strong>Website:</strong>
+          ${lead.website ? `<a href="${escapeHtml(lead.website)}" target="_blank" class="text-purple-600 hover:underline">${escapeHtml(lead.website)}</a>` : '—'}
+        </div>
+        <div class="col-span-2"><strong>Last outreach:</strong> ${lead.last_outreach_at || 'never'}</div>
+      </div>
+      <div class="mb-4">
+        <h3 class="font-semibold text-slate-700 mb-2">Messages (${data.messages.length})</h3>
+        ${data.messages.length === 0 ? '<p class="text-slate-400 text-sm">No messages yet.</p>' :
+          data.messages.map(m => `
+            <div class="border border-slate-200 rounded p-3 mb-2 text-sm">
+              <div class="flex justify-between mb-1">
+                <span class="font-semibold">${m.channel} · step ${m.sequence_step}</span>
+                <span class="text-xs ${m.status==='sent'?'text-green-600':m.status==='failed'?'text-red-600':'text-slate-500'}">${m.status}</span>
+              </div>
+              ${m.subject ? `<div class="text-slate-600 mb-1"><em>${escapeHtml(m.subject)}</em></div>` : ''}
+              <div class="text-slate-600 text-xs whitespace-pre-wrap max-h-32 overflow-y-auto">${escapeHtml(m.body || '').slice(0, 500)}</div>
+              ${m.failure_reason ? `<div class="text-xs text-red-600 mt-1">⚠ ${escapeHtml(m.failure_reason)}</div>` : ''}
+              <div class="text-xs text-slate-400 mt-1">${m.sent_at || m.created_at}</div>
+            </div>
+          `).join('')
+        }
+      </div>
+      <div class="mb-4">
+        <h3 class="font-semibold text-slate-700 mb-2">Replies (${data.replies.length})</h3>
+        ${data.replies.length === 0 ? '<p class="text-slate-400 text-sm">No replies yet.</p>' :
+          data.replies.map(r => `
+            <div class="border-l-4 border-purple-400 bg-slate-50 rounded p-3 mb-2 text-sm">
+              <div class="flex justify-between mb-1">
+                <span class="px-2 py-0.5 rounded text-xs badge-${r.classification || 'unknown'}">${r.classification || 'unknown'}</span>
+                <span class="text-xs text-slate-500">${r.received_at}</span>
+              </div>
+              <div class="text-slate-700 whitespace-pre-wrap text-xs">${escapeHtml(r.raw_text || '').slice(0, 500)}</div>
+            </div>
+          `).join('')
+        }
+      </div>
+      <div class="flex gap-2 pt-3 border-t border-slate-200">
+        <button onclick="updateLeadStatus(${id}, 'enriched')" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded text-xs">Mark enriched</button>
+        <button onclick="updateLeadStatus(${id}, 'converted')" class="px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded text-xs">Mark converted ✓</button>
+        <button onclick="updateLeadStatus(${id}, 'dead')" class="px-3 py-1.5 bg-slate-500 hover:bg-slate-600 text-white rounded text-xs">Mark dead</button>
+        <button onclick="addLeadToBlacklist('${escapeHtml(lead.email || '')}')" class="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded text-xs">+ Blacklist</button>
+      </div>
+    `;
+    document.getElementById('lead-modal-title').textContent = lead.business_name;
+    document.getElementById('lead-modal-content').innerHTML = html;
+    document.getElementById('lead-modal').classList.remove('hidden');
+  } catch (e) { showToast('❌ ' + e.message); }
+}
+
+function closeLeadModal() { document.getElementById('lead-modal').classList.add('hidden'); }
+
+async function updateLeadStatus(id, status) {
+  try {
+    await api(`/leads/${id}`, { method: 'PATCH', body: JSON.stringify({ status }) });
+    showToast(`✓ Marked ${status}`);
+    closeLeadModal();
+    loadLeads(); loadStats();
+  } catch (e) { showToast('❌ ' + e.message); }
+}
+
+async function addLeadToBlacklist(email) {
+  if (!email) { showToast('No email'); return; }
+  if (!confirm(`Blacklist ${email}?`)) return;
+  try {
+    await api('/blacklist', { method: 'POST',
+      body: JSON.stringify({ identifier: email, channel: 'all', reason: 'manual_from_lead' }) });
+    showToast('✓ Blacklisted');
+  } catch (e) { showToast('❌ ' + e.message); }
+}
+
+async function previewMessage(leadId) {
+  const step = parseInt(prompt('Sequence step (0=initial, 1-3=followup)?', '0'));
+  if (isNaN(step)) return;
+  try {
+    const data = await api('/channel/email/test', { method: 'POST',
+      body: JSON.stringify({ lead_id: leadId, sequence_step: step }) });
+    const html = `
+      <div class="mb-3">
+        <strong>Lead:</strong> ${escapeHtml(data.lead.business_name)} (${escapeHtml(data.lead.email || '—')})
+      </div>
+      <div class="mb-3">
+        <strong>Would send?</strong>
+        <span class="${data.would_send ? 'text-green-600' : 'text-red-600'}">
+          ${data.would_send ? '✓ YES' : `✗ NO — ${data.block_reason}`}
+        </span>
+      </div>
+      <div class="border border-slate-200 rounded p-3 bg-slate-50">
+        ${data.preview.subject ? `<div class="font-semibold mb-2">Subject: ${escapeHtml(data.preview.subject)}</div>` : ''}
+        <div class="whitespace-pre-wrap text-sm text-slate-700">${escapeHtml(data.preview.body || data.preview.text || '')}</div>
+      </div>
+    `;
+    document.getElementById('preview-content').innerHTML = html;
+    document.getElementById('preview-modal').classList.remove('hidden');
+  } catch (e) { showToast('❌ ' + e.message); }
+}
+
+// ════════════════════════════════════════════════════════════════
+//  Messages
+// ════════════════════════════════════════════════════════════════
+
+async function loadMessages() {
+  const channel = document.getElementById('messages-channel').value;
+  const status = document.getElementById('messages-status').value;
+  const params = new URLSearchParams({ limit: 50 });
+  if (channel) params.set('channel', channel);
+  if (status) params.set('status', status);
+  try {
+    const data = await api('/messages?' + params);
+    renderMessages(data.messages);
+  } catch (e) { showToast('❌ ' + e.message); }
+}
+
+function renderMessages(msgs) {
+  const tbody = document.getElementById('messages-tbody');
+  tbody.innerHTML = '';
+  if (!msgs.length) {
+    tbody.innerHTML = '<tr><td colspan="6" class="text-center py-8 text-slate-400">No messages</td></tr>';
+  }
+  msgs.forEach(m => {
+    const tr = document.createElement('tr');
+    tr.className = 'hover:bg-slate-50 fade-in';
+    const statusColor = m.status === 'sent' ? 'text-green-600' :
+                        m.status === 'failed' ? 'text-red-600' : 'text-slate-500';
+    const preview = (m.subject || '') + ' · ' + (m.body || '').slice(0, 80);
+    tr.innerHTML = `
+      <td class="px-3 py-2 text-slate-500 text-xs">${fmtDate(m.sent_at || m.created_at)}</td>
+      <td class="px-3 py-2"><span class="px-2 py-0.5 bg-slate-100 rounded text-xs">${m.channel}</span></td>
+      <td class="px-3 py-2 text-slate-700">${escapeHtml(m.business_name || '—').slice(0, 30)}</td>
+      <td class="px-3 py-2 text-slate-600 text-xs truncate max-w-md">${escapeHtml(preview)}</td>
+      <td class="px-3 py-2 text-slate-500">${m.sequence_step}</td>
+      <td class="px-3 py-2"><span class="${statusColor} text-xs font-semibold">${m.status}</span></td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+document.getElementById('messages-channel').addEventListener('change', loadMessages);
+document.getElementById('messages-status').addEventListener('change', loadMessages);
+
+// ════════════════════════════════════════════════════════════════
+//  Replies
+// ════════════════════════════════════════════════════════════════
+
+async function loadReplies() {
+  const showHandled = document.getElementById('replies-show-handled').checked;
+  try {
+    const data = await api('/replies' + (showHandled ? '?handled=1' : ''));
+    renderReplies(data.replies);
+  } catch (e) { showToast('❌ ' + e.message); }
+}
+
+function renderReplies(replies) {
+  const list = document.getElementById('replies-list');
+  list.innerHTML = '';
+  if (!replies.length) {
+    list.innerHTML = '<div class="text-center py-8 text-slate-400">No replies</div>';
+    return;
+  }
+  replies.forEach(r => {
+    const card = document.createElement('div');
+    card.className = 'border border-slate-200 rounded-lg p-4 fade-in';
+    card.innerHTML = `
+      <div class="flex items-center justify-between mb-2">
+        <div class="flex items-center gap-2">
+          <span class="px-2 py-0.5 rounded text-xs font-semibold badge-${r.classification || 'unknown'}">${r.classification || 'unknown'}</span>
+          <span class="font-semibold text-slate-800">${escapeHtml(r.business_name || r.lead_email || '—')}</span>
+          <span class="text-xs text-slate-400">${escapeHtml(r.lead_email || '')}</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-xs text-slate-500">${r.received_at}</span>
+          ${!r.handled ? `<button onclick="markHandled(${r.id})" class="px-2 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded text-xs">✓ Mark handled</button>` : ''}
+        </div>
+      </div>
+      <div class="bg-slate-50 rounded p-3 text-sm whitespace-pre-wrap text-slate-700">${escapeHtml(r.raw_text || '').slice(0, 1000)}</div>
+      ${r.lead_id ? `<button onclick="openLead(${r.lead_id})" class="mt-2 text-xs text-purple-600 hover:underline">→ Open lead</button>` : ''}
+    `;
+    list.appendChild(card);
+  });
+}
+
+async function markHandled(id) {
+  try {
+    await api(`/replies/${id}/handled`, { method: 'POST', body: JSON.stringify({ by: 'founder' }) });
+    showToast('✓ Marked handled');
+    loadReplies(); loadStats();
+  } catch (e) { showToast('❌ ' + e.message); }
+}
+
+document.getElementById('replies-show-handled').addEventListener('change', loadReplies);
+
+document.getElementById('poll-now-btn').addEventListener('click', async () => {
+  showToast('Polling IMAP...', 5000);
+  try {
+    const data = await api('/replies/poll', { method: 'POST' });
+    showToast(`📥 ${data.processed} processed · ${data.matched} matched · ${data.acks_sent} acked`, 4000);
+    loadReplies(); loadStats();
+  } catch (e) { showToast('❌ ' + e.message); }
+});
+
+// ════════════════════════════════════════════════════════════════
+//  Blacklist
+// ════════════════════════════════════════════════════════════════
+
+async function loadBlacklist() {
+  try {
+    const data = await api('/blacklist');
+    const list = document.getElementById('blacklist-list');
+    list.innerHTML = '';
+    if (!data.entries.length) {
+      list.innerHTML = '<div class="text-center py-8 text-slate-400">Empty</div>';
+      return;
+    }
+    data.entries.forEach(e => {
+      const row = document.createElement('div');
+      row.className = 'flex items-center justify-between px-3 py-2 bg-slate-50 rounded text-sm';
+      row.innerHTML = `
+        <div>
+          <span class="font-medium text-slate-800">${escapeHtml(e.identifier)}</span>
+          <span class="text-xs text-slate-500 ml-2">[${e.channel}]</span>
+          <span class="text-xs text-slate-400 ml-2">${escapeHtml(e.reason || '')}</span>
+        </div>
+        <button onclick="removeBl('${escapeHtml(e.channel)}', '${encodeURIComponent(e.identifier)}')" class="text-red-600 hover:underline text-xs">Remove</button>
+      `;
+      list.appendChild(row);
+    });
+  } catch (err) { showToast('❌ ' + err.message); }
+}
+
+async function removeBl(channel, identifier) {
+  try {
+    await api(`/blacklist/${channel}/${identifier}`, { method: 'DELETE' });
+    showToast('✓ Removed');
+    loadBlacklist();
+  } catch (e) { showToast('❌ ' + e.message); }
+}
+
+document.getElementById('bl-add-btn').addEventListener('click', async () => {
+  const identifier = document.getElementById('bl-identifier').value.trim();
+  const channel = document.getElementById('bl-channel').value;
+  const reason = document.getElementById('bl-reason').value.trim() || 'manual';
+  if (!identifier) { showToast('⚠ identifier required'); return; }
+  try {
+    await api('/blacklist', { method: 'POST', body: JSON.stringify({ identifier, channel, reason }) });
+    showToast('✓ Added');
+    document.getElementById('bl-identifier').value = '';
+    document.getElementById('bl-reason').value = '';
+    loadBlacklist();
+  } catch (e) { showToast('❌ ' + e.message); }
+});
+
+// ════════════════════════════════════════════════════════════════
+//  Tools tab
+// ════════════════════════════════════════════════════════════════
+
+document.getElementById('import-csvs-btn').addEventListener('click', async () => {
+  if (!confirm('Import 711 existing leads as already_contacted_manual?')) return;
+  showToast('Importing CSVs...', 4000);
+  try {
+    const data = await api('/leads/import-csvs', { method: 'POST' });
+    document.getElementById('import-result').innerHTML =
+      `✅ Files processed: ${data.files_processed} · Imported: ${data.imported} · Skipped: ${data.skipped}`;
+    showToast(`✓ Imported ${data.imported} leads`);
+    loadStats();
+  } catch (e) {
+    document.getElementById('import-result').textContent = '❌ ' + e.message;
+  }
+});
+
+document.getElementById('scrape-btn').addEventListener('click', async () => {
+  const query = document.getElementById('scrape-query').value.trim();
+  const location = document.getElementById('scrape-location').value.trim();
+  const max_results = parseInt(document.getElementById('scrape-max').value) || 20;
+  if (!query || !location) { showToast('⚠ query+location required'); return; }
+  document.getElementById('scrape-result').textContent = '🔎 Scraping (30-60s)...';
+  try {
+    const data = await api('/leads/scrape', { method: 'POST',
+      body: JSON.stringify({ query, location, max_results }) });
+    document.getElementById('scrape-result').innerHTML =
+      `✅ Scraped ${data.scraped} · imported ${data.imported} · emails enriched ${data.emails_enriched}`;
+    showToast(`✓ ${data.imported} new leads`);
+    loadStats(); loadLeads();
+  } catch (e) {
+    document.getElementById('scrape-result').textContent = '❌ ' + e.message;
+  }
+});
+
+// ════════════════════════════════════════════════════════════════
+//  Auth + bootstrap
+// ════════════════════════════════════════════════════════════════
+
+document.getElementById('auth-btn').addEventListener('click', () => {
+  const cur = getToken();
+  const t = prompt('Admin Bearer token (from .env ADMIN_TOKEN):', cur);
+  if (t === null) return;
+  if (t.trim() === '') { clearToken(); setAuthIndicator(false); showToast('Token cleared'); return; }
+  setToken(t.trim());
+  showToast('✓ Token saved');
+  loadStats();
+});
+
+document.getElementById('refresh-btn').addEventListener('click', () => {
+  loadStats(); loadLeads();
+});
+
+// Auto-refresh stats every 30s
+setInterval(loadStats, 30000);
+
+// Initial load
+if (getToken()) {
+  loadStats();
+  loadLeads();
+} else {
+  showToast('Set Bearer token to start →', 4000);
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Στήσιμο της AI Γραμματείας σου — Ran-Tevu</title>
+<meta name="description" content="Στήσε σε 5 βήματα τη δική σου AI γραμματεία 24/7 με προσωποποιημένο ύφος, υπηρεσίες και ωράριο.">
+<style>
+  :root { --primary: #7c3aed; --primary-dark: #6d28d9; --accent: #ec4899; --bg: #0a0a0f; --card: #111827; --border: #1f2937; --text: #e5e7eb; --muted: #9ca3af; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+         background: var(--bg); color: var(--text); min-height: 100vh; padding: 20px; }
+  .wrap { max-width: 720px; margin: 0 auto; }
+  header { text-align: center; padding: 30px 0; }
+  h1 { font-size: 28px; background: linear-gradient(135deg, var(--primary), var(--accent));
+       -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 8px; }
+  header p { color: var(--muted); }
+  .progress { display: flex; gap: 8px; margin: 20px 0; }
+  .progress-step { flex: 1; height: 6px; background: var(--border); border-radius: 3px; transition: background 0.3s; }
+  .progress-step.done, .progress-step.active { background: linear-gradient(90deg, var(--primary), var(--accent)); }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 28px; margin: 18px 0; }
+  .card h2 { margin-bottom: 6px; color: white; font-size: 22px; }
+  .card .sub { color: var(--muted); margin-bottom: 22px; font-size: 14px; }
+  label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px; margin-top: 16px; }
+  label.req::after { content: " *"; color: var(--accent); }
+  input[type=text], input[type=email], input[type=tel], input[type=number], select, textarea {
+    width: 100%; padding: 12px 14px; background: #1f2937; border: 1px solid #374151;
+    border-radius: 8px; color: white; font-size: 15px; font-family: inherit;
+  }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); }
+  textarea { min-height: 90px; resize: vertical; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
+  .voice-options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  @media (max-width: 600px) { .voice-options { grid-template-columns: 1fr; } }
+  .voice-card { background: #1f2937; border: 2px solid #374151; padding: 14px; border-radius: 10px; cursor: pointer; transition: all 0.2s; }
+  .voice-card:hover { border-color: var(--primary); }
+  .voice-card.selected { border-color: var(--accent); background: linear-gradient(135deg, #1f2937, #2d1b3a); }
+  .voice-card h4 { color: white; margin-bottom: 4px; }
+  .voice-card p { color: var(--muted); font-size: 12px; margin: 0; }
+  .tone-options { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+  .tone-chip { padding: 8px 14px; background: #1f2937; border: 1px solid #374151; border-radius: 20px; cursor: pointer; font-size: 13px; }
+  .tone-chip.selected { background: linear-gradient(135deg, var(--primary), var(--accent)); border-color: transparent; }
+  .service-row { display: grid; grid-template-columns: 2fr 80px 80px 40px; gap: 8px; margin-bottom: 8px; align-items: center; }
+  .service-row input { padding: 8px 10px; }
+  .btn-remove { background: #374151; border: none; color: white; padding: 8px; border-radius: 6px; cursor: pointer; }
+  .btn-add { background: transparent; border: 1px dashed var(--primary); color: var(--primary); padding: 10px; border-radius: 8px; cursor: pointer; width: 100%; margin-top: 8px; }
+  .day-row { display: grid; grid-template-columns: 100px 1fr 1fr 40px; gap: 8px; align-items: center; margin-bottom: 6px; }
+  .day-row .day-name { font-size: 14px; color: var(--muted); }
+  .hour-input { padding: 8px 10px; font-size: 14px; }
+  .nav { display: flex; justify-content: space-between; margin-top: 24px; gap: 12px; }
+  .btn { padding: 14px 24px; border: none; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 15px; transition: opacity 0.2s; flex: 1; }
+  .btn-primary { background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; }
+  .btn-secondary { background: #1f2937; color: var(--muted); border: 1px solid var(--border); }
+  .btn:hover { opacity: 0.92; }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .hidden { display: none; }
+  .step-info { color: var(--muted); font-size: 13px; margin-bottom: 14px; }
+  .preview-box { background: rgba(124, 58, 237, 0.1); border: 1px solid rgba(124, 58, 237, 0.3); border-radius: 8px; padding: 14px; margin-top: 16px; font-size: 14px; color: #c4b5fd; }
+  .success { text-align: center; padding: 40px 20px; }
+  .success-icon { font-size: 60px; margin-bottom: 16px; }
+  .phone-display { background: linear-gradient(135deg, #1f2937, #2d1b3a); padding: 24px; border-radius: 14px; margin: 20px 0;
+                   font-size: 28px; font-weight: bold; letter-spacing: 1px; text-align: center; }
+  .error-box { background: rgba(239, 68, 68, 0.1); border: 1px solid #ef4444; color: #fca5a5; padding: 14px; border-radius: 8px; margin: 14px 0; font-size: 14px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>🎙️ Στήσε τη δική σου AI Γραμματεία</h1>
+  <p>5 βήματα — 3 λεπτά — και θα είσαι online 24/7.</p>
+</header>
+
+<div class="progress">
+  <div class="progress-step active" data-step="1"></div>
+  <div class="progress-step" data-step="2"></div>
+  <div class="progress-step" data-step="3"></div>
+  <div class="progress-step" data-step="4"></div>
+  <div class="progress-step" data-step="5"></div>
+</div>
+
+<!-- STEP 1: BUSINESS INFO -->
+<div class="card" data-page="1">
+  <h2>1. Η επιχείρησή σου</h2>
+  <p class="sub">Βασικές πληροφορίες — αυτά θα τα μάθει η AI για να μιλάει σαν δικιά σου.</p>
+
+  <label class="req">Όνομα επιχείρησης</label>
+  <input type="text" id="business_name" placeholder="π.χ. Smile Clinic Athens">
+
+  <label class="req">Τύπος επιχείρησης</label>
+  <select id="business_type">
+    <option value="οδοντιατρείο">Οδοντιατρείο</option>
+    <option value="αισθητική">Κέντρο Αισθητικής</option>
+    <option value="κομμωτήριο">Κομμωτήριο</option>
+    <option value="κτηνιατρείο">Κτηνιατρείο</option>
+    <option value="φυσιοθεραπεία">Φυσιοθεραπεία</option>
+    <option value="εστιατόριο">Εστιατόριο</option>
+    <option value="γυμναστήριο">Γυμναστήριο</option>
+    <option value="spa">Spa / Wellness</option>
+    <option value="ψυχολόγος">Ψυχολόγος / Ψυχοθεραπευτής</option>
+    <option value="επιχείρηση">Άλλο (generic)</option>
+  </select>
+
+  <div class="grid-2">
+    <div>
+      <label class="req">Όνομα ιδιοκτήτη</label>
+      <input type="text" id="owner_name" placeholder="π.χ. Δρ. Νίκος Παπαδόπουλος">
+    </div>
+    <div>
+      <label class="req">Email επικοινωνίας</label>
+      <input type="email" id="owner_email" placeholder="email@domain.gr">
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div>
+      <label class="req">Τηλέφωνο ιδιοκτήτη (για επείγον transfer)</label>
+      <input type="tel" id="owner_phone" placeholder="+30 6987 747434">
+    </div>
+    <div>
+      <label>Διεύθυνση</label>
+      <input type="text" id="address" placeholder="Κηφισίας 100, Αθήνα">
+    </div>
+  </div>
+
+  <div class="nav">
+    <button class="btn btn-secondary" disabled>← Πίσω</button>
+    <button class="btn btn-primary" onclick="nextStep(1)">Επόμενο →</button>
+  </div>
+</div>
+
+<!-- STEP 2: SERVICES -->
+<div class="card hidden" data-page="2">
+  <h2>2. Υπηρεσίες & Τιμές</h2>
+  <p class="sub">Η AI θα τις γνωρίζει και θα τις προτείνει στους πελάτες.</p>
+
+  <div id="services_list">
+    <div class="service-row">
+      <input type="text" class="svc-name" placeholder="π.χ. Καθαρισμός">
+      <input type="number" class="svc-duration" placeholder="30" min="5" value="30">
+      <input type="number" class="svc-price" placeholder="€50" min="0" value="50">
+      <button class="btn-remove" onclick="removeService(this)">✕</button>
+    </div>
+  </div>
+  <button class="btn-add" onclick="addService()">+ Πρόσθεσε υπηρεσία</button>
+
+  <div class="step-info" style="margin-top: 14px;">
+    Διάρκεια = λεπτά. Πρόσθεσε όσες υπηρεσίες θες — μετά μπορείς να αλλάξεις.
+  </div>
+
+  <div class="nav">
+    <button class="btn btn-secondary" onclick="prevStep(2)">← Πίσω</button>
+    <button class="btn btn-primary" onclick="nextStep(2)">Επόμενο →</button>
+  </div>
+</div>
+
+<!-- STEP 3: HOURS -->
+<div class="card hidden" data-page="3">
+  <h2>3. Ωράριο Λειτουργίας</h2>
+  <p class="sub">Η AI θα κλείνει ραντεβού μόνο μέσα σε αυτές τις ώρες.</p>
+
+  <div id="hours_list"></div>
+
+  <div class="step-info" style="margin-top: 14px;">
+    Άσε κενό από/προς για να δηλώσεις ότι είστε κλειστά εκείνη τη μέρα.
+  </div>
+
+  <div class="nav">
+    <button class="btn btn-secondary" onclick="prevStep(3)">← Πίσω</button>
+    <button class="btn btn-primary" onclick="nextStep(3)">Επόμενο →</button>
+  </div>
+</div>
+
+<!-- STEP 4: VOICE & PERSONALITY -->
+<div class="card hidden" data-page="4">
+  <h2>4. Φωνή & Ύφος</h2>
+  <p class="sub">Διάλεξε πώς ακούγεται και πώς μιλάει η γραμματέας σου.</p>
+
+  <label>🎤 Φωνή</label>
+  <div class="voice-options" id="voice_options">
+    <div class="voice-card selected" data-voice="madlen" onclick="pickVoice(this)">
+      <h4>Madlen 👩</h4>
+      <p>Γυναικεία, ζεστή — για medical/wellness/beauty</p>
+    </div>
+    <div class="voice-card" data-voice="athina" onclick="pickVoice(this)">
+      <h4>Athina 👩</h4>
+      <p>Γυναικεία, νεανική — για hair/nails/fitness</p>
+    </div>
+    <div class="voice-card" data-voice="stefanos" onclick="pickVoice(this)">
+      <h4>Stefanos 👨</h4>
+      <p>Αντρική, professional — για restaurant/legal</p>
+    </div>
+    <div class="voice-card" data-voice="dimitris" onclick="pickVoice(this)">
+      <h4>Dimitris 👨</h4>
+      <p>Αντρική, mature — για dental/vet/physio</p>
+    </div>
+  </div>
+
+  <label>Όνομα που λέει η AI για τον εαυτό της</label>
+  <input type="text" id="voice_assistant_name" value="Madlen" placeholder="π.χ. Μαρία">
+
+  <label>🗣️ Ύφος επικοινωνίας</label>
+  <div class="tone-options">
+    <div class="tone-chip" data-tone="formal" onclick="pickTone(this)">📋 Επίσημο</div>
+    <div class="tone-chip selected" data-tone="friendly" onclick="pickTone(this)">😊 Φιλικό</div>
+    <div class="tone-chip" data-tone="casual" onclick="pickTone(this)">🙂 Χαλαρό</div>
+    <div class="tone-chip" data-tone="energetic" onclick="pickTone(this)">⚡ Δυναμικό</div>
+    <div class="tone-chip" data-tone="professional" onclick="pickTone(this)">💼 Επαγγελματικό</div>
+  </div>
+
+  <label>👋 Χαιρετισμός (προαιρετικό — αλλιώς auto)</label>
+  <input type="text" id="voice_greeting" placeholder="Καλημέρα! Είμαι η Madlen από το Smile Clinic. Πώς μπορώ να σας βοηθήσω;">
+
+  <label>📝 Ειδικές οδηγίες προς την AI (πολύ σημαντικό!)</label>
+  <textarea id="voice_custom_instructions" placeholder="π.χ. Πάντα ρώτα αν είναι πρώτη επίσκεψη. Μην κλείνεις ραντεβού Σαββατοκύριακο. Αν ρωτήσουν για ασφάλεια EOPYY, πες ότι δεχόμαστε."></textarea>
+
+  <div class="preview-box">
+    💡 <strong>Tip:</strong> Όσο πιο συγκεκριμένος είσαι εδώ, τόσο πιο "δική σου" θα ακούγεται.
+    Σκέψου: τι θα έλεγες σε νέα γραμματεία την πρώτη μέρα δουλειάς της;
+  </div>
+
+  <div class="nav">
+    <button class="btn btn-secondary" onclick="prevStep(4)">← Πίσω</button>
+    <button class="btn btn-primary" onclick="nextStep(4)">Επόμενο →</button>
+  </div>
+</div>
+
+<!-- STEP 5: REVIEW & SUBMIT -->
+<div class="card hidden" data-page="5">
+  <h2>5. Επιβεβαίωση</h2>
+  <p class="sub">Δες τα δεδομένα σου πριν δημιουργηθεί η AI γραμματεία.</p>
+
+  <div id="review_box" style="background: #1f2937; padding: 18px; border-radius: 10px;"></div>
+
+  <label style="display: flex; align-items: center; gap: 10px; margin-top: 20px; cursor: pointer;">
+    <input type="checkbox" id="purchase_new_number" style="width: auto;">
+    <span>Αγόρασε καινούριο Greek number ($1/μήνα)</span>
+  </label>
+  <div class="step-info">
+    Αν έχεις δικό σου Twilio number, βάλε το παρακάτω. Αλλιώς θα χρησιμοποιήσω ένα από τα δικά μου.
+  </div>
+  <input type="tel" id="twilio_phone" placeholder="+30... (προαιρετικό)">
+
+  <div id="submit_error" class="error-box hidden"></div>
+
+  <div class="nav">
+    <button class="btn btn-secondary" onclick="prevStep(5)">← Πίσω</button>
+    <button class="btn btn-primary" id="submit_btn" onclick="submitOnboarding()">🚀 Δημιουργία AI</button>
+  </div>
+</div>
+
+<!-- SUCCESS PAGE -->
+<div class="card hidden" data-page="success">
+  <div class="success">
+    <div class="success-icon">🎉</div>
+    <h2>Η AI Γραμματεία σου είναι έτοιμη!</h2>
+
+    <div id="success_phone_section">
+      <p style="margin-top: 16px;">Δώσε αυτό το νούμερο στους πελάτες σου:</p>
+      <div class="phone-display" id="phone_display">+30 ... ... ....</div>
+      <p style="color: var(--muted); font-size: 14px;">Όταν καλούν, θα απαντάει η AI 24/7.</p>
+    </div>
+
+    <div id="success_pending_section" class="hidden">
+      <div class="error-box">
+        ⚠️ Η επιχείρηση δημιουργήθηκε, αλλά το voice agent χρειάζεται API keys.
+        <br>Επικοινώνησε στο 6987 747434 για να ενεργοποιηθεί.
+      </div>
+    </div>
+
+    <div style="margin-top: 30px;">
+      <a id="admin_link" href="#" class="btn btn-primary" style="text-decoration: none; display: inline-block;">📊 Πίνακας Διαχείρισης</a>
+    </div>
+
+    <div style="margin-top: 16px; color: var(--muted); font-size: 13px;">
+      Στείλαμε email στο <span id="success_email"></span> με όλες τις λεπτομέρειες.
+    </div>
+  </div>
+</div>
+
+</div>
+
+<!-- Analytics tracker -->
+<script src="/tracker.js" async></script>
+
+<script>
+// Track onboarding start when page loads
+window.addEventListener("load", () => {
+  if (window.rtTrack) {
+    setTimeout(() => window.rtTrack("onboarding_start"), 100);
+  }
+});
+
+// ── State ──
+const state = {
+  step: 1,
+  voice_key: "madlen",
+  voice_tone: "friendly",
+};
+
+// ── Days setup ──
+const DAYS = [
+  ["monday", "Δευτέρα"], ["tuesday", "Τρίτη"], ["wednesday", "Τετάρτη"],
+  ["thursday", "Πέμπτη"], ["friday", "Παρασκευή"],
+  ["saturday", "Σάββατο"], ["sunday", "Κυριακή"],
+];
+
+function initHours() {
+  const list = document.getElementById("hours_list");
+  list.innerHTML = "";
+  DAYS.forEach(([key, name]) => {
+    const isWeekend = key === "saturday" || key === "sunday";
+    const defaultOpen = isWeekend ? "" : "09:00";
+    const defaultClose = isWeekend ? "" : "18:00";
+    const row = document.createElement("div");
+    row.className = "day-row";
+    row.innerHTML = `
+      <div class="day-name">${name}</div>
+      <input type="time" class="hour-input hour-open" data-day="${key}" value="${defaultOpen}">
+      <input type="time" class="hour-input hour-close" data-day="${key}" value="${defaultClose}">
+      <div></div>
+    `;
+    list.appendChild(row);
+  });
+}
+
+// ── Services ──
+function addService() {
+  const list = document.getElementById("services_list");
+  const row = document.createElement("div");
+  row.className = "service-row";
+  row.innerHTML = `
+    <input type="text" class="svc-name" placeholder="π.χ. Καθαρισμός">
+    <input type="number" class="svc-duration" placeholder="30" min="5" value="30">
+    <input type="number" class="svc-price" placeholder="€50" min="0" value="50">
+    <button class="btn-remove" onclick="removeService(this)">✕</button>
+  `;
+  list.appendChild(row);
+}
+
+function removeService(btn) {
+  const rows = document.querySelectorAll(".service-row");
+  if (rows.length <= 1) return;
+  btn.parentElement.remove();
+}
+
+// ── Voice selection ──
+function pickVoice(el) {
+  document.querySelectorAll(".voice-card").forEach(c => c.classList.remove("selected"));
+  el.classList.add("selected");
+  state.voice_key = el.dataset.voice;
+  const namesMap = { madlen: "Madlen", athina: "Athina", stefanos: "Stefanos", dimitris: "Dimitris" };
+  document.getElementById("voice_assistant_name").value = namesMap[state.voice_key];
+}
+
+function pickTone(el) {
+  document.querySelectorAll(".tone-chip").forEach(c => c.classList.remove("selected"));
+  el.classList.add("selected");
+  state.voice_tone = el.dataset.tone;
+}
+
+// ── Step navigation ──
+function showStep(n) {
+  document.querySelectorAll("[data-page]").forEach(p => p.classList.add("hidden"));
+  const target = document.querySelector(`[data-page="${n}"]`);
+  if (target) target.classList.remove("hidden");
+
+  if (typeof n === "number") {
+    document.querySelectorAll(".progress-step").forEach((s, i) => {
+      s.classList.remove("done", "active");
+      if (i + 1 < n) s.classList.add("done");
+      if (i + 1 === n) s.classList.add("active");
+    });
+  }
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function nextStep(current) {
+  if (current === 1 && !validateStep1()) return;
+  if (current === 2 && !validateStep2()) return;
+  if (current === 4) buildReview();
+  if (window.rtTrack) window.rtTrack("onboarding_step_complete", { step: current });
+  state.step = current + 1;
+  showStep(state.step);
+}
+
+function prevStep(current) {
+  state.step = current - 1;
+  showStep(state.step);
+}
+
+// ── Validation ──
+function validateStep1() {
+  const required = ["business_name", "owner_name", "owner_email", "owner_phone"];
+  for (const f of required) {
+    if (!document.getElementById(f).value.trim()) {
+      alert(`Παρακαλώ συμπλήρωσε το πεδίο.`);
+      document.getElementById(f).focus();
+      return false;
+    }
+  }
+  const email = document.getElementById("owner_email").value;
+  if (!email.includes("@")) { alert("Μη έγκυρο email"); return false; }
+  return true;
+}
+
+function validateStep2() {
+  const rows = document.querySelectorAll(".service-row");
+  let valid = false;
+  for (const r of rows) {
+    if (r.querySelector(".svc-name").value.trim()) { valid = true; break; }
+  }
+  if (!valid) { alert("Πρόσθεσε τουλάχιστον μία υπηρεσία"); return false; }
+  return true;
+}
+
+// ── Collect payload ──
+function collectPayload() {
+  const services = [];
+  document.querySelectorAll(".service-row").forEach(r => {
+    const name = r.querySelector(".svc-name").value.trim();
+    if (!name) return;
+    services.push({
+      name,
+      duration: parseInt(r.querySelector(".svc-duration").value) || 30,
+      price: parseFloat(r.querySelector(".svc-price").value) || 0,
+    });
+  });
+
+  const hours = {};
+  document.querySelectorAll(".day-row").forEach(r => {
+    const open = r.querySelector(".hour-open").value;
+    const close = r.querySelector(".hour-close").value;
+    const day = r.querySelector(".hour-open").dataset.day;
+    if (open && close) hours[day] = `${open}-${close}`;
+  });
+
+  return {
+    business_name: document.getElementById("business_name").value.trim(),
+    business_type: document.getElementById("business_type").value,
+    owner_name: document.getElementById("owner_name").value.trim(),
+    owner_email: document.getElementById("owner_email").value.trim(),
+    owner_phone: document.getElementById("owner_phone").value.trim(),
+    address: document.getElementById("address").value.trim(),
+    services,
+    hours,
+    voice_key: state.voice_key,
+    voice_assistant_name: document.getElementById("voice_assistant_name").value.trim(),
+    voice_tone: state.voice_tone,
+    voice_greeting: document.getElementById("voice_greeting").value.trim(),
+    voice_custom_instructions: document.getElementById("voice_custom_instructions").value.trim(),
+    twilio_phone: document.getElementById("twilio_phone").value.trim() || null,
+    purchase_new_number: document.getElementById("purchase_new_number").checked,
+  };
+}
+
+function buildReview() {
+  const p = collectPayload();
+  const box = document.getElementById("review_box");
+  box.innerHTML = `
+    <strong>Επιχείρηση:</strong> ${escapeHtml(p.business_name)} (${p.business_type})<br>
+    <strong>Ιδιοκτήτης:</strong> ${escapeHtml(p.owner_name)} · ${escapeHtml(p.owner_email)}<br>
+    <strong>Διεύθυνση:</strong> ${escapeHtml(p.address || "—")}<br>
+    <strong>Υπηρεσίες:</strong> ${p.services.length}<br>
+    <strong>Ωράριο:</strong> ${Object.keys(p.hours).length} μέρες/εβδομάδα<br>
+    <strong>Φωνή:</strong> ${p.voice_assistant_name} (${p.voice_key}) · Ύφος: ${p.voice_tone}<br>
+    ${p.voice_custom_instructions ? `<strong>Ειδικές οδηγίες:</strong> ${escapeHtml(p.voice_custom_instructions.slice(0, 200))}${p.voice_custom_instructions.length > 200 ? "..." : ""}<br>` : ""}
+  `;
+}
+
+function escapeHtml(s) {
+  return (s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+// ── Submit ──
+async function submitOnboarding() {
+  const btn = document.getElementById("submit_btn");
+  const errBox = document.getElementById("submit_error");
+  errBox.classList.add("hidden");
+  btn.disabled = true;
+  btn.textContent = "⏳ Δημιουργία...";
+
+  try {
+    const r = await fetch("/api/onboarding/voice/submit", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(collectPayload()),
+    });
+    const data = await r.json();
+    if (!data.ok) {
+      errBox.classList.remove("hidden");
+      errBox.textContent = data.error || "Κάτι πήγε στραβά.";
+      btn.disabled = false;
+      btn.textContent = "🚀 Δημιουργία AI";
+      return;
+    }
+
+    // Track successful submit
+    if (window.rtTrack) window.rtTrack("onboarding_submit", {
+      voice_provisioned: !!data.voice_provisioned,
+      business_type: document.getElementById("business_type").value,
+    });
+
+    // Success — show success page
+    document.getElementById("success_email").textContent = document.getElementById("owner_email").value;
+    document.getElementById("admin_link").href = data.admin_url || `/admin/${data.business_slug}/voice`;
+    if (data.voice_provisioned && data.voice_phone_number) {
+      document.getElementById("phone_display").textContent = data.voice_phone_number;
+      document.getElementById("success_pending_section").classList.add("hidden");
+    } else {
+      document.getElementById("success_phone_section").classList.add("hidden");
+      document.getElementById("success_pending_section").classList.remove("hidden");
+    }
+    showStep("success");
+
+  } catch (e) {
+    errBox.classList.remove("hidden");
+    errBox.textContent = "Network error: " + e.message;
+    btn.disabled = false;
+    btn.textContent = "🚀 Δημιουργία AI";
+  }
+}
+
+// ── Init ──
+initHours();
+showStep(1);
+</script>
+</body>
+</html>

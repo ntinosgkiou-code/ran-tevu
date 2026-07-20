@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About — Founder, Mission, Tech | Ran-Tevu</title>
+<meta name="description" content="Ran-Tevu: Greek AI startup από Ρέθυμνο. Founder Κωνσταντίνος Γκιουλμπαξιώτης. Tech stack: Claude, ElevenLabs, Vapi, Resend. GDPR-compliant. Made in Greece, for Greece.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://www.ran-tevu.gr/about">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="el_GR">
+<meta property="og:title" content="About Ran-Tevu — Greek AI Startup">
+<meta property="og:url" content="https://www.ran-tevu.gr/about">
+<style>
+  *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #050510; color: #E5E7EB; line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  a { color: inherit; text-decoration: none; }
+  .bg-glow { position: fixed; inset: 0; z-index: -1; pointer-events: none; background: radial-gradient(ellipse 800px 600px at 20% 0%, rgba(124,58,237,0.25), transparent 60%), radial-gradient(ellipse 700px 500px at 80% 30%, rgba(251,191,36,0.12), transparent 60%), radial-gradient(ellipse 900px 700px at 50% 100%, rgba(139,92,246,0.18), transparent 70%); animation: bg-shift 20s ease-in-out infinite; }
+  @keyframes bg-shift { 0%,100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+  .bg-stars { position: fixed; inset: 0; z-index: -1; pointer-events: none; background-image: radial-gradient(1px 1px at 20px 30px, rgba(255,255,255,0.5), transparent), radial-gradient(2px 2px at 110px 50px, rgba(255,255,255,0.6), transparent); background-size: 300px 300px; opacity: 0.4; }
+
+  nav { position: sticky; top: 0; z-index: 50; background: rgba(5,5,16,0.7); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.06); padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; }
+  .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 22px; color: white; }
+  .logo-icon { width: 36px; height: 36px; background: linear-gradient(135deg, #7C3AED, #C084FC); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; box-shadow: 0 4px 16px rgba(124,58,237,0.5); }
+  .logo span { background: linear-gradient(135deg, #C084FC, #FBBF24); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .nav-links { display: flex; gap: 24px; font-size: 14px; }
+  .nav-links a { color: rgba(255,255,255,0.7); }
+  .nav-links a:hover { color: #FBBF24; }
+  .nav-cta { background: linear-gradient(135deg, #FBBF24, #F59E0B); color: #050510 !important; padding: 10px 20px; border-radius: 10px; font-weight: 800; }
+  @media (max-width: 720px) { .nav-links a:not(.nav-cta) { display: none; } }
+
+  header { text-align: center; padding: 80px 24px 48px; max-width: 920px; margin: 0 auto; }
+  .badge-glow { display: inline-block; padding: 8px 18px; background: rgba(251,191,36,0.12); border: 1px solid rgba(251,191,36,0.4); border-radius: 100px; color: #FBBF24; font-size: 12px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 24px; box-shadow: 0 0 24px rgba(251,191,36,0.3); animation: pulse 2.5s ease infinite; }
+  @keyframes pulse { 0%,100% { box-shadow: 0 0 24px rgba(251,191,36,0.3); } 50% { box-shadow: 0 0 40px rgba(251,191,36,0.6); } }
+  h1 { font-size: clamp(36px, 6vw, 64px); font-weight: 900; letter-spacing: -1.8px; color: white; margin-bottom: 20px; line-height: 1.05; }
+  .gradient-text { background: linear-gradient(135deg, #FBBF24, #C084FC, #7C3AED); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .lead { font-size: clamp(16px, 2vw, 19px); color: rgba(255,255,255,0.75); max-width: 720px; margin: 0 auto; }
+  .lead strong { color: #FBBF24; }
+
+  .container { max-width: 1000px; margin: 0 auto; padding: 0 24px 80px; }
+  section { padding: 40px 0; }
+
+  .card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 36px; backdrop-filter: blur(20px); margin-bottom: 24px; }
+  .card h2 { color: white; font-size: 26px; margin-bottom: 14px; font-weight: 800; }
+  .card h2 .icon { color: #FBBF24; margin-right: 10px; }
+  .card h3 { color: #FBBF24; font-size: 18px; margin: 20px 0 10px; font-weight: 700; }
+  .card p { color: rgba(255,255,255,0.78); margin-bottom: 12px; font-size: 15px; }
+  .card p strong { color: #FBBF24; }
+  .card ul { margin-left: 22px; color: rgba(255,255,255,0.78); }
+  .card ul li { padding: 4px 0; }
+  .card ul li strong { color: white; }
+
+  /* Founder profile */
+  .founder-grid { display: grid; grid-template-columns: 180px 1fr; gap: 28px; align-items: start; }
+  @media (max-width: 600px) { .founder-grid { grid-template-columns: 1fr; text-align: center; } }
+  .founder-avatar { width: 180px; height: 180px; border-radius: 50%; background: linear-gradient(135deg, #7C3AED, #C084FC, #FBBF24); display: flex; align-items: center; justify-content: center; font-size: 72px; font-weight: 900; color: white; box-shadow: 0 16px 48px rgba(124,58,237,0.4); margin: 0 auto; }
+  .founder-info h3 { color: white; font-size: 26px; margin-bottom: 6px; }
+  .founder-info .title { color: #FBBF24; font-size: 14px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 14px; }
+  .founder-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 20px; }
+  .founder-stat { background: rgba(0,0,0,0.3); border-radius: 12px; padding: 14px; text-align: center; }
+  .founder-stat .num { color: #FBBF24; font-size: 24px; font-weight: 900; }
+  .founder-stat .lbl { color: rgba(255,255,255,0.6); font-size: 12px; margin-top: 4px; }
+
+  /* Tech stack */
+  .stack { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  @media (max-width: 700px) { .stack { grid-template-columns: 1fr 1fr; } }
+  .stack-item { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 20px; text-align: center; transition: all 0.3s; }
+  .stack-item:hover { transform: translateY(-3px); border-color: rgba(124,58,237,0.4); }
+  .stack-item .ico { font-size: 36px; margin-bottom: 10px; }
+  .stack-item .name { color: white; font-weight: 700; font-size: 15px; margin-bottom: 4px; }
+  .stack-item .desc { color: rgba(255,255,255,0.6); font-size: 12px; }
+
+  /* Values */
+  .values { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  @media (max-width: 700px) { .values { grid-template-columns: 1fr; } }
+  .value { background: rgba(255,255,255,0.03); border: 1px solid rgba(124,58,237,0.3); border-radius: 14px; padding: 22px; }
+  .value h4 { color: #FBBF24; margin-bottom: 6px; font-size: 16px; }
+  .value p { color: rgba(255,255,255,0.7); font-size: 14px; }
+
+  /* Contact */
+  .contact-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  @media (max-width: 600px) { .contact-grid { grid-template-columns: 1fr; } }
+  .contact-item { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 20px; }
+  .contact-item .ico { font-size: 24px; margin-bottom: 8px; }
+  .contact-item h4 { color: white; margin-bottom: 4px; }
+  .contact-item p { color: rgba(255,255,255,0.6); font-size: 13px; margin-bottom: 8px; }
+  .contact-item a { color: #FBBF24; font-weight: 700; }
+
+  .final-cta { background: linear-gradient(135deg, rgba(124,58,237,0.15), rgba(251,191,36,0.1)); border: 1px solid rgba(251,191,36,0.3); border-radius: 24px; padding: 56px 32px; text-align: center; margin-top: 48px; backdrop-filter: blur(20px); }
+  .final-cta h2 { color: white; font-size: 32px; margin-bottom: 14px; font-weight: 900; }
+  .final-cta p { color: rgba(255,255,255,0.85); margin-bottom: 28px; }
+  .final-cta a { display: inline-block; background: linear-gradient(135deg, #FBBF24, #F59E0B); color: #050510; padding: 18px 36px; border-radius: 14px; font-weight: 800; box-shadow: 0 8px 32px rgba(251,191,36,0.4); }
+  .final-cta a:hover { transform: translateY(-3px); color: #050510; }
+
+  footer { border-top: 1px solid rgba(255,255,255,0.06); padding: 40px 24px; background: rgba(0,0,0,0.3); text-align: center; color: rgba(255,255,255,0.5); font-size: 13px; }
+  footer a { color: rgba(255,255,255,0.6); margin: 0 12px; }
+  footer a:hover { color: #FBBF24; }
+</style>
+</head>
+<body>
+
+<div class="bg-glow"></div>
+<div class="bg-stars"></div>
+
+<nav>
+  <a href="/" class="logo"><div class="logo-icon">📅</div>Ran<span>-Tevu</span></a>
+  <div class="nav-links">
+    <a href="/pricing">Pricing</a>
+    <a href="/#how">Πώς δουλεύει</a>
+    <a href="/about" style="color:#FBBF24;">About</a>
+    <a href="/#pricing" class="nav-cta">14 μέρες δωρεάν</a>
+  </div>
+</nav>
+
+<header>
+  <div class="badge-glow">🇬🇷 Made in Greece</div>
+  <h1>Φτιάχνουμε <span class="gradient-text">Greek AI</span><br>για ελληνικές επιχειρήσεις</h1>
+  <p class="lead">
+    Indie startup από το Ρέθυμνο. Χωρίς venture capital. Χωρίς γραφεία στην Αθήνα.
+    Μόνο <strong>πραγματικό προϊόν</strong> που δουλεύει στα ελληνικά — με 14 μέρες δωρεάν δοκιμή, χωρίς κάρτα, για να το κρίνετε πριν πληρώσετε.
+  </p>
+</header>
+
+<div class="container">
+
+<!-- ─── FOUNDER ─── -->
+<section>
+  <div class="card">
+    <h2><span class="icon">👤</span>Founder</h2>
+
+    <div class="founder-grid">
+      <div class="founder-avatar">ΚΓ</div>
+      <div class="founder-info">
+        <h3>Κωνσταντίνος Γκιουλμπαξιώτης</h3>
+        <div class="title">Founder · Engineer · Operator</div>
+        <p>24 ετών, στο τελευταίο έτος του πανεπιστημίου στο Ρέθυμνο. Έχτισα όλο το Ran-Tevu από το μηδέν σε 6 μήνες — από το product μέχρι το marketing — με <strong>€0 funding</strong> και 2 ώρες δουλειάς την ημέρα δίπλα στις σπουδές.</p>
+        <p>Γιατί το έχτισα: είδα ότι Greek SMBs χάνουν πολλά ραντεβού επειδή δεν μπορούν να σηκώνουν τηλέφωνο 24/7. Sofia/γραμματεία.gr υπάρχει 29 χρόνια αλλά απλώς μαζεύει μηνύματα. Ήθελα κάτι που <strong>πραγματικά κλείνει</strong> το ραντεβού — όπως άνθρωπος.</p>
+
+        <div class="founder-stats">
+          <div class="founder-stat">
+            <div class="num">6+</div>
+            <div class="lbl">μήνες build</div>
+          </div>
+          <div class="founder-stat">
+            <div class="num">€0</div>
+            <div class="lbl">funding</div>
+          </div>
+          <div class="founder-stat">
+            <div class="num">100%</div>
+            <div class="lbl">Greek-native</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="margin-top:32px;">Επικοινωνία</h3>
+    <ul>
+      <li><strong>Email:</strong> ntinosgkiou@gmail.com</li>
+      <li><strong>Τηλέφωνο/WhatsApp:</strong> 6987 747 434</li>
+      <li><strong>Έδρα:</strong> Ρέθυμνο, Κρήτη, Ελλάδα</li>
+      <li><strong>Cal.com:</strong> <a href="https://cal.com/randevu-konstantinois/15min" target="_blank" style="color:#FBBF24;">cal.com/randevu-konstantinois/15min</a></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ─── MISSION ─── -->
+<section>
+  <div class="card">
+    <h2><span class="icon">🎯</span>Mission</h2>
+    <p>
+      <strong>Να μπορεί κάθε ελληνική μικρομεσαία επιχείρηση</strong> να έχει AI γραμματεία 24/7
+      που μιλάει σαν φυσικός Έλληνας και κλείνει ραντεβού — σε <strong>μία απλή, σταθερή τιμή</strong>.
+    </p>
+    <p>
+      Sofia/γραμματεία.gr εξυπηρετεί την αγορά εδώ και 29 χρόνια με fixed monthly fee.
+      Εμείς προτείνουμε <strong>ξεκάθαρο flat model</strong>: μία τιμή, όλα included, χωρίς setup fee.
+    </p>
+    <p>
+      Το κρίνετε με <strong>14 μέρες δωρεάν δοκιμή, χωρίς κάρτα</strong>. Αν δεν σας πείσει, δεν πληρώνετε τίποτα — και ακυρώνετε όποτε θέλετε.
+    </p>
+
+    <h3>Αξίες</h3>
+    <div class="values">
+      <div class="value">
+        <h4>🔓 Διαφάνεια</h4>
+        <p>Όλες οι τιμές αναρτημένες public. Όλα τα costs analyzed στο /pricing. Καμία hidden charge.</p>
+      </div>
+      <div class="value">
+        <h4>⚡ Flat & δίκαιη τιμή</h4>
+        <p>Μία σταθερή τιμή, όλα included, χωρίς setup fee. 14 μέρες δωρεάν χωρίς κάρτα — το ρίσκο της δοκιμής το κρατάμε εμείς.</p>
+      </div>
+      <div class="value">
+        <h4>🇬🇷 Greek-first</h4>
+        <p>Δε φτιάξαμε US product translated. Όλα design-αρισμένα για ελληνικές πρακτικές: ΕΟΠΥΥ, αργίες, διάλεκτος.</p>
+      </div>
+      <div class="value">
+        <h4>🔐 GDPR-compliant</h4>
+        <p>Φυσικό πρόσωπο, full responsibility. EU hosting (Ireland). Data export anytime. Right to erasure ισχύει.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── TECH STACK ─── -->
+<section>
+  <div class="card">
+    <h2><span class="icon">⚙️</span>Tech Stack</h2>
+    <p>Χρησιμοποιούμε <strong>τα καλύτερα διαθέσιμα tools του 2026</strong>. Όχι in-house DIY που σπάει.</p>
+
+    <div class="stack">
+      <div class="stack-item">
+        <div class="ico">🧠</div>
+        <div class="name">Claude Sonnet 4.5</div>
+        <div class="desc">Anthropic · AI για συνομιλίες</div>
+      </div>
+      <div class="stack-item">
+        <div class="ico">🎙️</div>
+        <div class="name">ElevenLabs</div>
+        <div class="desc">Greek voice generation</div>
+      </div>
+      <div class="stack-item">
+        <div class="ico">📞</div>
+        <div class="name">Vapi.ai / Bland</div>
+        <div class="desc">Voice AI infrastructure</div>
+      </div>
+      <div class="stack-item">
+        <div class="ico">📧</div>
+        <div class="name">Resend</div>
+        <div class="desc">EU email delivery (Ireland)</div>
+      </div>
+      <div class="stack-item">
+        <div class="ico">💬</div>
+        <div class="name">Twilio</div>
+        <div class="desc">Greek SMS routing</div>
+      </div>
+      <div class="stack-item">
+        <div class="ico">💳</div>
+        <div class="name">Stripe</div>
+        <div class="desc">Payment processing</div>
+      </div>
+      <div class="stack-item">
+        <div class="ico">🚂</div>
+        <div class="name">Railway</div>
+        <div class="desc">EU hosting (Ireland)</div>
+      </div>
+      <div class="stack-item">
+        <div class="ico">☁️</div>
+        <div class="name">Cloudflare</div>
+        <div class="desc">CDN + DNS + DDoS</div>
+      </div>
+      <div class="stack-item">
+        <div class="ico">🐍</div>
+        <div class="name">Python + Flask</div>
+        <div class="desc">Backend (open source)</div>
+      </div>
+    </div>
+
+    <p style="margin-top:20px;font-size:13px;color:rgba(255,255,255,0.55);">
+      <strong>Γιατί αυτά:</strong> Anthropic έχει τα καλύτερα Ελληνικά από οποιοδήποτε άλλο AI. ElevenLabs έχει τις πιο φυσικές Greek voices. Όλα EU-hosted για GDPR compliance.
+    </p>
+  </div>
+</section>
+
+<!-- ─── WHY US ─── -->
+<section>
+  <div class="card">
+    <h2><span class="icon">⭐</span>Γιατί εμάς (και όχι άλλους)</h2>
+
+    <h3>vs. International voice AI (Vapi, Bland, Synthflow, Retell solo)</h3>
+    <p>Είναι DIY platforms. Πρέπει εσείς να τα στήσετε, να γράψετε prompts, να κάνετε integration. <strong>Εμείς είμαστε done-for-you</strong> με Greek expertise.</p>
+
+    <h3>vs. Sofia / γραμματεία.gr</h3>
+    <p>29 χρόνια εμπειρία, αλλά scripted TTS που απλώς μαζεύει μηνύματα. <strong>Εμείς πραγματικά κλείνουμε</strong> ραντεβού στο ημερολόγιό σας. Flat τιμή, χωρίς setup fee.</p>
+
+    <h3>vs. Πραγματική γραμματέας</h3>
+    <p>€800-1.500/μήνα + δώρο + ΕΦΚΑ. Διαθέσιμη μόνο 8 ώρες. Χάνετε ραντεβού νύχτες/Σαββατοκύριακο. <strong>Εμείς 24/7 με κόστος 1/10</strong>.</p>
+
+    <h3>vs. Treatwell / Booksy / Doctoranytime</h3>
+    <p>Εκείνοι έχουν audience αλλά παίρνουν 15-30% commission από κάθε booking + ελέγχουν την σχέση με πελάτη σας. <strong>Εμείς δουλεύουμε για εσάς, όχι αντί για εσάς.</strong> Δικός σας customer relationship, δικά σας data.</p>
+  </div>
+</section>
+
+<!-- ─── CONTACT ─── -->
+<section>
+  <div class="card">
+    <h2><span class="icon">📞</span>Πώς να μας προσεγγίσετε</h2>
+
+    <div class="contact-grid">
+      <div class="contact-item">
+        <div class="ico">📧</div>
+        <h4>Email</h4>
+        <p>Πρώτη επικοινωνία. Απάντηση εντός 4 ωρών εργάσιμες.</p>
+        <a href="mailto:ntinosgkiou@gmail.com">ntinosgkiou@gmail.com</a>
+      </div>
+
+      <div class="contact-item">
+        <div class="ico">📱</div>
+        <h4>WhatsApp / Phone</h4>
+        <p>Για urgent ή να μιλήσουμε γρήγορα.</p>
+        <a href="tel:+306987747434">+30 6987 747 434</a>
+      </div>
+
+      <div class="contact-item">
+        <div class="ico">📅</div>
+        <h4>15-min consultation</h4>
+        <p>Free Zoom. Σας δείχνω live demo. 0 πίεση πώλησης.</p>
+        <a href="https://cal.com/randevu-konstantinois/15min" target="_blank">Κλείστε εδώ →</a>
+      </div>
+
+      <div class="contact-item">
+        <div class="ico">🏠</div>
+        <h4>Έδρα</h4>
+        <p>Φυσικό πρόσωπο, Ρέθυμνο Κρήτης. Remote setup, χωρίς φυσική επίσκεψη.</p>
+        <a href="https://maps.google.com/?q=Rethymno+Greece" target="_blank">Ρέθυμνο, Κρήτη →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="final-cta">
+  <h2>Δοκιμάστε live demo</h2>
+  <p>Σε 2 λεπτά: δείτε αν δουλεύει για την επιχείρησή σας. Χωρίς δέσμευση, χωρίς εγγραφή.</p>
+  <a href="/">Επιστροφή στην αρχική →</a>
+</div>
+
+</div>
+
+<footer>
+  <a href="/">Αρχική</a> ·
+  <a href="/pricing">Pricing</a> ·
+  <a href="/#how">Πώς δουλεύει</a> ·
+  <a href="/about" style="color:#FBBF24;">About</a> ·
+  <a href="/privacy">Απόρρητο</a> ·
+  <a href="/terms">Όροι</a>
+  <p style="margin-top:14px;">© 2026 Ran-Tevu · Κωνσταντίνος Γκιουλμπαξιώτης · Ρέθυμνο, Κρήτη</p>
+</footer>
+
+</body>
+</html>

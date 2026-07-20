@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lead Generation — Ran-Tevu Admin</title>
+<style>
+  :root { --bg:#0a0a0f; --surface:#111827; --surface-2:#1f2937; --border:rgba(255,255,255,0.08); --text:#e5e7eb; --muted:#9ca3af; --primary:#7c3aed; --accent:#ec4899; --gold:#fbbf24; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, system-ui, sans-serif; background: var(--bg); color: var(--text); padding: 24px; }
+  .wrap { max-width: 1200px; margin: 0 auto; }
+  header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
+  h1 { font-size: 26px; font-weight: 800; color: white; }
+  .back { color: var(--primary); font-size: 14px; text-decoration: none; }
+  .filters { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px; margin-bottom: 20px; display: grid; grid-template-columns: 1fr 1fr 100px 100px auto; gap: 10px; align-items: end; }
+  @media (max-width: 800px) { .filters { grid-template-columns: 1fr 1fr; } }
+  label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 6px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+  input, select { width: 100%; padding: 10px 12px; background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; color: white; font-size: 14px; font-family: inherit; }
+  .btn { padding: 10px 18px; border-radius: 8px; border: none; font-weight: 700; font-size: 13px; cursor: pointer; }
+  .btn-primary { background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; }
+  .btn-ghost { background: var(--surface-2); color: var(--text); border: 1px solid var(--border); }
+  .results { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: left; padding: 12px; color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--border); background: var(--surface-2); position: sticky; top: 0; }
+  td { padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+  .badge { padding: 3px 10px; border-radius: 100px; font-size: 10px; font-weight: 700; text-transform: uppercase; }
+  .badge.new { background: rgba(124,58,237,0.15); color: var(--primary); }
+  .badge.contacted { background: rgba(59,130,246,0.15); color: #60a5fa; }
+  .badge.replied { background: rgba(251,191,36,0.15); color: var(--gold); }
+  .badge.won { background: rgba(16,185,129,0.15); color: #34d399; }
+  .badge.lost { background: rgba(239,68,68,0.15); color: #f87171; }
+  .score { font-weight: 700; color: var(--gold); }
+  .empty { text-align: center; padding: 60px 20px; color: var(--muted); }
+  select.status-mover { padding: 4px 8px; font-size: 12px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <a href="javascript:history.back()" class="back">← Back</a>
+      <h1>🔍 Lead Generation</h1>
+    </div>
+  </header>
+
+  <div class="filters">
+    <div>
+      <label>Industry / Κατηγορία</label>
+      <input id="filter-industry" placeholder="medspa, dental, salon, restaurant..." />
+    </div>
+    <div>
+      <label>Πόλη / City</label>
+      <input id="filter-city" placeholder="Αθήνα, Miami, Rethymno..." />
+    </div>
+    <div>
+      <label>Country</label>
+      <select id="filter-country">
+        <option value="">Όλα</option>
+        <option value="GR">🇬🇷 Greece</option>
+        <option value="US">🇺🇸 USA</option>
+      </select>
+    </div>
+    <div>
+      <label>Limit</label>
+      <input id="filter-limit" type="number" value="50" min="10" max="200" />
+    </div>
+    <button class="btn btn-primary" onclick="search()">🔍 Αναζήτηση</button>
+  </div>
+
+  <div class="results" id="results">
+    <div class="empty">Συμπλήρωσε φίλτρα και πάτα "Αναζήτηση".</div>
+  </div>
+</div>
+
+<script>
+const TOKEN = new URLSearchParams(location.search).get("token") || localStorage.getItem("admin_token") || "";
+if (TOKEN) localStorage.setItem("admin_token", TOKEN);
+
+async function search() {
+  const body = {
+    industry: document.getElementById("filter-industry").value,
+    city: document.getElementById("filter-city").value,
+    country: document.getElementById("filter-country").value,
+    limit: parseInt(document.getElementById("filter-limit").value) || 50,
+  };
+  document.getElementById("results").innerHTML = '<div class="empty">⏳ Αναζήτηση...</div>';
+  try {
+    const r = await fetch("/api/admin/leads/search", {
+      method: "POST", headers: { "Authorization": "Bearer " + TOKEN, "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    const data = await r.json();
+    render(data);
+  } catch (e) {
+    document.getElementById("results").innerHTML = `<div class="empty">Σφάλμα: ${e.message}</div>`;
+  }
+}
+
+function render(data) {
+  if (!data.results || !data.results.length) {
+    document.getElementById("results").innerHTML = '<div class="empty">Δεν βρέθηκαν leads με αυτά τα φίλτρα.</div>';
+    return;
+  }
+  document.getElementById("results").innerHTML = `
+    <table>
+      <thead><tr><th>Επιχείρηση</th><th>Email</th><th>Industry</th><th>Score</th><th>Status</th><th>Action</th></tr></thead>
+      <tbody>${data.results.map(r => `
+        <tr>
+          <td><strong>${esc(r.business_name)}</strong><br><small style="color:var(--muted)">${esc(r.phone||"")}</small></td>
+          <td>${esc(r.email||"—")}</td>
+          <td>${esc(r.industry||"—")}</td>
+          <td class="score">${r.score || 0}</td>
+          <td><span class="badge ${r.status||'new'}">${r.status||'new'}</span></td>
+          <td>
+            <select class="status-mover" onchange="moveLead(${r.id}, this.value)">
+              <option value="">Move to...</option>
+              <option value="new">New</option>
+              <option value="contacted">Contacted</option>
+              <option value="replied">Replied</option>
+              <option value="won">Won 🎉</option>
+              <option value="lost">Lost</option>
+            </select>
+          </td>
+        </tr>
+      `).join("")}</tbody>
+    </table>
+    <div style="padding:14px;text-align:center;color:var(--muted);font-size:13px;">${data.count} αποτελέσματα</div>
+  `;
+}
+
+async function moveLead(id, status) {
+  if (!status) return;
+  try {
+    await fetch(`/api/admin/leads/${id}/move`, {
+      method: "POST", headers: { "Authorization": "Bearer " + TOKEN, "Content-Type": "application/json" },
+      body: JSON.stringify({ status }),
+    });
+    search();
+  } catch (e) { alert("Σφάλμα: " + e.message); }
+}
+
+function esc(s) { return (s||"").toString().replace(/[<>&"]/g, c => ({"<":"&lt;",">":"&gt;","&":"&amp;",'"':"&quot;"})[c]); }
+</script>
+</body>
+</html>

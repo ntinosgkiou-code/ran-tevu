@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ran-Tevu Academy — Πώς το στήνεις & πώς δουλεύει (10 λεπτά)</title>
+<meta name="description" content="Ran-Tevu Academy: βήμα-βήμα πώς στήνεις την AI γραμματεία σου σε 10 λεπτά, πώς συνδέεις το τηλέφωνό σου, πώς φέρνει πίσω χαμένους ασθενείς και πώς βλέπεις τα έσοδα. Για φυσικοθεραπευτές & ιατρεία.">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="https://www.ran-tevu.gr/academy">
+
+<meta property="og:title" content="Ran-Tevu Academy — Πώς το στήνεις & πώς δουλεύει">
+<meta property="og:description" content="Βήμα-βήμα: στήσιμο σε 10 λεπτά, σύνδεση τηλεφώνου, revenue recovery, back office. Για φυσικοθεραπευτές & ιατρεία.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.ran-tevu.gr/academy">
+<meta property="og:locale" content="el_GR">
+<meta property="og:site_name" content="Ran-Tevu">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Course",
+  "name": "Ran-Tevu Academy",
+  "description": "Οδηγός για το πώς στήνεις και λειτουργείς την AI γραμματεία Ran-Tevu: setup, σύνδεση τηλεφώνου, revenue recovery, back office.",
+  "provider": { "@type": "Organization", "name": "Ran-Tevu", "url": "https://www.ran-tevu.gr" }
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
+
+<style>
+* { margin:0; padding:0; box-sizing:border-box; -webkit-font-smoothing:antialiased; }
+body { font-family:'DM Sans',-apple-system,'Segoe UI',Roboto,sans-serif; color:#1c1917; line-height:1.65;
+  background:
+    radial-gradient(at 15% 10%, hsla(245,90%,88%,.5) 0, transparent 45%),
+    radial-gradient(at 90% 5%, hsla(300,90%,90%,.45) 0, transparent 45%),
+    #fafaf9;
+  letter-spacing:-.011em; }
+a { color:#7c3aed; text-decoration:none; }
+.wrap { max-width:860px; margin:0 auto; padding:24px; }
+
+/* nav */
+nav { position:sticky; top:0; z-index:10; backdrop-filter:blur(20px); background:rgba(250,250,249,.7); border-bottom:1px solid rgba(255,255,255,.6); }
+nav .inner { max-width:860px; margin:0 auto; padding:14px 24px; display:flex; align-items:center; justify-content:space-between; }
+.brand { display:flex; align-items:center; gap:10px; font-weight:700; color:#1c1917; }
+.logo { width:30px; height:30px; border-radius:9px; background:linear-gradient(135deg,#6366f1,#a855f7,#ec4899); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; }
+.btn { display:inline-block; background:linear-gradient(135deg,#6366f1,#a855f7,#ec4899); color:#fff; padding:11px 22px; border-radius:999px; font-weight:600; font-size:14px; }
+
+/* hero */
+.hero { text-align:center; padding:56px 0 30px; }
+.tag { display:inline-flex; align-items:center; gap:8px; background:rgba(255,255,255,.8); border:1px solid rgba(168,85,247,.18); color:#7c3aed; padding:6px 14px; border-radius:999px; font-size:12px; font-weight:600; margin-bottom:22px; }
+.hero h1 { font-size:clamp(30px,6vw,52px); line-height:1.05; letter-spacing:-.03em; margin-bottom:18px; }
+.hero h1 em { font-family:'Instrument Serif',serif; font-style:italic;
+  background:linear-gradient(135deg,#6366f1,#a855f7,#ec4899); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+.hero p { font-size:18px; color:#57534e; max-width:580px; margin:0 auto; }
+
+/* lesson cards */
+.lesson { background:rgba(255,255,255,.7); backdrop-filter:blur(20px); border:1px solid rgba(255,255,255,.85);
+  border-radius:22px; padding:24px 26px; margin-bottom:16px; box-shadow:0 12px 40px rgba(99,102,241,.06); }
+.lesson .num { font-size:13px; font-weight:700; color:#a855f7; text-transform:uppercase; letter-spacing:.1em; }
+.lesson h2 { font-size:22px; margin:6px 0 12px; letter-spacing:-.01em; }
+.lesson p { color:#44403c; margin-bottom:10px; }
+.lesson ul, .lesson ol { margin:8px 0 8px 20px; color:#44403c; }
+.lesson li { margin:6px 0; }
+.steps { counter-reset:s; list-style:none; margin-left:0 !important; }
+.steps li { position:relative; padding:10px 0 10px 44px; border-bottom:1px dashed #e7e5e4; }
+.steps li:last-child { border-bottom:none; }
+.steps li::before { counter-increment:s; content:counter(s); position:absolute; left:0; top:8px;
+  width:28px; height:28px; border-radius:50%; background:linear-gradient(135deg,#6366f1,#a855f7); color:#fff;
+  display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px; }
+.code { font-family:'JetBrains Mono',monospace; background:#1c1917; color:#fafaf9; padding:3px 9px; border-radius:7px; font-size:14px; display:inline-block; }
+.callout { background:linear-gradient(135deg,rgba(99,102,241,.08),rgba(236,72,153,.08)); border:1px solid rgba(168,85,247,.2);
+  border-radius:14px; padding:14px 16px; font-size:15px; color:#44403c; margin:12px 0; }
+table.fwd { width:100%; border-collapse:collapse; margin:10px 0; font-size:14px; }
+table.fwd td { padding:9px 8px; border-bottom:1px solid #eee7e3; vertical-align:top; }
+table.fwd td:first-child { color:#57534e; width:55%; }
+.cta-block { text-align:center; padding:40px 0 20px; }
+.cta-block h3 { font-size:26px; margin-bottom:16px; letter-spacing:-.02em; }
+footer { margin:40px 0 24px; padding-top:22px; border-top:1px solid #e7e5e4; color:#78716c; font-size:13px; text-align:center; }
+footer a { margin:0 8px; font-weight:600; }
+</style>
+</head>
+<body>
+
+<nav><div class="inner">
+  <a class="brand" href="https://www.ran-tevu.gr"><span class="logo">R</span> Ran-Tevu</a>
+  <a class="btn" href="https://www.ran-tevu.gr">Ξεκίνα δωρεάν →</a>
+</div></nav>
+
+<div class="wrap">
+
+<section class="hero">
+  <div class="tag">🎓 Ran-Tevu Academy</div>
+  <h1>Πώς το στήνεις & πώς <em>δουλεύει.</em></h1>
+  <p>Όλα όσα χρειάζεται ένας φυσικοθεραπευτής ή γιατρός για να βάλει το AI να σηκώνει το τηλέφωνο και να γεμίζει το πρόγραμμα — σε 10 λεπτά, χωρίς τεχνικές γνώσεις.</p>
+</section>
+
+<div class="lesson">
+  <div class="num">Μάθημα 01 · 2 λεπτά</div>
+  <h2>Τι είναι το Ran-Tevu</h2>
+  <p>Είναι μια AI γραμματέας που <strong>σηκώνει κάθε κλήση 24/7 στα ελληνικά</strong>, κλείνει ραντεβού μόνη της στο ημερολόγιό σου, και — το πιο σημαντικό — <strong>φέρνει πίσω ασθενείς που χάθηκαν</strong> (no-shows, όσοι σταμάτησαν τη θεραπεία). Δεν αντικαθιστά τη γραμματέα σου· πιάνει τις κλήσεις που αλλιώς θα χάνονταν.</p>
+  <div class="callout">💡 Η διαφορά μας: οι άλλοι σταματούν στο «απαντάμε κλήσεις». Εμείς κυνηγάμε ενεργά τα λεφτά που ήδη έχασες.</div>
+</div>
+
+<div class="lesson">
+  <div class="num">Μάθημα 02 · 10 λεπτά</div>
+  <h2>Πώς το στήνεις (setup)</h2>
+  <ol class="steps">
+    <li>Γράφεσαι με email — <strong>14 μέρες δωρεάν, χωρίς κάρτα</strong>.</li>
+    <li>Συμπληρώνεις μια φόρμα: όνομα ιατρείου, υπηρεσίες με τιμές, ωράριο, συχνές ερωτήσεις.</li>
+    <li>Το AI «μαθαίνει» την επιχείρησή σου αυτόματα — μιλάει σαν δικός σου υπάλληλος.</li>
+    <li>Παίρνεις τον δικό σου AI αριθμό και ένα link για το online booking.</li>
+  </ol>
+  <div class="callout">⏱️ Όλο μαζί κάτω από 10 λεπτά. Καμία εγκατάσταση, κανένας ειδικός εξοπλισμός.</div>
+</div>
+
+<div class="lesson">
+  <div class="num">Μάθημα 03 · 3 λεπτά</div>
+  <h2>Πώς συνδέεις το τηλέφωνό σου</h2>
+  <p>Κρατάς τον αριθμό σου. Απλώς ενεργοποιείς <strong>προώθηση κλήσεων</strong> προς τον AI αριθμό που σου δίνουμε. Το πληκτρολογείς από το κινητό/σταθερό σου σαν κλήση:</p>
+  <table class="fwd">
+    <tr><td>Όταν <strong>δεν απαντάς</strong> (το πιο συνηθισμένο)</td><td><span class="code">**61*ΑΡΙΘΜΟΣ#</span></td></tr>
+    <tr><td>Όταν <strong>μιλάς</strong> ήδη</td><td><span class="code">**67*ΑΡΙΘΜΟΣ#</span></td></tr>
+    <tr><td>Όταν είναι <strong>κλειστό/εκτός</strong></td><td><span class="code">**62*ΑΡΙΘΜΟΣ#</span></td></tr>
+    <tr><td><strong>Όλες</strong> οι κλήσεις στο AI</td><td><span class="code">**21*ΑΡΙΘΜΟΣ#</span></td></tr>
+    <tr><td><strong>Απενεργοποίηση</strong> προώθησης</td><td><span class="code">##002#</span></td></tr>
+  </table>
+  <div class="callout">📲 Δουλεύει σχεδόν σε κάθε πάροχο (Cosmote, Vodafone, Nova). Στο onboarding στο κάνουμε μαζί — δεν χρειάζεται να το θυμάσαι.</div>
+</div>
+
+<div class="lesson">
+  <div class="num">Μάθημα 04 · 2 λεπτά</div>
+  <h2>Τι μπορεί να κάνει η φωνή</h2>
+  <ul>
+    <li>Απαντά σε ερωτήσεις (ωράριο, τιμές, διεύθυνση, υπηρεσίες) — από τα δικά σου δεδομένα.</li>
+    <li>Κλείνει, αλλάζει ή ακυρώνει ραντεβού, ελέγχοντας διαθεσιμότητα.</li>
+    <li>Στέλνει SMS/email επιβεβαίωσης και υπενθυμίσεις.</li>
+    <li>Σε δύσκολα/ιατρικά θέματα περνάει την κλήση σε άνθρωπο. <strong>Δεν δίνει ποτέ ιατρικές συμβουλές.</strong></li>
+  </ul>
+</div>
+
+<div class="lesson">
+  <div class="num">Μάθημα 05 · 3 λεπτά</div>
+  <h2>Revenue Recovery — πώς φέρνει πίσω χαμένους ασθενείς</h2>
+  <p>Αυτό είναι που δεν κάνει κανένας άλλος AI τηλεφωνητής στην Ελλάδα:</p>
+  <ul>
+    <li><strong>No-show recovery:</strong> δεν ήρθε στο ραντεβού; Το AI τον ξαναπροσεγγίζει και ξανακλείνει.</li>
+    <li><strong>Win-back:</strong> ασθενής που σταμάτησε τη θεραπεία στη μέση — επανενεργοποιείται αυτόματα.</li>
+    <li><strong>Recall:</strong> υπενθύμιση για επανέλεγχο μετά από θεραπεία.</li>
+  </ul>
+  <div class="callout">💰 Στο back office βλέπεις ζωντανά <strong>πόσα € ανέκτησε</strong> — όχι υποσχέσεις, νούμερα.</div>
+</div>
+
+<div class="lesson">
+  <div class="num">Μάθημα 06 · 2 λεπτά</div>
+  <h2>Το back office σου</h2>
+  <p>Από έναν απλό πίνακα βλέπεις: τα ραντεβού της ημέρας (με ένδειξη 📞 όταν τα έκλεισε το AI), τους φακέλους ασθενών, και τα έσοδα/ανακτημένα ευρώ. Όταν το AI κλείνει ένα ραντεβού, εμφανίζεται live μπροστά σου.</p>
+</div>
+
+<div class="lesson">
+  <div class="num">Μάθημα 07 · 1 λεπτό</div>
+  <h2>Ασφάλεια & GDPR</h2>
+  <p>Τα δεδομένα μένουν σε server της ΕΕ, κρυπτογραφημένα. Δεν εκπαιδεύουμε ποτέ AI πάνω στα δεδομένα σου. Διαθέσιμη σύμβαση επεξεργασίας (DPA). Σύμφωνο με GDPR & EU AI Act.</p>
+</div>
+
+<div class="lesson">
+  <div class="num">Συχνές ερωτήσεις</div>
+  <h2>Απορίες</h2>
+  <details><summary style="font-weight:600;cursor:pointer;">Πρέπει να αλλάξω τον αριθμό μου;</summary>
+    <p style="margin-top:8px;color:#57534e;">Όχι. Κρατάς το νούμερό σου και προωθείς τις κλήσεις στο AI όταν δεν προλαβαίνεις (δες Μάθημα 03).</p></details>
+  <details style="margin-top:10px;"><summary style="font-weight:600;cursor:pointer;">Πόσο κοστίζει;</summary>
+    <p style="margin-top:8px;color:#57534e;">€179/μήνα, απεριόριστες κλήσεις & ραντεβού. 14 μέρες δωρεάν χωρίς κάρτα. Χωρίς χρέωση ανά λεπτό.</p></details>
+  <details style="margin-top:10px;"><summary style="font-weight:600;cursor:pointer;">Καταλαβαίνει ο ασθενής ότι είναι AI;</summary>
+    <p style="margin-top:8px;color:#57534e;">Η φωνή είναι φυσική ελληνική, όχι ρομποτική. Οι περισσότεροι δεν το ξεχωρίζουν.</p></details>
+</div>
+
+<section class="cta-block">
+  <h3>Έτοιμος να το δοκιμάσεις;</h3>
+  <a class="btn" href="https://www.ran-tevu.gr" style="padding:15px 34px;font-size:15px;">Ξεκίνα 14 μέρες δωρεάν →</a>
+</section>
+
+<footer>
+  <p><a href="https://www.ran-tevu.gr">Αρχική</a> · <a href="https://www.ran-tevu.gr/pricing">Τιμές</a> · <a href="https://www.ran-tevu.gr/compare">Σύγκριση</a></p>
+  <p style="margin-top:8px;">© Ran-Tevu — AI γραμματεία & revenue recovery για φυσικοθεραπευτές & ιατρεία.</p>
+</footer>
+
+</div>
+</body>
+</html>

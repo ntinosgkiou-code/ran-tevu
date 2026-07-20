@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ran-Tevu vs Epic Voice, Sofia, Orfeas — Σύγκριση AI Γραμματεία 2026</title>
+<meta name="description" content="Σύγκριση AI γραμματείας στην Ελλάδα: Ran-Tevu vs Epic Voice vs Sofia (grammateia.gr) vs Orfeas AI vs Noria vs ArgonStack. Features, τιμές, EU AI Act compliance, AI memory. Ποιος είναι καλύτερος για την επιχείρησή σου.">
+<link rel="canonical" href="https://www.ran-tevu.gr/compare">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#FFFFFF">
+<link rel="icon" type="image/svg+xml" href="/icons/icon-192.svg">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+
+<script src="/tracker.js" async></script>
+
+<style>
+  *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  :root {
+    --bg:#FBFAFC; --surface:#FFFFFF; --surface-2:#F4F4F8; --border:#E5E7EB;
+    --text:#0F172A; --text-secondary:#475569; --text-muted:#64748B;
+    --primary:#6E56CF; --primary-dark:#5841BD; --accent:#F5A524;
+    --success:#10B981; --danger:#EF4444; --warn:#F59E0B;
+  }
+  body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+  a { color: inherit; text-decoration: none; }
+
+  /* Nav */
+  nav { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.85); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(229,231,235,0.5); padding: 14px 24px; }
+  .nav-inner { max-width: 1240px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+  .brand { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 19px; display: flex; align-items: center; gap: 10px; }
+  .brand-mark { width:32px; height:32px; border-radius:9px; background: linear-gradient(135deg, #6E56CF, #F5A524); display:flex; align-items:center; justify-content:center; color:white; font-size:14px; }
+  .nav-cta { background: var(--text); color: white; padding: 9px 18px; border-radius: 8px; font-weight: 600; font-size: 13px; }
+
+  /* Hero */
+  .hero { padding: 80px 24px 40px; text-align: center; max-width: 920px; margin: 0 auto; }
+  .eyebrow { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 100px; font-size: 12px; font-weight: 600; color: var(--primary); letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 24px; }
+  h1 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: clamp(34px, 5vw, 56px); font-weight: 800; line-height: 1.05; letter-spacing: -0.03em; margin-bottom: 20px; }
+  h1 .grad { background: linear-gradient(135deg, var(--primary), var(--accent)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+  .lede { font-size: 18px; color: var(--text-secondary); max-width: 680px; margin: 0 auto; }
+
+  /* Comparison table */
+  .compare-section { padding: 40px 24px 80px; }
+  .compare-wrap { max-width: 1240px; margin: 0 auto; overflow-x: auto; }
+  table.compare {
+    width: 100%; border-collapse: separate; border-spacing: 0;
+    min-width: 900px;
+    background: white; border: 1px solid var(--border); border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(15,23,42,0.04);
+    overflow: hidden;
+  }
+  table.compare th, table.compare td {
+    padding: 16px 18px; text-align: left; border-bottom: 1px solid var(--border);
+    font-size: 14px;
+  }
+  table.compare thead th { background: var(--surface-2); font-weight: 700; font-size: 13px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  table.compare thead th.us {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+    position: relative;
+  }
+  table.compare thead th.us::after {
+    content: "ΕΜΕΙΣ"; position: absolute; top: -8px; right: 8px;
+    background: var(--accent); color: white;
+    font-size: 9px; padding: 2px 8px; border-radius: 100px; font-weight: 800;
+  }
+  table.compare tbody tr:hover { background: var(--surface-2); }
+  table.compare tbody td.feature { font-weight: 600; color: var(--text); }
+  table.compare tbody td.us { background: rgba(110, 86, 207, 0.05); font-weight: 600; }
+  .check { color: var(--success); font-weight: 800; font-size: 18px; }
+  .x { color: var(--danger); font-weight: 800; font-size: 18px; }
+  .meh { color: var(--warn); font-weight: 800; }
+  .price { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; }
+
+  /* Per-section comparison cards */
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; max-width: 1240px; margin: 60px auto; padding: 0 24px; }
+  .card { background: white; border: 1px solid var(--border); border-radius: 16px; padding: 24px; transition: all 0.2s; }
+  .card:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(15,23,42,0.08); }
+  .card.us { border: 2px solid var(--primary); background: linear-gradient(180deg, white, #FAFAFC); }
+  .card h3 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 22px; font-weight: 800; margin-bottom: 4px; }
+  .card .meta { color: var(--text-muted); font-size: 13px; margin-bottom: 16px; }
+  .card .price-line { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 26px; font-weight: 800; color: var(--primary); margin-bottom: 16px; }
+  .card ul { list-style: none; padding: 0; font-size: 13px; }
+  .card li { padding: 6px 0 6px 24px; position: relative; color: var(--text-secondary); }
+  .card li.good::before { content: "✓"; position: absolute; left: 0; color: var(--success); font-weight: 900; }
+  .card li.bad::before { content: "✗"; position: absolute; left: 0; color: var(--danger); font-weight: 900; }
+  .card .verdict { padding: 10px 12px; background: var(--surface-2); border-radius: 8px; font-size: 12px; color: var(--text-secondary); margin-top: 16px; line-height: 1.5; }
+
+  /* Bottom CTA */
+  .bottom-cta {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+    padding: 60px 24px; text-align: center;
+  }
+  .bottom-cta h2 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: clamp(28px, 4vw, 40px); margin-bottom: 16px; color: white; }
+  .bottom-cta p { color: rgba(255,255,255,0.85); margin-bottom: 28px; font-size: 17px; max-width: 600px; margin-left: auto; margin-right: auto; }
+  .btn-cta { background: white; color: var(--primary); padding: 16px 32px; border-radius: 10px; font-weight: 700; display: inline-flex; gap: 8px; transition: all 0.2s; }
+  .btn-cta:hover { transform: translateY(-2px); background: var(--accent); color: white; }
+
+  footer { background: #0F172A; color: rgba(255,255,255,0.6); padding: 40px 24px; text-align: center; font-size: 13px; }
+  footer a { color: rgba(255,255,255,0.7); margin: 0 12px; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="brand">
+      <div class="brand-mark">📞</div>
+      Ran-Tevu
+    </a>
+    <a href="/onboarding/voice" class="nav-cta" data-track="compare_to_onboarding">Στήσε AI →</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <span class="eyebrow">⚖️ Σύγκριση 2026</span>
+  <h1>Ran-Tevu vs <span class="grad">όλος ο ανταγωνισμός</span></h1>
+  <p class="lede">
+    Συγκρίνουμε feature-by-feature με τα 5 μεγαλύτερα Greek AI receptionist services.
+    Χωρίς ωραιοποιήσεις. Με checkmarks και αριθμούς.
+  </p>
+</header>
+
+<!-- ════════════ COMPARISON TABLE ════════════ -->
+<section class="compare-section">
+  <div class="compare-wrap">
+    <table class="compare">
+      <thead>
+        <tr>
+          <th style="width:22%">Feature</th>
+          <th class="us">Ran-Tevu</th>
+          <th>Epic Voice<br><small style="font-weight:400;color:#94A3B8">epicvoice.gr</small></th>
+          <th>Sofia<br><small style="font-weight:400;color:#94A3B8">grammateia.gr</small></th>
+          <th>Orfeas AI<br><small style="font-weight:400;color:#94A3B8">orfeas-ai.gr</small></th>
+          <th>Noria AI<br><small style="font-weight:400;color:#94A3B8">noria.gr</small></th>
+          <th>ArgonStack<br><small style="font-weight:400;color:#94A3B8">argonstack.gr</small></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="feature">💰 Τιμή starting</td>
+          <td class="us"><span class="price">€179</span>/μήνα<br><small>flat · voice+chat · χωρίς setup fee</small></td>
+          <td><span class="price">€149</span>/μήνα<br><small>+ €299 setup</small></td>
+          <td><span class="price">€19.99</span>/μήνα</td>
+          <td><span class="price">€30</span>/μήνα</td>
+          <td class="meh">Contact us</td>
+          <td class="meh">Contact us</td>
+        </tr>
+        <tr>
+          <td class="feature">💸 Setup fee</td>
+          <td class="us"><span class="check">✓</span> <strong>€0</strong><br><small>μηδέν setup fee</small></td>
+          <td class="x"><strong>€299-€999</strong></td>
+          <td><span class="meh">~€100</span></td>
+          <td><span class="meh">~€200</span></td>
+          <td class="x"><strong>Custom</strong></td>
+          <td class="x"><strong>€500+</strong></td>
+        </tr>
+        <tr>
+          <td class="feature">🧠 AI Memory (θυμάται πελάτες)</td>
+          <td class="us"><span class="check">✓</span> Full long-term</td>
+          <td><span class="x">✗</span></td>
+          <td><span class="x">✗</span></td>
+          <td><span class="x">✗</span></td>
+          <td><span class="x">✗</span></td>
+          <td><span class="meh">CRM only</span></td>
+        </tr>
+        <tr>
+          <td class="feature">🛡️ EU AI Act + GDPR compliance</td>
+          <td class="us"><span class="check">✓</span> <a href="/compliance" style="color:inherit;text-decoration:underline">Public docs</a></td>
+          <td><span class="meh">Privacy policy μόνο</span></td>
+          <td><span class="meh">Privacy policy μόνο</span></td>
+          <td><span class="meh">Privacy policy μόνο</span></td>
+          <td><span class="meh">Privacy policy μόνο</span></td>
+          <td><span class="meh">Privacy policy μόνο</span></td>
+        </tr>
+        <tr>
+          <td class="feature">🎙️ Real voice phone</td>
+          <td class="us"><span class="check">✓</span> ElevenLabs Greek</td>
+          <td><span class="check">✓</span> Greek voice</td>
+          <td><span class="x">✗</span> Text only</td>
+          <td><span class="check">✓</span> Generic TTS</td>
+          <td><span class="check">✓</span> Multilingual</td>
+          <td><span class="x">✗</span> Chat widget</td>
+        </tr>
+        <tr>
+          <td class="feature">💬 Chat + Voice (όχι μόνο voice)</td>
+          <td class="us"><span class="check">✓</span> Both</td>
+          <td><span class="x">✗</span> Voice only</td>
+          <td><span class="check">✓</span> Chat only</td>
+          <td><span class="meh">Voice focus</span></td>
+          <td><span class="meh">Voice focus</span></td>
+          <td><span class="check">✓</span> Chat only</td>
+        </tr>
+        <tr>
+          <td class="feature">⚡ Self-service setup</td>
+          <td class="us"><span class="check">✓</span> 3 λεπτά</td>
+          <td><span class="x">✗</span> Sales call</td>
+          <td><span class="x">✗</span> Sales call</td>
+          <td><span class="x">✗</span> Sales call</td>
+          <td><span class="x">✗</span> Done-for-you</td>
+          <td><span class="x">✗</span> 3-6 εβδομάδες</td>
+        </tr>
+        <tr>
+          <td class="feature">🌐 Live in-browser demo</td>
+          <td class="us"><span class="check">✓</span> Click & chat</td>
+          <td><span class="meh">Audio sample</span></td>
+          <td><span class="x">✗</span></td>
+          <td><span class="meh">Audio sample</span></td>
+          <td><span class="meh">Audio agents</span></td>
+          <td><span class="x">✗</span></td>
+        </tr>
+        <tr>
+          <td class="feature">🆓 Δωρεάν δοκιμή 14 ημερών</td>
+          <td class="us"><span class="check">✓</span></td>
+          <td><span class="x">✗</span> Demo only</td>
+          <td><span class="meh">Trial 7 μέρες</span></td>
+          <td><span class="meh">Demo only</span></td>
+          <td><span class="x">✗</span></td>
+          <td><span class="x">✗</span></td>
+        </tr>
+        <tr>
+          <td class="feature">🤖 Custom personality (tone, ύφος)</td>
+          <td class="us"><span class="check">✓</span> Warm/professional/friendly</td>
+          <td><span class="check">✓</span> Custom solutions</td>
+          <td><span class="x">✗</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="x">✗</span></td>
+        </tr>
+        <tr>
+          <td class="feature">📊 Analytics dashboard</td>
+          <td class="us"><span class="check">✓</span> Real-time + memory stats</td>
+          <td><span class="check">✓</span> Dashboard</td>
+          <td><span class="meh">Basic stats</span></td>
+          <td><span class="meh">Basic</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">✓</span> Full CRM</td>
+        </tr>
+        <tr>
+          <td class="feature">🌍 EL + EN multi-language</td>
+          <td class="us"><span class="check">✓</span> Auto-detect</td>
+          <td><span class="meh">Pro+ tier only</span></td>
+          <td><span class="x">✗</span> EL only</td>
+          <td><span class="meh">Manual switch</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="x">✗</span></td>
+        </tr>
+        <tr>
+          <td class="feature">📱 PWA mobile install</td>
+          <td class="us"><span class="check">✓</span></td>
+          <td><span class="x">✗</span></td>
+          <td><span class="x">✗</span></td>
+          <td><span class="x">✗</span></td>
+          <td><span class="x">✗</span></td>
+          <td><span class="check">✓</span> iOS+Android</td>
+        </tr>
+        <tr>
+          <td class="feature">📅 Google Calendar sync</td>
+          <td class="us"><span class="check">✓</span> 2-way</td>
+          <td><span class="meh">Όχι αναφορά</span></td>
+          <td><span class="meh">One-way</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+        </tr>
+        <tr>
+          <td class="feature">📧 Auto emails (confirmations + reminders)</td>
+          <td class="us"><span class="check">✓</span> 24h + 4h reminders</td>
+          <td><span class="meh">Όχι αναφορά</span></td>
+          <td><span class="meh">SMS μόνο</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">✓</span> Full builder</td>
+        </tr>
+        <tr>
+          <td class="feature">♻️ Reengagement σε inactive customers</td>
+          <td class="us"><span class="check">✓</span> Auto weekly</td>
+          <td><span class="x">✗</span></td>
+          <td><span class="x">✗</span></td>
+          <td><span class="x">✗</span></td>
+          <td><span class="x">✗</span></td>
+          <td><span class="check">✓</span></td>
+        </tr>
+        <tr>
+          <td class="feature">👤 Founder direct access</td>
+          <td class="us"><span class="check">✓</span> Email/phone founder</td>
+          <td><span class="x">✗</span> Sales team</td>
+          <td><span class="x">✗</span> Call center</td>
+          <td><span class="x">✗</span> Email support</td>
+          <td><span class="x">✗</span> Ticket system</td>
+          <td><span class="x">✗</span> Email support</td>
+        </tr>
+        <tr>
+          <td class="feature">🇬🇷 Made in Greece</td>
+          <td class="us"><span class="check">✓</span> Ρέθυμνο, Κρήτη</td>
+          <td><span class="check">✓</span> Αθήνα</td>
+          <td><span class="check">✓</span> Αθήνα</td>
+          <td><span class="check">✓</span> Ιωάννινα</td>
+          <td><span class="check">✓</span> Athens</td>
+          <td><span class="check">✓</span> Athens</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ════════════ PER-COMPETITOR VERDICTS ════════════ -->
+<section style="background: var(--surface);">
+<div style="max-width: 1240px; margin: 0 auto; padding: 60px 24px;">
+  <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 32px; text-align: center; margin-bottom: 14px; font-weight: 800; letter-spacing:-0.02em;">Πότε να επιλέξεις ποιον</h2>
+  <p style="text-align: center; color: var(--text-secondary); margin-bottom: 50px; font-size: 17px;">Όχι όλοι είμαστε το ίδιο. Να ποια λύση ταιριάζει σε ποιον.</p>
+
+  <div class="cards">
+    <div class="card us">
+      <h3>Ran-Tevu 🎙️</h3>
+      <div class="meta">Voice + Chat + Memory · Made στο Ρέθυμνο</div>
+      <div class="price-line">€179/μήνα flat (voice+chat) · Premium €299 με Revenue Recovery</div>
+      <ul>
+        <li class="good">Revenue Recovery: κυνηγάει no-shows & χαμένους ασθενείς</li>
+        <li class="good">AI Memory (θυμάται κάθε πελάτη)</li>
+        <li class="good">EU AI Act + GDPR compliant (public docs)</li>
+        <li class="good">Μηδέν setup fee · 14 μέρες δωρεάν χωρίς κάρτα</li>
+        <li class="good">Voice + Chat (όχι μόνο ένα)</li>
+        <li class="good">Founder direct contact</li>
+      </ul>
+      <div class="verdict"><strong>Διάλεξε αν:</strong> Θες AI γραμματεία που δεν απαντά απλώς — φέρνει πίσω χαμένα έσοδα. Flat τιμή, χωρίς setup fee (Epic Voice: €299-999 setup), δωρεάν δοκιμή χωρίς κάρτα που δεν δίνει κανείς άλλος.</div>
+    </div>
+
+    <div class="card">
+      <h3>Epic Voice 🎙️</h3>
+      <div class="meta">epicvoice.gr · Athens-based</div>
+      <div class="price-line">€149-449/μήνα + €299-999 setup</div>
+      <ul>
+        <li class="good">Polished website + brand</li>
+        <li class="good">3 clear pricing tiers</li>
+        <li class="good">Greek voice quality</li>
+        <li class="bad">3x ακριβότερο από εμάς</li>
+        <li class="bad">Όχι AI memory</li>
+        <li class="bad">Όχι free trial (μόνο demo)</li>
+        <li class="bad">Voice μόνο (όχι chat)</li>
+        <li class="bad">Σιωπή σε EU AI Act compliance</li>
+      </ul>
+      <div class="verdict"><strong>Διάλεξε αν:</strong> Θες brand-name solution και δεν σε νοιάζει 3x το κόστος. Αλλιώς πάρε εμάς με τα ίδια features.</div>
+    </div>
+
+    <div class="card">
+      <h3>Sofia 📞</h3>
+      <div class="meta">grammateia.gr · 28 χρόνια</div>
+      <div class="price-line">€19.99/μήνα</div>
+      <ul>
+        <li class="good">Φθηνότερο entry</li>
+        <li class="good">Established (1997)</li>
+        <li class="bad">Text only — όχι real voice AI</li>
+        <li class="bad">Παλιά τεχνολογία</li>
+      </ul>
+      <div class="verdict"><strong>Διάλεξε αν:</strong> Θες απλή τηλεφωνική γραμματεία χωρίς AI, με μικρό budget, να μη σε νοιάζει η τεχνολογία.</div>
+    </div>
+
+    <div class="card">
+      <h3>Orfeas AI 🎤</h3>
+      <div class="meta">orfeas-ai.gr · LIME Tech</div>
+      <div class="price-line">€30/μήνα</div>
+      <ul>
+        <li class="good">"1ος στην Ελλάδα" (claim)</li>
+        <li class="good">9 industry verticals</li>
+        <li class="bad">Όχι live in-browser demo</li>
+        <li class="bad">Sales call για onboarding</li>
+      </ul>
+      <div class="verdict"><strong>Διάλεξε αν:</strong> Θες established brand με parent company backing και προτιμάς human sales call.</div>
+    </div>
+
+    <div class="card">
+      <h3>Noria AI 🌍</h3>
+      <div class="meta">noria.gr · 30+ γλώσσες</div>
+      <div class="price-line">Contact us</div>
+      <ul>
+        <li class="good">Multilingual (30+ languages)</li>
+        <li class="good">Hospitality focused</li>
+        <li class="bad">No public pricing</li>
+        <li class="bad">Enterprise model</li>
+      </ul>
+      <div class="verdict"><strong>Διάλεξε αν:</strong> Είσαι ξενοδοχείο/τουριστική επιχείρηση με πολυγλωσσικούς πελάτες, έχεις enterprise budget.</div>
+    </div>
+
+    <div class="card">
+      <h3>ArgonStack 📊</h3>
+      <div class="meta">argonstack.gr · All-in-one CRM</div>
+      <div class="price-line">Contact us</div>
+      <ul>
+        <li class="good">Full CRM σε ένα</li>
+        <li class="good">Mobile apps (iOS+Android)</li>
+        <li class="bad">3-6 εβδομάδες onboarding</li>
+        <li class="bad">Όχι real voice phone</li>
+      </ul>
+      <div class="verdict"><strong>Διάλεξε αν:</strong> Θες full CRM + marketing + pipeline. Δεν χρειάζεσαι μόνο voice receptionist.</div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ════════════ BOTTOM CTA ════════════ -->
+<section class="bottom-cta">
+  <h2>Πειστήκατε; Δοκιμάστε live σε 60 sec.</h2>
+  <p>Live in-browser voice demo. Self-service onboarding σε 3 λεπτά. 14-day money back guarantee.</p>
+  <a href="/" class="btn-cta" data-track="compare_to_homepage">🎤 Δοκιμάστε live demo →</a>
+  <div style="margin-top: 20px;">
+    <a href="/onboarding/voice" style="color: rgba(255,255,255,0.8); font-size: 14px;" data-track="compare_to_onboarding_bottom">ή στήστε τη δικιά σας AI σε 3 λεπτά →</a>
+  </div>
+</section>
+
+<footer>
+  <div>© 2026 Ran-Tevu · Κωνσταντίνος Γκιουλμπαξιώτης · Ρέθυμνο, Κρήτη</div>
+  <div style="margin-top: 14px;">
+    <a href="/">Αρχική</a>
+    <a href="/pricing">Τιμές</a>
+    <a href="/about">About</a>
+    <a href="/blog">Blog</a>
+    <a href="/privacy">Απόρρητο</a>
+  </div>
+  <div style="margin-top: 14px; font-size: 11px; opacity: 0.7;">
+    Σύγκριση based on public data Μάιος 2026. Οι ανταγωνιστές μπορεί να αναβαθμίσουν τις υπηρεσίες τους.
+  </div>
+</footer>
+
+</body>
+</html>

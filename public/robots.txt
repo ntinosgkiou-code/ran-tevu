@@ -1,0 +1,39 @@
+User-agent: *
+Allow: /
+
+# Block admin + API + internal pages from indexing
+Disallow: /admin/
+Disallow: /admin
+Disallow: /api/
+Disallow: /unsubscribe
+Disallow: /setup
+Disallow: /onboarding/
+Disallow: /tmp_dbg/
+Disallow: /seo/health/
+# Owner-only + private provisioning + per-tenant dashboards/back-office
+Disallow: /owner
+Disallow: /start
+Disallow: /try-
+Disallow: /*/back-office
+Disallow: /*/dashboard
+
+# Allow Google-Extended (LLM training) — opt out if you prefer
+# User-agent: Google-Extended
+# Disallow: /
+
+# Allow GPTBot, ClaudeBot, etc. to read public content
+User-agent: GPTBot
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+User-agent: ClaudeBot
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+# Sitemap (auto-discovered by all major crawlers)
+Sitemap: https://www.ran-tevu.gr/sitemap.xml
+
+# Host directive (Yandex)
+Host: www.ran-tevu.gr

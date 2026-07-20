@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<title>AI Γραμματεία για Ιατρεία — Ran-Tevu | Οδοντιατρεία, Κτηνιατρεία, Φυσιοθεραπεία</title>
+<meta name="description" content="AI γραμματεία 24/7 για οδοντιατρεία, κτηνιατρεία, φυσιοθεραπευτήρια, δερματολογικά. Φωνή + chat στα ελληνικά + 9 γλώσσες. €49/μήνα chat ή €1 ανά ραντεβού. Πρώτος μήνας δωρεάν.">
+<link rel="canonical" href="https://www.ran-tevu.gr/iatreio">
+<style>
+  html { color-scheme: light only; background: #FBFAFC; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif; margin: 0; padding: 0; color: #1f2937; background: #FBFAFC; line-height: 1.6; }
+  .container { max-width: 960px; margin: 0 auto; padding: 0 20px; }
+  .nav { padding: 16px 0; border-bottom: 1px solid #e5e7eb; background: #fff; position: sticky; top: 0; z-index: 100; }
+  .nav .container { display: flex; justify-content: space-between; align-items: center; }
+  .nav a.brand { font-weight: 800; font-size: 18px; color: #0f172a; text-decoration: none; }
+  .nav a.cta { background: #6E56CF; color: #fff; padding: 8px 18px; border-radius: 999px; text-decoration: none; font-weight: 600; font-size: 14px; }
+  .hero { padding: 60px 0 50px; text-align: center; background: linear-gradient(135deg,#dbeafe 0%,#ede9fe 100%); }
+  .hero h1 { font-size: clamp(28px, 5vw, 44px); line-height: 1.15; margin: 0 0 20px; color: #0f172a; font-weight: 800; }
+  .hero h1 .accent { color: #6E56CF; }
+  .hero p.sub { font-size: 18px; color: #1e293b; max-width: 680px; margin: 0 auto 28px; }
+  .vertical-pills { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 24px 0; }
+  .vertical-pills a { background: #fff; padding: 10px 18px; border-radius: 999px; text-decoration: none; color: #4338ca; font-weight: 600; font-size: 14px; border: 1px solid #c7d2fe; }
+  .vertical-pills a:hover { background: #6E56CF; color: #fff; border-color: #6E56CF; }
+  .btn-primary { background: #6E56CF; color: #fff; padding: 16px 32px; border-radius: 12px; text-decoration: none; font-weight: 700; font-size: 16px; display: inline-block; box-shadow: 0 4px 16px rgba(110,86,207,0.25); }
+  .badges { margin-top: 18px; font-size: 13px; color: #4338ca; }
+  .badges span { margin: 0 6px; }
+  .section { padding: 60px 0; }
+  .section h2 { font-size: 28px; margin: 0 0 24px; color: #0f172a; text-align: center; }
+  .vertical-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 16px; padding: 28px; margin-bottom: 20px; }
+  .vertical-card h3 { margin: 0 0 12px; font-size: 22px; color: #0f172a; display: flex; align-items: center; gap: 10px; }
+  .vertical-card h3 .emoji { font-size: 28px; }
+  .vertical-card p.tagline { color: #4b5563; margin: 0 0 14px; font-size: 15px; }
+  .vertical-card ul { list-style: none; padding: 0; margin: 0; }
+  .vertical-card ul li { padding: 6px 0; font-size: 14px; display: flex; gap: 10px; color: #374151; }
+  .vertical-card ul li .v { color: #059669; font-weight: 800; flex-shrink: 0; }
+  .pain-list { background: #fff; border-radius: 16px; padding: 32px; box-shadow: 0 2px 12px rgba(0,0,0,0.05); }
+  .pain-list ul { list-style: none; padding: 0; margin: 0; }
+  .pain-list li { padding: 12px 0; border-bottom: 1px solid #f3f4f6; font-size: 16px; display: flex; gap: 12px; }
+  .pain-list li:last-child { border-bottom: none; }
+  .pain-list li .x { color: #dc2626; font-weight: 800; flex-shrink: 0; }
+  .pricing-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 30px; }
+  @media(max-width:760px){ .pricing-grid { grid-template-columns: 1fr; } }
+  .pricing-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 16px; padding: 28px; }
+  .pricing-card.featured { border: 2px solid #6E56CF; box-shadow: 0 8px 32px rgba(110,86,207,0.15); position: relative; }
+  .pricing-card.featured::before { content: 'Δημοφιλέστερο'; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: #6E56CF; color: #fff; padding: 4px 14px; border-radius: 999px; font-size: 11px; font-weight: 700; letter-spacing: 1px; }
+  .pricing-card h3 { margin: 0 0 10px; font-size: 20px; color: #0f172a; }
+  .pricing-card .price { font-size: 36px; font-weight: 900; color: #0f172a; }
+  .pricing-card .period { color: #6b7280; font-size: 14px; }
+  .pricing-card .alt { color: #15803d; font-size: 14px; margin-top: 4px; font-weight: 600; }
+  .pricing-card ul { list-style: none; padding: 0; margin: 18px 0; }
+  .pricing-card ul li { padding: 6px 0; font-size: 14px; color: #374151; display: flex; gap: 8px; }
+  .pricing-card ul li .c { color: #059669; font-weight: 800; flex-shrink: 0; }
+  .pricing-card .buy { background: #6E56CF; color: #fff; padding: 12px 20px; border-radius: 10px; text-decoration: none; font-weight: 700; display: block; text-align: center; font-size: 14px; }
+  .guarantee-box { background: linear-gradient(135deg,#f0fdf4,#dcfce7); border: 1px solid #86efac; border-radius: 12px; padding: 18px; margin-top: 24px; text-align: center; font-size: 14px; color: #14532d; }
+  .faq { background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; margin-bottom: 12px; padding: 16px 20px; }
+  .faq summary { cursor: pointer; font-weight: 600; font-size: 16px; color: #0f172a; }
+  .faq p { color: #4b5563; margin: 12px 0 0; font-size: 15px; }
+  .final-cta { background: #6E56CF; padding: 60px 0; text-align: center; color: #fff; }
+  .final-cta h2 { color: #fff; font-size: 28px; }
+  .final-cta .btn-primary { background: #fff; color: #6E56CF; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="container">
+    <a href="/" class="brand">📅 Ran-Tevu</a>
+    <a href="https://cal.com/randevu-konstantinois/15min" target="_blank" class="cta">Κλείσε demo →</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="container">
+    <h1>Σταματήστε να χάνετε ασθενείς<br>όταν είστε <span class="accent">με ασθενή.</span></h1>
+    <p class="sub">
+      AI γραμματέας 24/7 σχεδιασμένη για <strong>ιατρεία κάθε ειδικότητας</strong>.
+      Κλείνει ραντεβού, στέλνει reminders, εξυπηρετεί τουρίστες σε 10 γλώσσες.
+      <strong>Πληρώνεστε μόνο αν φέρει αποτέλεσμα.</strong>
+    </p>
+    <div class="vertical-pills">
+      <a href="#dental">🦷 Οδοντιατρεία</a>
+      <a href="#vet">🐾 Κτηνιατρεία</a>
+      <a href="#physio">💪 Φυσικοθεραπεία</a>
+      <a href="#derma">✨ Δερματολογία</a>
+    </div>
+    <a href="https://cal.com/randevu-konstantinois/15min" target="_blank" class="btn-primary">
+      📅 Κλείσε δωρεάν 15' demo
+    </a>
+    <div class="badges">
+      ✓ Πρώτος μήνας <strong>ΔΩΡΕΑΝ</strong>
+      <span>·</span> ✓ Χωρίς δέσμευση
+      <span>·</span> ✓ GDPR + EU AI Act
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2>Τι πονάει κάθε ιατρείο σήμερα</h2>
+    <div class="pain-list">
+      <ul>
+        <li><span class="x">✗</span><span><strong>Ασθενής τηλεφωνεί 17:30</strong>, είστε σε εξέταση — αναπάντητη. Παίρνει το επόμενο ιατρείο. <strong>Lost forever.</strong></span></li>
+        <li><span class="x">✗</span><span><strong>Σάββατο πρωί</strong>: 5 άτομα ψάχνουν ραντεβού, η γραμματέας Δευτέρα.</span></li>
+        <li><span class="x">✗</span><span><strong>Τουρίστες</strong> που μιλάνε αγγλικά/γερμανικά/ρωσικά — δεν τους εξυπηρετείτε.</span></li>
+        <li><span class="x">✗</span><span><strong>No-shows</strong>: ασθενείς ξεχνάνε το ραντεβού, εσείς χάνετε €60-€100 το slot.</span></li>
+        <li><span class="x">✗</span><span><strong>Re-engagement</strong> δεν γίνεται: ασθενείς που δεν ήρθαν 6+ μήνες ξεχνιούνται.</span></li>
+        <li><span class="x">✗</span><span><strong>Γραμματέας €1.500/μήνα + ΕΦΚΑ + δώρα</strong> = €25.000/χρόνο για 8 ώρες κάλυψης.</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="background:#fff;">
+  <div class="container">
+    <h2>Sized για την ειδικότητά σου</h2>
+
+    <div id="dental" class="vertical-card">
+      <h3><span class="emoji">🦷</span> Οδοντιατρεία</h3>
+      <p class="tagline">Από καθαρισμό μέχρι implant — το AI ξέρει τις υπηρεσίες σου, τις τιμές, τη διάρκεια κάθε intervention.</p>
+      <ul>
+        <li><span class="v">✓</span>Triage urgency: «πονάω πολύ» → άμεση κλήση σε σένα</li>
+        <li><span class="v">✓</span>Pricing transparency: «καθαρισμός 60€, 30 λεπτά»</li>
+        <li><span class="v">✓</span>Συγχρονισμός με Google Calendar του ιατρείου</li>
+        <li><span class="v">✓</span>Reminders 24h + 4h πριν — λιγότερα no-shows</li>
+      </ul>
+      <a href="/odontiatreio" style="color:#6E56CF;font-weight:700;text-decoration:none;font-size:14px;">→ Δες αναλυτικά για οδοντιατρεία</a>
+    </div>
+
+    <div id="vet" class="vertical-card">
+      <h3><span class="emoji">🐾</span> Κτηνιατρεία</h3>
+      <p class="tagline">Validation τύπου ζώου, emergency detection, συντονισμός εμβολιασμών — όλα αυτόματα.</p>
+      <ul>
+        <li><span class="v">✓</span>Ρωτά τύπο ζώου πρώτα (σκύλος vs γάτα vs εξωτικά)</li>
+        <li><span class="v">✓</span>Emergency keywords: «αιμορραγία», «δεν αναπνέει» → άμεση escalation</li>
+        <li><span class="v">✓</span>Reminders εμβολιασμών 1 μήνα πριν</li>
+        <li><span class="v">✓</span>Auto-booking για ετήσιο checkup</li>
+      </ul>
+    </div>
+
+    <div id="physio" class="vertical-card">
+      <h3><span class="emoji">💪</span> Φυσικοθεραπευτήρια</h3>
+      <p class="tagline">Assessment-first booking — το AI ρωτά για τραυματισμό πριν κλείσει.</p>
+      <ul>
+        <li><span class="v">✓</span>«Από πού πονάς, πότε ξεκίνησε, ένταση 1-10;» — όλα γραμμένα στο card σου</li>
+        <li><span class="v">✓</span>Packages (10 sessions με έκπτωση) προτείνονται αυτόματα</li>
+        <li><span class="v">✓</span>Re-booking: μετά από session 5, AI κλείνει την επόμενη</li>
+        <li><span class="v">✓</span>Sport-specific routing (running vs ποδόσφαιρο vs μπάσκετ)</li>
+      </ul>
+    </div>
+
+    <div id="derma" class="vertical-card">
+      <h3><span class="emoji">✨</span> Δερματολογία</h3>
+      <p class="tagline">Personalized για consultations + αισθητικές υπηρεσίες (botox, fillers, laser).</p>
+      <ul>
+        <li><span class="v">✓</span>Pricing για αισθητικές: «botox 250€ ανά session»</li>
+        <li><span class="v">✓</span>Free consultation booking για high-ticket procedures</li>
+        <li><span class="v">✓</span>Memory: ασθενής που έκανε botox 6 μήνες πριν → reminder για touch-up</li>
+        <li><span class="v">✓</span>Photo intake pre-consultation (optional)</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2>Τιμές</h2>
+
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <h3>Performance</h3>
+        <div class="price">€1</div>
+        <div class="period">/ ραντεβού που έκλεισε</div>
+        <div class="alt">€0 μηνιαία</div>
+        <ul>
+          <li><span class="c">✓</span>AI Chat στο site σου</li>
+          <li><span class="c">✓</span>10+ γλώσσες</li>
+          <li><span class="c">✓</span>Google Calendar sync</li>
+          <li><span class="c">✓</span>Email + SMS reminders</li>
+          <li><span class="c">✓</span>Πληρώνεις μόνο όταν δουλέψει</li>
+          <li><span class="c">✓</span>Καμία δέσμευση</li>
+        </ul>
+        <a href="https://cal.com/randevu-konstantinois/15min" target="_blank" class="buy">Δοκίμασε δωρεάν →</a>
+      </div>
+
+      <div class="pricing-card featured">
+        <h3>Chat Standard</h3>
+        <div class="price">€49</div>
+        <div class="period">/ μήνα flat</div>
+        <div class="alt">1ος μήνας ΔΩΡΕΑΝ</div>
+        <ul>
+          <li><span class="c">✓</span>AI Chat (site + WhatsApp + IG)</li>
+          <li><span class="c">✓</span>10+ γλώσσες</li>
+          <li><span class="c">✓</span>Memory: θυμάται κάθε ασθενή</li>
+          <li><span class="c">✓</span>Reminders + re-engagement automated</li>
+          <li><span class="c">✓</span>Admin dashboard με analytics</li>
+          <li><span class="c">✓</span>Unlimited ραντεβού</li>
+          <li><span class="c">✓</span><strong>+€50 Voice add-on (φωνητικός τηλεφωνητής)</strong></li>
+        </ul>
+        <a href="https://cal.com/randevu-konstantinois/15min" target="_blank" class="buy">Δοκίμασε δωρεάν →</a>
+      </div>
+    </div>
+
+    <div class="guarantee-box">
+      🛡️ <strong>Πρώτος μήνας 100% δωρεάν, χωρίς πιστωτική κάρτα.</strong><br>
+      Aν δεν φέρει ραντεβού, παίρνετε τα λεφτά σας πίσω. Ακυρώνετε με ένα κλικ.
+    </div>
+  </div>
+</section>
+
+<section class="section" style="background:#fff;">
+  <div class="container" style="max-width:720px;">
+    <h2>Συχνές ερωτήσεις</h2>
+
+    <details class="faq">
+      <summary>Είναι GDPR-compliant για ιατρικά δεδομένα;</summary>
+      <p>Πλήρης συμμόρφωση με GDPR + EU AI Act. Δεν αποθηκεύουμε ιατρικά δεδομένα — μόνο όνομα/τηλέφωνο/email για το ραντεβού. Δείτε <a href="/legal/privacy">Privacy Policy</a> + <a href="/legal/dpa">DPA</a>.</p>
+    </details>
+
+    <details class="faq">
+      <summary>Συνδέεται με το ηλεκτρονικό μου σύστημα;</summary>
+      <p>Google Calendar / Outlook out-of-the-box. Άλλα systems (Doctoranytime, eMedical) μέσω webhook integration. Σας βοηθάμε στο setup.</p>
+    </details>
+
+    <details class="faq">
+      <summary>Αν ο ασθενής ρωτήσει για ιατρική συμβουλή;</summary>
+      <p>Το AI ΔΕΝ δίνει ιατρικές συμβουλές ποτέ. Πάντα κατευθύνει σε εσάς ή στο επόμενο διαθέσιμο ραντεβού. Compliance-first design.</p>
+    </details>
+
+    <details class="faq">
+      <summary>Πόσο γρήγορα στήνεται;</summary>
+      <p>3-5 λεπτά self-service. Μου δίνετε ωράριο, υπηρεσίες, τιμές. Πρώτος ασθενής μπορεί να κλείσει ραντεβού σε λιγότερο από 1 ώρα από την εγγραφή.</p>
+    </details>
+
+    <details class="faq">
+      <summary>Μπορώ να ακυρώσω;</summary>
+      <p>Ναι, οποιαδήποτε στιγμή, με ένα κλικ. Χωρίς δέσμευση, χωρίς ποινές. <a href="/legal/refunds">Πολιτική Επιστροφών</a>.</p>
+    </details>
+  </div>
+</section>
+
+<section class="final-cta">
+  <div class="container">
+    <h2>15 λεπτά. Όχι hard sell.</h2>
+    <p style="font-size:17px;margin:14px 0 28px;">Βλέπουμε μαζί αν ταιριάζει για το ιατρείο σας. Aν όχι, σας λέμε ευχαριστώ και τέλος.</p>
+    <a href="https://cal.com/randevu-konstantinois/15min" target="_blank" class="btn-primary">
+      📅 Κλείσε δωρεάν 15' demo
+    </a>
+  </div>
+</section>
+
+<footer style="background:#0f172a;color:rgba(255,255,255,0.7);padding:30px 0;text-align:center;font-size:13px;">
+  <div class="container">
+    <p>© 2026 Ran-Tevu · Κωνσταντίνος Γκιουλμπαξιώτης · Ρέθυμνο, Κρήτη</p>
+    <p style="margin-top:8px;">
+      <a href="/legal/terms" style="color:rgba(255,255,255,0.6);margin:0 8px;">Όροι</a>
+      <a href="/legal/privacy" style="color:rgba(255,255,255,0.6);margin:0 8px;">Privacy</a>
+      <a href="/legal/refunds" style="color:rgba(255,255,255,0.6);margin:0 8px;">Επιστροφές</a>
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>

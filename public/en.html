@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ran-Tevu — AI Receptionist 24/7 for Your Business | ran-tevu.gr</title>
+<meta name="description" content="AI that answers calls, web chat, WhatsApp, Instagram, Facebook 24/7. Books appointments to your calendar. Pay only when it books — $3 per booking. 14-day money back.">
+<meta name="keywords" content="AI receptionist, AI booking, voice AI, AI chatbot, 24/7 receptionist, appointment booking AI, AI for SMB, dental AI, medspa AI, vet AI booking">
+<meta name="author" content="Konstantinos Gkioulbaxiotis">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://www.ran-tevu.gr/en">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="en_US">
+<meta property="og:url" content="https://www.ran-tevu.gr/en">
+<meta property="og:site_name" content="Ran-Tevu">
+<meta property="og:title" content="Ran-Tevu — AI Receptionist 24/7 · Pay only when it books">
+<meta property="og:description" content="AI that books appointments via phone, chat, WhatsApp, IG, FB. $3 per booking. No monthly fee.">
+
+<style>
+  *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #050510; color: #E5E7EB; line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  a { color: inherit; text-decoration: none; }
+  .bg-glow { position: fixed; inset: 0; z-index: -1; pointer-events: none; background: radial-gradient(ellipse 800px 600px at 20% 0%, rgba(124,58,237,0.25), transparent 60%), radial-gradient(ellipse 700px 500px at 80% 30%, rgba(251,191,36,0.12), transparent 60%), radial-gradient(ellipse 900px 700px at 50% 100%, rgba(139,92,246,0.18), transparent 70%); animation: bg-shift 20s ease-in-out infinite; }
+  @keyframes bg-shift { 0%,100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+  .bg-stars { position: fixed; inset: 0; z-index: -1; pointer-events: none; background-image: radial-gradient(1px 1px at 20px 30px, rgba(255,255,255,0.5), transparent), radial-gradient(2px 2px at 110px 50px, rgba(255,255,255,0.6), transparent); background-size: 300px 300px; opacity: 0.4; }
+
+  nav { position: sticky; top: 0; z-index: 50; background: rgba(5,5,16,0.7); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.06); padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; }
+  .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 22px; color: white; }
+  .logo-icon { width: 36px; height: 36px; background: linear-gradient(135deg, #7C3AED, #C084FC); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; box-shadow: 0 4px 16px rgba(124,58,237,0.5); }
+  .logo span { background: linear-gradient(135deg, #C084FC, #FBBF24); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .nav-links { display: flex; gap: 24px; font-size: 14px; }
+  .nav-links a { color: rgba(255,255,255,0.7); }
+  .nav-links a:hover { color: #FBBF24; }
+  .nav-cta { background: linear-gradient(135deg, #FBBF24, #F59E0B); color: #050510 !important; padding: 10px 20px; border-radius: 10px; font-weight: 800; }
+  @media (max-width: 720px) { .nav-links a:not(.nav-cta) { display: none; } }
+
+  header { text-align: center; padding: 96px 24px 64px; max-width: 1000px; margin: 0 auto; }
+  .badge-glow { display: inline-block; padding: 8px 18px; background: rgba(251,191,36,0.12); border: 1px solid rgba(251,191,36,0.4); border-radius: 100px; color: #FBBF24; font-size: 12px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 28px; box-shadow: 0 0 24px rgba(251,191,36,0.3); animation: pulse 2.5s ease infinite; }
+  @keyframes pulse { 0%,100% { box-shadow: 0 0 24px rgba(251,191,36,0.3); } 50% { box-shadow: 0 0 40px rgba(251,191,36,0.6); } }
+  h1 { font-size: clamp(40px, 6vw, 72px); font-weight: 900; letter-spacing: -2px; color: white; margin-bottom: 24px; line-height: 1.05; }
+  .gradient-text { background: linear-gradient(135deg, #FBBF24, #C084FC, #7C3AED); background-size: 200% 200%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: gradient-shift 4s ease infinite; }
+  @keyframes gradient-shift { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+  .lead { font-size: clamp(17px, 2vw, 21px); color: rgba(255,255,255,0.75); max-width: 740px; margin: 0 auto 36px; }
+  .lead strong { color: #FBBF24; }
+  .hero-ctas { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-bottom: 28px; }
+  .btn { display: inline-block; padding: 18px 32px; border-radius: 14px; font-weight: 800; font-size: 15px; transition: all 0.25s; border: 2px solid transparent; cursor: pointer; }
+  .btn-primary { background: linear-gradient(135deg, #FBBF24, #F59E0B); color: #050510; box-shadow: 0 8px 32px rgba(251,191,36,0.4); }
+  .btn-primary:hover { transform: translateY(-3px); color: #050510; box-shadow: 0 16px 48px rgba(251,191,36,0.6); }
+  .btn-secondary { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.15); color: white; backdrop-filter: blur(10px); }
+  .btn-secondary:hover { background: rgba(255,255,255,0.1); color: white; }
+  .hero-trust { display: flex; gap: 28px; justify-content: center; flex-wrap: wrap; color: rgba(255,255,255,0.55); font-size: 13px; margin-top: 28px; }
+  .hero-trust span { display: flex; align-items: center; gap: 6px; }
+  .check { color: #4ADE80; font-weight: 800; }
+
+  section { padding: 80px 24px; }
+  .container { max-width: 1100px; margin: 0 auto; }
+  .section-title { text-align: center; margin-bottom: 56px; }
+  .section-title .badge-glow { margin-bottom: 16px; }
+  .section-title h2 { font-size: clamp(32px, 4.5vw, 48px); font-weight: 900; letter-spacing: -1.5px; margin-bottom: 14px; color: white; }
+  .section-title p { color: rgba(255,255,255,0.65); font-size: 17px; max-width: 680px; margin: 0 auto; }
+
+  .products { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  @media (max-width: 900px) { .products { grid-template-columns: 1fr; } }
+  .product { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 32px 28px; display: flex; flex-direction: column; transition: all 0.3s; backdrop-filter: blur(20px); position: relative; }
+  .product:hover { transform: translateY(-6px); border-color: rgba(124,58,237,0.4); box-shadow: 0 24px 64px rgba(124,58,237,0.2); }
+  .product.featured { border: 1px solid rgba(251,191,36,0.4); background: linear-gradient(135deg, rgba(124,58,237,0.08), rgba(251,191,36,0.04)); box-shadow: 0 16px 48px rgba(251,191,36,0.15); }
+  .product.featured::before { content: "MOST POPULAR"; position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #FBBF24, #F59E0B); color: #050510; padding: 6px 18px; border-radius: 100px; font-size: 11px; font-weight: 900; letter-spacing: 1.5px; }
+  .product-icon { font-size: 44px; margin-bottom: 14px; }
+  .product h3 { font-size: 23px; font-weight: 800; margin-bottom: 8px; color: white; }
+  .product .tagline { color: rgba(255,255,255,0.6); font-size: 14px; margin-bottom: 22px; min-height: 44px; }
+  .product .price { font-size: 36px; font-weight: 900; background: linear-gradient(135deg, #FBBF24, #F59E0B); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 4px; }
+  .product .price-sub { color: rgba(255,255,255,0.55); font-size: 13px; margin-bottom: 24px; min-height: 36px; }
+  .product .price-sub strong { color: #FBBF24; }
+  .product ul { list-style: none; padding: 0; flex: 1; margin-bottom: 24px; }
+  .product li { padding: 9px 0 9px 28px; position: relative; font-size: 14px; color: rgba(255,255,255,0.8); border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .product li::before { content: "✓"; position: absolute; left: 0; top: 9px; color: #4ADE80; font-weight: 800; }
+  .product li strong { color: #FBBF24; }
+  .product .cta-stack { display: flex; flex-direction: column; gap: 10px; }
+  .product .cta-stack .btn { padding: 14px 20px; font-size: 14px; text-align: center; }
+  .product .demo-link { text-align: center; font-size: 13px; color: rgba(255,255,255,0.5); text-decoration: underline; padding: 6px; }
+  .product .demo-link:hover { color: #FBBF24; }
+
+  .compare { background: rgba(255,255,255,0.03); border-radius: 18px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08); backdrop-filter: blur(20px); }
+  .compare table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .compare th, .compare td { padding: 16px 20px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.05); color: rgba(255,255,255,0.8); }
+  .compare th { background: rgba(255,255,255,0.04); font-weight: 700; color: white; }
+  .compare td.check { color: #4ADE80; font-weight: 700; text-align: center; font-size: 18px; }
+  .compare td.x { color: #EF4444; font-weight: 700; text-align: center; font-size: 18px; }
+  .compare .col-us { background: rgba(251,191,36,0.08); }
+  .compare th.col-us { color: #FBBF24; }
+
+  .faq { max-width: 760px; margin: 0 auto; }
+  .faq details { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 16px 22px; margin-bottom: 10px; backdrop-filter: blur(20px); cursor: pointer; }
+  .faq summary { font-weight: 700; color: white; outline: none; list-style: none; font-size: 15px; }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary::after { content: "+"; float: right; font-size: 22px; color: #FBBF24; transition: transform 0.2s; }
+  .faq details[open] summary::after { transform: rotate(45deg); }
+  .faq details p { margin-top: 12px; color: rgba(255,255,255,0.7); font-size: 14px; line-height: 1.7; }
+
+  .final-cta { background: linear-gradient(135deg, rgba(124,58,237,0.15), rgba(251,191,36,0.1)); border: 1px solid rgba(251,191,36,0.3); border-radius: 24px; padding: 64px 32px; text-align: center; margin: 0 auto 64px; max-width: 1100px; backdrop-filter: blur(20px); }
+  .final-cta h2 { color: white; font-size: clamp(28px, 4vw, 40px); font-weight: 900; margin-bottom: 16px; }
+  .final-cta p { color: rgba(255,255,255,0.85); font-size: 17px; max-width: 600px; margin: 0 auto 28px; }
+  .final-cta strong { color: #FBBF24; }
+
+  footer { border-top: 1px solid rgba(255,255,255,0.06); padding: 40px 24px; background: rgba(0,0,0,0.3); text-align: center; color: rgba(255,255,255,0.5); font-size: 13px; }
+  footer a { color: rgba(255,255,255,0.6); margin: 0 12px; }
+  footer a:hover { color: #FBBF24; }
+</style>
+</head>
+<body>
+
+<div class="bg-glow"></div>
+<div class="bg-stars"></div>
+
+<nav>
+  <a href="/en" class="logo"><div class="logo-icon">📅</div>Ran<span>-Tevu</span></a>
+  <div class="nav-links">
+    <a href="#products">Products</a>
+    <a href="#demo">Demo</a>
+    <a href="#faq">FAQ</a>
+    <a href="/" style="color:rgba(255,255,255,0.5);">🇬🇷 Ελληνικά</a>
+    <a href="https://cal.com/randevu-konstantinois/15min" class="nav-cta" target="_blank">Book demo →</a>
+  </div>
+</nav>
+
+<header>
+  <div class="badge-glow">🇺🇸 Made for US SMBs · Available 24/7</div>
+  <h1>The AI receptionist that <span class="gradient-text">books appointments</span><br>while you sleep</h1>
+  <p class="lead">
+    Answers <strong>calls, web chat, WhatsApp, Instagram, Facebook DMs</strong> 24/7 in human voice. Books to your calendar. Sends SMS confirmations.
+    <strong>Pay only $3 per booking captured.</strong> No monthly fee on Chat tier.
+  </p>
+  <div class="hero-ctas">
+    <a href="#products" class="btn btn-primary">See pricing →</a>
+    <a href="https://cal.com/randevu-konstantinois/15min" target="_blank" class="btn btn-secondary">▶ Book 15-min demo</a>
+  </div>
+  <div class="hero-trust">
+    <span><span class="check">✓</span> 24-48hr setup</span>
+    <span><span class="check">✓</span> No code required</span>
+    <span><span class="check">✓</span> 14-day money back</span>
+    <span><span class="check">✓</span> CAN-SPAM compliant</span>
+  </div>
+</header>
+
+<section id="products">
+<div class="container">
+  <div class="section-title">
+    <div class="badge-glow">⚡ Pick your plan</div>
+    <h2>Three ways to automate your bookings</h2>
+    <p>Start with what fits. Upgrade anytime. No long-term contracts.</p>
+  </div>
+
+  <div class="products">
+
+    <div class="product">
+      <div class="product-icon">💬</div>
+      <h3>Chat Booking</h3>
+      <p class="tagline">AI on website + WhatsApp + Instagram + Facebook. No phone.</p>
+      <div class="price">$149</div>
+      <div class="price-sub">setup + <strong>$3/booking</strong><br>or <strong>$79/month flat</strong></div>
+      <ul>
+        <li>Custom branded URL</li>
+        <li>Web chat widget embed</li>
+        <li>WhatsApp Business integration</li>
+        <li>Instagram + Facebook DM auto-reply</li>
+        <li>Booking to your calendar</li>
+        <li>SMS + email confirmations</li>
+        <li>Reminders 24h + 4h before</li>
+        <li>Admin dashboard + analytics</li>
+        <li>14-day money back</li>
+      </ul>
+      <div class="cta-stack">
+        <a href="https://cal.com/randevu-konstantinois/15min" target="_blank" class="btn btn-primary">Book demo →</a>
+        <a href="/demo-en" target="_blank" class="demo-link">▶ Try live demo →</a>
+      </div>
+    </div>
+
+    <div class="product featured">
+      <div class="product-icon">📞</div>
+      <h3>Voice Receptionist</h3>
+      <p class="tagline">AI answers your phone 24/7 in natural human voice (ElevenLabs).</p>
+      <div class="price">$199</div>
+      <div class="price-sub">setup + <strong>$79/month</strong> + <strong>$4/voice booking</strong><br>or <strong>$149/month flat</strong></div>
+      <ul>
+        <li>Everything in Chat Booking +</li>
+        <li>US phone number included</li>
+        <li>ElevenLabs human-grade voice</li>
+        <li>24/7 answering or call-forwarding</li>
+        <li>Emergency → transfer to you</li>
+        <li>Multi-language support (US/ES)</li>
+        <li>Call recordings (optional)</li>
+        <li>Voice analytics dashboard</li>
+        <li>14-day money back</li>
+      </ul>
+      <div class="cta-stack">
+        <a href="https://cal.com/randevu-konstantinois/15min" target="_blank" class="btn btn-primary">Book demo →</a>
+        <a href="/voice-sample-dermatology-v2.mp3" target="_blank" class="demo-link">▶ Hear it (60 sec)</a>
+      </div>
+    </div>
+
+    <div class="product">
+      <div class="product-icon">📦</div>
+      <h3>Digital Products</h3>
+      <p class="tagline">Done-for-you packages. Delivered in 24-72h. No subscription.</p>
+      <div class="price">$29<span style="font-size:22px;color:rgba(255,255,255,0.4);">–$97</span></div>
+      <div class="price-sub">one-time · refund if late</div>
+      <ul>
+        <li>50 SEO product descriptions ($29)</li>
+        <li>30 social media posts ($29)</li>
+        <li>10 email marketing templates ($29)</li>
+        <li>5 SEO articles 1500+ words ($29)</li>
+        <li>30-day social plan ($49)</li>
+        <li>AI Chatbot Wix/WP install ($97)</li>
+        <li>24-72h delivery</li>
+        <li>100% refund if we miss deadline</li>
+      </ul>
+      <div class="cta-stack">
+        <a href="mailto:ntinosgkiou@gmail.com?subject=Digital%20Products%20Inquiry" class="btn btn-primary">Email for order →</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+</section>
+
+<section>
+<div class="container">
+  <div class="section-title">
+    <div class="badge-glow">🆚 Comparison</div>
+    <h2>Why Ran-Tevu over competitors</h2>
+  </div>
+
+  <div class="compare">
+  <table>
+    <tr>
+      <th></th>
+      <th>Goodcall / Numa</th>
+      <th class="col-us"><strong>Ran-Tevu</strong></th>
+      <th>Human receptionist</th>
+    </tr>
+    <tr><td>Monthly cost</td><td>$100-300</td><td class="col-us"><strong style="color:#FBBF24;">$0 if 0 bookings</strong></td><td>$3,000-5,000</td></tr>
+    <tr><td>Setup time</td><td>1-2 weeks</td><td class="col-us"><strong style="color:#FBBF24;">24-48 hours</strong></td><td>2-4 weeks hiring</td></tr>
+    <tr><td>Answers calls 24/7</td><td class="check">✓</td><td class="check col-us">✓</td><td class="x">✗</td></tr>
+    <tr><td>Books to calendar</td><td class="check">✓</td><td class="check col-us">✓</td><td class="check">✓</td></tr>
+    <tr><td>Web chat</td><td class="x">✗</td><td class="check col-us">✓</td><td class="x">✗</td></tr>
+    <tr><td>WhatsApp Business</td><td class="x">✗</td><td class="check col-us">✓</td><td class="x">✗</td></tr>
+    <tr><td>Instagram + FB DM</td><td class="x">✗</td><td class="check col-us">✓</td><td class="x">✗</td></tr>
+    <tr><td>Pay-per-result option</td><td class="x">✗</td><td class="check col-us">✓</td><td class="x">✗</td></tr>
+    <tr><td>14-day money back</td><td class="x">✗ Often locked-in</td><td class="check col-us">✓</td><td class="x">✗</td></tr>
+  </table>
+  </div>
+</div>
+</section>
+
+<section id="faq">
+<div class="container">
+  <div class="section-title">
+    <div class="badge-glow">❓ FAQ</div>
+    <h2>Everything you need to know</h2>
+  </div>
+
+  <div class="faq">
+    <details>
+      <summary>Does it really work in natural English?</summary>
+      <p>Yes. We use Claude Sonnet 4.5 (Anthropic) for conversations and ElevenLabs for voice. Both are state-of-the-art for English. Try the live demo above — most prospects can't tell it's AI in the first 30 seconds.</p>
+    </details>
+
+    <details>
+      <summary>What does "$3 per booking" mean exactly?</summary>
+      <p>You pay $149 one-time setup. Then for each appointment our AI books into your calendar = $3. If we book 0 appointments → you pay $0. If we book 50 → $150/mo. Voice tier has $79/mo base (covers US phone number + ElevenLabs).</p>
+    </details>
+
+    <details>
+      <summary>Is there a free trial?</summary>
+      <p><strong>No free trial.</strong> You pay $149 setup upfront. We activate within 24-48 hours. <strong>14-day money back guarantee</strong> — full refund, no questions asked.</p>
+    </details>
+
+    <details>
+      <summary>Do I need a website?</summary>
+      <p>No. We give you a custom URL (yourname.ran-tevu.gr). Use it standalone, embed in your existing site (1 line of code), or just put the link in your IG bio.</p>
+    </details>
+
+    <details>
+      <summary>How does it handle emergencies?</summary>
+      <p>Fully customizable. AI recognizes keywords ("pain", "bleeding", "urgent") and either transfers the call to you immediately or escalates via SMS. You define the rules during setup.</p>
+    </details>
+
+    <details>
+      <summary>How long is setup?</summary>
+      <p>Chat Booking: 24 hours. Voice Receptionist: 48 hours (we provision the phone number). Digital Products: 24-72 hours. All remote — no on-site visits.</p>
+    </details>
+
+    <details>
+      <summary>Where is my data stored?</summary>
+      <p>EU servers (Ireland via Railway). GDPR-compliant. CCPA-compliant. Anthropic doesn't train on API data. Full data export available anytime, free.</p>
+    </details>
+
+    <details>
+      <summary>Are you a real company?</summary>
+      <p>Yes — sole proprietor based in Rethymno, Crete, Greece. Konstantinos Gkioulbaxiotis, founder. Stripe verified. Phone: +30 6987 747 434. Email: ntinosgkiou@gmail.com.</p>
+    </details>
+  </div>
+</div>
+</section>
+
+<section style="padding-top: 0;">
+<div class="final-cta">
+  <h2>Ready to book more appointments?</h2>
+  <p>Free 15-min consultation. We'll show you a live demo for your industry. Zero sales pressure. <strong>First 5 US customers get 50% off first 3 months.</strong></p>
+  <a href="https://cal.com/randevu-konstantinois/15min" target="_blank" class="btn btn-primary">Book free 15-min demo →</a>
+</div>
+</section>
+
+<footer>
+  <a href="/en">English Home</a> ·
+  <a href="/" style="color:rgba(255,255,255,0.5);">🇬🇷 Greek site</a> ·
+  <a href="/demo-en" target="_blank">Live demo</a> ·
+  <a href="mailto:ntinosgkiou@gmail.com">Email</a> ·
+  <a href="https://cal.com/randevu-konstantinois/15min" target="_blank">Book demo</a> ·
+  <a href="/privacy">Privacy</a> ·
+  <a href="/terms">Terms</a>
+  <p style="margin-top:14px;">© 2026 Ran-Tevu · Konstantinos Gkioulbaxiotis · Rethymno, Crete, Greece</p>
+  <p style="margin-top:8px;font-size:12px;opacity:0.5;">CAN-SPAM compliant · Reply STOP to any email to unsubscribe</p>
+</footer>
+
+</body>
+</html>

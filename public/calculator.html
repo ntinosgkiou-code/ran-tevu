@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Πόσα λεφτά χάνετε από χαμένες κλήσεις; · Δωρεάν Calculator | Ran-Tevu</title>
+<meta name="description" content="Δωρεάν calculator: υπολογίστε σε 30 δευτερόλεπτα πόσα λεφτά χάνει η επιχείρησή σας από χαμένες κλήσεις. Ποτέ δε φαντάζεστε το νούμερο.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://www.ran-tevu.gr/calculator">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="el_GR">
+<meta property="og:title" content="Πόσα λεφτά χάνετε από χαμένες κλήσεις;">
+<meta property="og:description" content="Δωρεάν calculator για ελληνικές επιχειρήσεις. 30 δευτερόλεπτα.">
+<meta property="og:url" content="https://www.ran-tevu.gr/calculator">
+<style>
+  *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { min-height: 100%; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #FAFAFA 0%, #F5F3FF 100%);
+    color: #111827; line-height: 1.6;
+    padding: 24px 16px 80px;
+  }
+  .container { max-width: 720px; margin: 0 auto; }
+
+  nav { padding-bottom: 24px; }
+  .logo { font-weight: 800; font-size: 20px; color: #111827; text-decoration: none; }
+  .logo span { color: #7C3AED; }
+
+  h1 {
+    font-size: 38px; font-weight: 800; line-height: 1.2;
+    letter-spacing: -0.5px; margin: 32px 0 12px;
+  }
+  h1 span { color: #7C3AED; }
+  .lead { font-size: 17px; color: #6B7280; margin-bottom: 32px; }
+
+  .card {
+    background: white; border: 1px solid #E5E7EB;
+    border-radius: 16px; padding: 32px; margin-bottom: 24px;
+    box-shadow: 0 4px 16px rgba(124,58,237,0.05);
+  }
+
+  .field { margin-bottom: 20px; }
+  .field label {
+    display: block; font-weight: 600; font-size: 14px;
+    margin-bottom: 8px; color: #374151;
+  }
+  .field input, .field select {
+    width: 100%; padding: 14px;
+    font-size: 17px; border: 2px solid #E5E7EB;
+    border-radius: 10px; background: #FAFAFA;
+    transition: border-color 0.2s;
+  }
+  .field input:focus, .field select:focus {
+    outline: none; border-color: #7C3AED;
+    background: white;
+  }
+  .field .hint { font-size: 13px; color: #6B7280; margin-top: 6px; }
+
+  .results {
+    background: linear-gradient(135deg, #7C3AED, #5B21B6);
+    color: white; border-radius: 16px;
+    padding: 32px; margin-top: 32px;
+    text-align: center;
+    box-shadow: 0 12px 40px rgba(124,58,237,0.25);
+  }
+  .results .label {
+    font-size: 14px; opacity: 0.9; letter-spacing: 1px;
+    text-transform: uppercase; margin-bottom: 12px;
+  }
+  .results .big-number {
+    font-size: 56px; font-weight: 800;
+    margin-bottom: 8px; letter-spacing: -1px;
+  }
+  .results .timeframe { font-size: 14px; opacity: 0.85; }
+  .results .breakdown {
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px; margin-top: 24px; padding-top: 24px;
+    border-top: 1px solid rgba(255,255,255,0.2);
+  }
+  @media (max-width: 540px) {
+    .results .breakdown { grid-template-columns: 1fr; }
+    .results .big-number { font-size: 42px; }
+    h1 { font-size: 28px; }
+  }
+  .breakdown div {
+    text-align: center;
+  }
+  .breakdown .num { font-size: 22px; font-weight: 700; }
+  .breakdown .desc { font-size: 12px; opacity: 0.85; margin-top: 4px; }
+
+  .cta-section {
+    background: white; border: 2px solid #7C3AED;
+    border-radius: 16px; padding: 32px; margin-top: 24px;
+    text-align: center;
+  }
+  .cta-section h2 {
+    font-size: 24px; margin-bottom: 12px; color: #7C3AED;
+  }
+  .cta-section p { color: #6B7280; margin-bottom: 24px; }
+  .cta-button {
+    display: inline-block; background: #7C3AED; color: white;
+    padding: 16px 32px; border-radius: 12px;
+    font-weight: 700; font-size: 16px; text-decoration: none;
+    transition: transform 0.2s;
+  }
+  .cta-button:hover { transform: translateY(-2px); background: #5B21B6; }
+  .cta-secondary {
+    display: block; margin-top: 16px; color: #7C3AED;
+    text-decoration: none; font-size: 14px;
+  }
+
+  .share-section {
+    text-align: center; margin-top: 32px;
+    padding: 24px; background: #F5F3FF;
+    border-radius: 12px;
+  }
+  .share-buttons { display: flex; gap: 12px; justify-content: center; margin-top: 12px; flex-wrap: wrap; }
+  .share-btn {
+    padding: 10px 18px; border-radius: 8px;
+    background: white; border: 1px solid #E5E7EB;
+    text-decoration: none; color: #111827;
+    font-size: 14px; font-weight: 600;
+  }
+
+  footer {
+    text-align: center; margin-top: 48px;
+    color: #9CA3AF; font-size: 13px;
+  }
+  footer a { color: #7C3AED; text-decoration: none; }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <nav>
+    <a href="/" class="logo">Ran<span>-Tevu</span></a>
+  </nav>
+
+  <h1>Πόσα <span>χάνετε</span> από χαμένες κλήσεις;</h1>
+  <p class="lead">
+    Δωρεάν calculator για ελληνικές επιχειρήσεις. 30 δευτερόλεπτα.
+    Ποτέ δε φαντάζεστε το νούμερο.
+  </p>
+
+  <div class="card">
+    <div class="field">
+      <label for="industry">Τι είδος επιχείρηση έχετε;</label>
+      <select id="industry">
+        <option value="60">Ιατρείο / Οδοντιατρείο (μέσο ραντεβού €60)</option>
+        <option value="80">Φυσιοθεραπευτήριο (μέσο ραντεβού €80)</option>
+        <option value="40">Σαλόνι ομορφιάς (μέσο ραντεβού €40)</option>
+        <option value="35">Κομμωτήριο (μέσο ραντεβού €35)</option>
+        <option value="50">Νυχιών / Σαλόνι (μέσο ραντεβού €50)</option>
+        <option value="30">Κτηνιατρείο (μέσο ραντεβού €30)</option>
+        <option value="100">Spa / Aesthetics (μέσο ραντεβού €100)</option>
+        <option value="25">Γυμναστήριο / Pilates (μέσο μηνιαία €25)</option>
+        <option value="20">Εστιατόριο (μέση κράτηση €20/άτομο)</option>
+        <option value="custom">Άλλο — βάζω εγώ</option>
+      </select>
+    </div>
+
+    <div class="field" id="customField" style="display:none;">
+      <label for="customAvg">Μέση αξία πελάτη (€)</label>
+      <input type="number" id="customAvg" placeholder="π.χ. 50" min="1">
+    </div>
+
+    <div class="field">
+      <label for="missed">Πόσες χαμένες κλήσεις την ημέρα;</label>
+      <input type="number" id="missed" value="3" min="1" max="50">
+      <div class="hint">Συμπεριλάβετε νυχτερινές κλήσεις, Σ/Κ, και ώρες πελατών (συνήθως 3-8/μέρα)</div>
+    </div>
+
+    <div class="field">
+      <label for="conversion">Πόσες από αυτές θα έκλειναν ραντεβού; (%)</label>
+      <input type="number" id="conversion" value="40" min="1" max="100">
+      <div class="hint">Στατιστικά: 30-50% για industries με ραντεβού. 60% για επείγοντα ιατρεία.</div>
+    </div>
+
+    <div class="field">
+      <label for="days">Πόσες μέρες δουλεύετε τον μήνα;</label>
+      <input type="number" id="days" value="22" min="1" max="31">
+    </div>
+  </div>
+
+  <div class="results" id="results">
+    <div class="label">Χάνετε κάθε μήνα</div>
+    <div class="big-number" id="lostMonth">€0</div>
+    <div class="timeframe">σε χαμένα ραντεβού (κάθε χρόνο: <strong id="lostYear">€0</strong>)</div>
+
+    <div class="breakdown">
+      <div>
+        <div class="num" id="missedAppt">0</div>
+        <div class="desc">χαμένα ραντεβού/μήνα</div>
+      </div>
+      <div>
+        <div class="num" id="costRanTevu">€0</div>
+        <div class="desc">θα κόστιζε με Ran-Tevu</div>
+      </div>
+      <div>
+        <div class="num" id="netGain">€0</div>
+        <div class="desc">καθαρό κέρδος/μήνα</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cta-section">
+    <h2>Γνωρίζετε τώρα το νούμερο. Τι κάνετε με αυτό;</h2>
+    <p>Το Ran-Tevu απαντάει 24/7 σε web, WhatsApp, Instagram, Facebook, τηλέφωνο. Κλείνει ραντεβού. <strong>€1 ανά ραντεβού.</strong> €0 αν 0 ραντεβού.</p>
+    <a href="/founding" class="cta-button">Κλείσε δωρεάν 15-min consultation →</a>
+    <a href="/dental-demo" class="cta-secondary">Ή δες πώς δουλεύει live (demo) →</a>
+  </div>
+
+  <div class="share-section">
+    <strong>Στείλτε σε φίλο επιχειρηματία:</strong>
+    <div class="share-buttons">
+      <a href="https://wa.me/?text=Δες%20πόσα%20χάνεις%20από%20χαμένες%20κλήσεις:%20https://www.ran-tevu.gr/calculator" target="_blank" class="share-btn">📱 WhatsApp</a>
+      <a href="https://www.facebook.com/sharer/sharer.php?u=https://www.ran-tevu.gr/calculator" target="_blank" class="share-btn">📘 Facebook</a>
+      <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://www.ran-tevu.gr/calculator" target="_blank" class="share-btn">💼 LinkedIn</a>
+      <a href="mailto:?subject=Πόσα%20χάνεις%20από%20χαμένες%20κλήσεις&body=Δες%20αυτό:%20https://www.ran-tevu.gr/calculator" class="share-btn">✉️ Email</a>
+    </div>
+  </div>
+
+  <footer>
+    <p>Made με ❤ από <a href="/">Ran-Tevu</a> · <a href="/founding">Founding Members</a> · <a href="/privacy">Απόρρητο</a></p>
+  </footer>
+
+</div>
+
+<script>
+function calculate() {
+  const industrySel = document.getElementById('industry');
+  const customField = document.getElementById('customField');
+  let avg = parseFloat(industrySel.value);
+  if (industrySel.value === 'custom') {
+    customField.style.display = 'block';
+    avg = parseFloat(document.getElementById('customAvg').value) || 0;
+  } else {
+    customField.style.display = 'none';
+  }
+
+  const missed = parseInt(document.getElementById('missed').value) || 0;
+  const conversion = parseFloat(document.getElementById('conversion').value) || 0;
+  const days = parseInt(document.getElementById('days').value) || 0;
+
+  // Math
+  const wouldHaveBooked = missed * (conversion/100);
+  const lostMonth = wouldHaveBooked * avg * days;
+  const lostYear = lostMonth * 12;
+  const missedApptPerMonth = wouldHaveBooked * days;
+
+  // Ran-Tevu cost: €1 per booking
+  const costRanTevu = missedApptPerMonth * 1;
+  const netGain = lostMonth - costRanTevu;
+
+  // Render
+  document.getElementById('lostMonth').textContent = '€' + Math.round(lostMonth).toLocaleString('el-GR');
+  document.getElementById('lostYear').textContent = '€' + Math.round(lostYear).toLocaleString('el-GR');
+  document.getElementById('missedAppt').textContent = Math.round(missedApptPerMonth);
+  document.getElementById('costRanTevu').textContent = '€' + Math.round(costRanTevu);
+  document.getElementById('netGain').textContent = '+€' + Math.round(netGain).toLocaleString('el-GR');
+}
+
+// Listen to all inputs
+['industry', 'customAvg', 'missed', 'conversion', 'days'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) el.addEventListener('input', calculate);
+  if (el) el.addEventListener('change', calculate);
+});
+
+// Initial calculation
+calculate();
+</script>
+
+</body>
+</html>

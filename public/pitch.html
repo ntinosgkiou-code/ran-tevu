@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="robots" content="noindex,nofollow"/>
+<title>Ran-Tevu — The agentic back-office that recovers lost clinic revenue</title>
+<meta property="og:title" content="Ran-Tevu — recovering the revenue clinics don't know they're losing"/>
+<meta property="og:description" content="An agentic digital employee that turns missed calls, no-shows and forgotten patients into recovered euros — with the owner approving every move. Live in production. Built solo."/>
+<meta property="og:type" content="website"/>
+<meta property="og:url" content="https://www.ran-tevu.gr/pitch"/>
+<style>
+  :root{
+    --bg:#070b0d; --bg2:#0b1316; --panel:#0e1a1e; --line:#1c2e33;
+    --teal:#13b5cc; --teal2:#0F7B8A; --ink:#eaf4f5; --mut:#8aa3a8; --gold:#f4c95d;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg); color:var(--ink);
+    font-family:-apple-system,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.55; -webkit-font-smoothing:antialiased; overflow-x:hidden;
+  }
+  .wrap{max-width:980px;margin:0 auto;padding:0 24px}
+  section{padding:74px 0;border-bottom:1px solid var(--line)}
+  .eyebrow{font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--teal);font-weight:700}
+  h1{font-size:clamp(34px,6vw,62px);line-height:1.05;font-weight:800;letter-spacing:-1.5px;margin:18px 0 20px}
+  h2{font-size:clamp(24px,3.4vw,36px);line-height:1.1;font-weight:800;letter-spacing:-.8px;margin-bottom:22px}
+  h1 .hl,h2 .hl{color:var(--teal)}
+  p{font-size:clamp(16px,1.9vw,19px);color:var(--mut)}
+  p.lead{font-size:clamp(18px,2.3vw,23px);color:#cfe2e4;max-width:780px}
+  strong{color:var(--ink)}
+  /* hero */
+  .hero{position:relative;padding:96px 0 84px;border-bottom:1px solid var(--line);overflow:hidden}
+  .glow{position:absolute;inset:0;background:
+     radial-gradient(620px 360px at 12% -8%, rgba(19,181,204,.20), transparent 60%),
+     radial-gradient(560px 360px at 92% 4%, rgba(15,123,138,.18), transparent 60%);
+     pointer-events:none}
+  .hero .wrap{position:relative}
+  .cta{display:flex;gap:14px;flex-wrap:wrap;margin-top:30px;align-items:center}
+  .btn{display:inline-block;background:var(--teal);color:#04181b;font-weight:800;
+       padding:14px 24px;border-radius:12px;text-decoration:none;font-size:16px;
+       box-shadow:0 10px 30px rgba(19,181,204,.25);transition:transform .15s}
+  .btn:hover{transform:translateY(-2px)}
+  .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line);box-shadow:none}
+  .badges{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px}
+  .badge{font-size:13px;color:var(--mut);border:1px solid var(--line);border-radius:30px;padding:6px 14px;background:rgba(255,255,255,.02)}
+  .badge b{color:var(--teal)}
+  /* insight */
+  .quote{font-size:clamp(20px,2.6vw,27px);color:#dff0f1;font-weight:600;line-height:1.4;max-width:840px}
+  .quote em{color:var(--teal);font-style:normal}
+  /* leak stats */
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:30px}
+  .stat{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:22px}
+  .stat .n{font-size:clamp(28px,4vw,40px);font-weight:800;color:var(--teal);letter-spacing:-1px}
+  .stat .l{font-size:14px;color:var(--mut);margin-top:6px}
+  /* loop diagram */
+  .loop{margin-top:14px;background:var(--bg2);border:1px solid var(--line);border-radius:20px;padding:26px 18px}
+  .loopgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;align-items:stretch}
+  .node{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 12px;text-align:center;position:relative}
+  .node .ic{font-size:22px}
+  .node .t{font-weight:800;font-size:15px;margin:8px 0 4px;color:var(--ink)}
+  .node .d{font-size:12.5px;color:var(--mut);line-height:1.35}
+  .node .step{position:absolute;top:-10px;left:12px;font-size:11px;font-weight:800;color:#04181b;background:var(--teal);border-radius:20px;padding:2px 8px}
+  .node.approve{border-color:var(--gold)}
+  .node.approve .step{background:var(--gold)}
+  .loopnote{text-align:center;color:var(--mut);font-size:13.5px;margin-top:16px}
+  .loopnote b{color:var(--gold)}
+  /* moat / cols */
+  .cols{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:8px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:24px}
+  .card h3{font-size:17px;color:var(--ink);margin-bottom:8px}
+  .card p{font-size:15px}
+  /* proof */
+  .proof{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:8px}
+  .pf{background:linear-gradient(180deg,var(--panel),#0a1417);border:1px solid var(--line);border-radius:16px;padding:24px}
+  .pf .k{font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);font-weight:700}
+  .pf p{margin-top:8px;font-size:15px}
+  .honest{margin-top:22px;border-left:3px solid var(--gold);padding:6px 0 6px 18px;color:#cfe2e4;font-size:16px}
+  /* founder */
+  .founder{display:flex;gap:22px;align-items:center;flex-wrap:wrap}
+  .av{width:84px;height:84px;border-radius:50%;background:linear-gradient(135deg,var(--teal2),var(--teal));
+      display:flex;align-items:center;justify-content:center;font-size:34px;font-weight:800;color:#04181b;flex:0 0 auto}
+  /* ask */
+  .ask{background:linear-gradient(135deg,rgba(19,181,204,.10),rgba(15,123,138,.06));border:1px solid var(--line);
+       border-radius:22px;padding:40px 30px;text-align:center}
+  .ask h2{margin-bottom:14px}
+  .foot{padding:34px 0;color:var(--mut);font-size:13.5px;text-align:center;border-bottom:none}
+  @media(max-width:720px){
+    .loopgrid{grid-template-columns:1fr 1fr}
+    .stats,.cols,.proof{grid-template-columns:1fr}
+    section{padding:52px 0}
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="glow"></div>
+  <div class="wrap">
+    <div class="eyebrow">Live in production · Built solo</div>
+    <h1>The agentic back-office that recovers the revenue clinics <span class="hl">don't know they're losing.</span></h1>
+    <p class="lead">Ran-Tevu turns the missed call, the no-show and the forgotten patient into recovered euros — with the clinic owner approving every single move.</p>
+    <div class="cta">
+      <a class="btn" href="https://www.ran-tevu.gr" target="_blank" rel="noopener">See it live →</a>
+      <a class="btn ghost" href="#system">How the system works</a>
+    </div>
+    <div class="badges">
+      <span class="badge"><b>●</b> In production: www.ran-tevu.gr</span>
+      <span class="badge">Voice + chat · Greek-native</span>
+      <span class="badge">Built by one founder, 19</span>
+    </div>
+  </div>
+</header>
+
+<!-- INSIGHT -->
+<section id="insight">
+  <div class="wrap">
+    <div class="eyebrow">The insight</div>
+    <h2>Booking AI is a commodity. The money is in what happens <span class="hl">after</span>.</h2>
+    <p class="quote">Everyone automates the call that comes <em>in</em>. Almost no one touches the money that leaks <em>out</em> — the no-show nobody re-books, the patient overdue for a recall nobody phones, the after-hours call nobody returns.</p>
+    <div class="stats">
+      <div class="stat"><div class="n">15–30%</div><div class="l">of bookable revenue lost to no-shows &amp; missed follow-ups</div></div>
+      <div class="stat"><div class="n">€1k–5k</div><div class="l">leaking every month from a single high-ticket clinic</div></div>
+      <div class="stat"><div class="n">0</div><div class="l">front-desk hours available to chase any of it</div></div>
+    </div>
+    <p style="margin-top:18px;font-size:15px">Figures are typical ranges for appointment-based healthcare clinics; the exact number is computed live per clinic from its own data.</p>
+  </div>
+</section>
+
+<!-- SYSTEM -->
+<section id="system">
+  <div class="wrap">
+    <div class="eyebrow">The system</div>
+    <h2>A closed loop — not a chatbot.</h2>
+    <p class="lead" style="margin-bottom:8px">Ran-Tevu reads a clinic's own data, finds the leak, and proposes the fix. A human approves. The euro comes back. The dashboard keeps score.</p>
+    <div class="loop">
+      <div class="loopgrid">
+        <div class="node"><span class="step">1</span><div class="ic">🔍</div><div class="t">Detect</div><div class="d">Reads bookings, no-shows, recall windows &amp; missed calls</div></div>
+        <div class="node"><span class="step">2</span><div class="ic">🧠</div><div class="t">Propose</div><div class="d">Drafts the recovery action + the € at stake</div></div>
+        <div class="node approve"><span class="step">3</span><div class="ic">✋</div><div class="t">Approve</div><div class="d">Owner taps yes — nothing auto-sends (GR Law 3471/2006)</div></div>
+        <div class="node"><span class="step">4</span><div class="ic">📞</div><div class="t">Recover</div><div class="d">Re-books, recalls, calls back — voice + chat, in Greek</div></div>
+        <div class="node"><span class="step">5</span><div class="ic">📈</div><div class="t">Ledger</div><div class="d">Every recovered euro shown on a dashboard</div></div>
+      </div>
+      <div class="loopnote">The approval step is the product, not a limitation. <b>Compliance is built into the loop</b> where blunt auto-messaging is illegal.</div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY IT COMPOUNDS -->
+<section id="moat">
+  <div class="wrap">
+    <div class="eyebrow">Why it compounds</div>
+    <h2>Defensible where a generic voice bot is not.</h2>
+    <div class="cols">
+      <div class="card"><h3>Compliance is the moat</h3><p>Propose→approve keeps it legal in the EU, where auto-blasting patients is not. The funded "AI receptionist" players ignore this layer.</p></div>
+      <div class="card"><h3>The ledger is switching-cost</h3><p>Each clinic's recovered-revenue history lives in Ran-Tevu. The longer it runs, the more it knows — and the harder it is to leave.</p></div>
+      <div class="card"><h3>One leak, every market</h3><p>Greek high-ticket clinics first. The exact same revenue leak exists across physio, dental and aesthetics throughout the EU.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROOF -->
+<section id="proof">
+  <div class="wrap">
+    <div class="eyebrow">Proof</div>
+    <h2>Not a deck. A system that runs today.</h2>
+    <div class="proof">
+      <div class="pf"><div class="k">Shipped</div><p>Live, multi-tenant, in production at www.ran-tevu.gr — end-to-end booking working now.</p></div>
+      <div class="pf"><div class="k">Full stack, solo</div><p>Voice (Vapi), payments (Stripe), the agentic layer and the dashboard — all built by one person.</p></div>
+      <div class="pf"><div class="k">Velocity</div><p>From idea to production system, shipping daily, as a 19-year-old student.</p></div>
+    </div>
+    <p class="honest"><strong>Honest status:</strong> pre-revenue by design. The product is built; the next milestone is the first paid design-partner clinic — this month.</p>
+  </div>
+</section>
+
+<!-- FOUNDER -->
+<section id="founder">
+  <div class="wrap">
+    <div class="eyebrow">The founder</div>
+    <div class="founder">
+      <div class="av">Δ</div>
+      <div>
+        <h2 style="margin-bottom:6px">Dinos Gkiou — 19</h2>
+        <p style="font-size:17px;color:#cfe2e4">Economics, University of Crete. Built the entire Ran-Tevu stack alone and ships every day. Looking for the right people to build the next part with.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ASK -->
+<section style="border-bottom:none">
+  <div class="wrap">
+    <div class="ask">
+      <div class="eyebrow">The ask</div>
+      <h2>15 minutes of your read — and one intro.</h2>
+      <p class="lead" style="margin:0 auto 24px">Your honest take on the wedge, and — if it fits — an intro to one physio or dental clinic willing to be a design partner. That is the single thing that moves this forward right now.</p>
+      <a class="btn" href="https://www.ran-tevu.gr" target="_blank" rel="noopener">See it live → www.ran-tevu.gr</a>
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><div class="foot">Ran-Tevu · Athens / Crete · www.ran-tevu.gr · Dinos Gkiou<br>
+<span style="opacity:.6">Confidential — shared for evaluation only, not for redistribution. © 2026 Konstantinos Gkioulbaxiotis. All rights reserved.</span></div></div>
+
+</body>
+</html>

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 80" width="360" height="80">
+  <defs>
+    <linearGradient id="rtGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1a1a2e"/>
+      <stop offset="100%" stop-color="#4a148c"/>
+    </linearGradient>
+  </defs>
+  <!-- Mark: stylized "R" inside calendar square -->
+  <rect x="8" y="14" width="56" height="56" rx="12" fill="url(#rtGrad)"/>
+  <rect x="8" y="14" width="56" height="14" rx="12" fill="#ffd700" opacity="0.95"/>
+  <text x="36" y="58" font-family="Inter, system-ui, sans-serif" font-size="36" font-weight="800" text-anchor="middle" fill="#fff">R</text>
+  <!-- Wordmark -->
+  <text x="80" y="50" font-family="Inter, system-ui, sans-serif" font-size="32" font-weight="700" fill="#1a1a2e">Ran-Tevu</text>
+  <text x="80" y="68" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="500" fill="#6b6b80" letter-spacing="2">AI BOOKING · 24/7</text>
+</svg>

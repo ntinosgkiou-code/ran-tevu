@@ -1,0 +1,23 @@
+/* TEAM */
+Founder: Konstantinos Gkioulbaxiotis
+  Site:    https://www.ran-tevu.gr
+  Email:   ntinosgkiou@gmail.com
+  GitHub:  ntinosgkiou-code
+  From:    Rethymno, Crete, Greece
+
+/* THANKS */
+Anthropic (Claude) — conversational AI
+Vapi.ai — voice orchestration
+ElevenLabs — voice synthesis
+Twilio — telephony
+Railway — hosting (Ireland EU)
+Cloudflare — CDN & DNS
+Resend — transactional email
+
+/* SITE */
+Last update:    2026/05/21
+Language:       Greek (el), English (en)
+Doctype:        HTML5
+Standards:      EU AI Act, GDPR, WCAG 2.1 AA
+Components:     Flask, SQLite, vanilla JS
+Software:       Python 3.11

@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reply Dashboard · Ran-Tevu Admin</title>
+<style>
+:root {
+  --bg: #FAFAFB;
+  --fg: #1B1B1F;
+  --muted: #6B6B73;
+  --accent: #6E56CF;
+  --card: #FFFFFF;
+  --border: #E6E6EA;
+  --ok: #10B981;
+  --warn: #F59E0B;
+  --danger: #EF4444;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  line-height: 1.6;
+  padding: 24px;
+}
+.container { max-width: 1100px; margin: 0 auto; }
+h1 {
+  font-size: 28px;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+.sub {
+  color: var(--muted);
+  font-size: 15px;
+  margin-bottom: 28px;
+}
+.tabs {
+  display: flex;
+  gap: 8px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 24px;
+}
+.tab {
+  background: transparent;
+  color: var(--muted);
+  border: 0;
+  padding: 12px 18px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all .15s;
+}
+.tab.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+.tab:hover { color: var(--fg); }
+
+/* Templates */
+.template-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+}
+.template-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px;
+  transition: all .15s;
+}
+.template-card:hover {
+  border-color: var(--accent);
+  box-shadow: 0 8px 24px rgba(110, 86, 207, .08);
+}
+.template-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.template-icon {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--accent), #8B6FE7);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+.template-title {
+  font-weight: 700;
+  font-size: 15px;
+  flex: 1;
+  margin-left: 12px;
+}
+.template-lang {
+  background: var(--bg);
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 600;
+}
+.template-body {
+  background: #F7F6FA;
+  border-radius: 10px;
+  padding: 14px;
+  font-size: 13px;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  color: #2A2A30;
+  max-height: 200px;
+  overflow-y: auto;
+  margin-bottom: 12px;
+}
+.template-actions {
+  display: flex;
+  gap: 8px;
+}
+.btn {
+  flex: 1;
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 0;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  text-decoration: none;
+  transition: all .15s;
+}
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+}
+.btn-primary:hover { background: #5841BD; }
+.btn-secondary {
+  background: var(--bg);
+  color: var(--fg);
+  border: 1px solid var(--border);
+}
+.btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+/* Quick guide section */
+.guide-card {
+  background: linear-gradient(135deg, #F3F1FA, #FAFAFB);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+.guide-card h2 {
+  font-size: 18px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.guide-card ol {
+  padding-left: 20px;
+  font-size: 14px;
+  color: #4B4B53;
+}
+.guide-card li { margin-bottom: 6px; }
+.guide-card .highlight {
+  background: #fff;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+/* Stats row */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin-bottom: 28px;
+}
+.stat {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+}
+.stat-num {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--accent);
+  line-height: 1;
+}
+.stat-label {
+  font-size: 12px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  margin-top: 6px;
+}
+
+.copied {
+  background: var(--ok) !important;
+  color: #fff !important;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<h1>📬 Reply Dashboard</h1>
+<p class="sub">Templates για γρήγορη απάντηση σε prospects (κάθε reply σε <2 λεπτά)</p>
+
+<!-- Stats -->
+<div class="stats-row">
+  <div class="stat">
+    <div class="stat-num" id="stat-sent">—</div>
+    <div class="stat-label">Cold sent σύνολο</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num" id="stat-eligible">—</div>
+    <div class="stat-label">Eligible leads</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num" id="stat-runway">—</div>
+    <div class="stat-label">Days runway @ 80/day</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num" id="stat-greek">—</div>
+    <div class="stat-label">Greek / English split</div>
+  </div>
+</div>
+
+<!-- How to use -->
+<div class="guide-card">
+  <h2>⚡ Πώς να απαντάς γρήγορα</h2>
+  <ol>
+    <li>Όταν έρθει reply στο <span class="highlight">ntinosgkiou@gmail.com</span>, διάβασε το</li>
+    <li>Κατηγοριοποίησέ το (interested, pricing, objection, etc.)</li>
+    <li>Βρες το αντίστοιχο template πιο κάτω</li>
+    <li>Πάτα <strong>"Copy"</strong>, paste στο reply, personalize (όνομα + 1 detail από το email τους)</li>
+    <li>Στείλε ✉️ (στόχος: <strong>&lt;2 λεπτά</strong> per reply)</li>
+  </ol>
+</div>
+
+<!-- Tabs -->
+<div class="tabs">
+  <button class="tab active" onclick="showLang('el')">🇬🇷 Ελληνικά (10 templates)</button>
+  <button class="tab" onclick="showLang('en')">🇬🇧 English (10 templates)</button>
+</div>
+
+<div id="templates-el" class="template-grid"></div>
+<div id="templates-en" class="template-grid" style="display:none;"></div>
+
+</div>
+
+<script>
+const TEMPLATES_EL = [
+  {
+    icon: "🤔",
+    title: "Ενδιαφέρεται γενικά (κερδίστε το)",
+    body: `Γεια σου [όνομα],
+
+Χαίρομαι που ενδιαφέρεσαι! Σε λίγα λόγια:
+• Ο bot απαντά στα ελληνικά 24/7 στο website σου ή/και στο τηλέφωνο
+• Κλείνει ραντεβού στο ημερολόγιό σου αυτόματα
+• Θυμάται κάθε επανερχόμενο πελάτη (όνομα, προτιμήσεις, ιστορικό)
+• Στέλνει email confirmations + reminders
+
+Δωρεάν 14 μέρες, χωρίς κάρτα. €179/μήνα μετά (voice + chat μαζί, flat).
+
+Θες να σου στείλω ένα link με 5λεπτο demo για την επιχείρησή σου;
+
+Κωνσταντίνος
+6987747434`,
+  },
+  {
+    icon: "💰",
+    title: "Ρωτάει τιμή",
+    body: `Καλημέρα [όνομα],
+
+Δύο επιλογές:
+
+1️⃣ Standard €179/μήνα flat — AI ρεσεψιόν (voice + chat μαζί): απαντά τις κλήσεις με ελληνική φωνή, κλείνει ραντεβού 24/7, υπενθυμίσεις, με AI memory.
+
+2️⃣ Premium €299/μήνα — ό,τι έχει το Standard + Revenue Recovery: κυνηγάει no-shows & χαμένους ασθενείς και σου δείχνει πόσα € ανέκτησε.
+
+Καμία δέσμευση — 14 μέρες δωρεάν δοκιμή. Αν δεν σε βοηθήσει, δεν πληρώνεις τίποτα.
+
+Θες να ξεκινήσουμε με το chat για να δεις πόσο εύκολο είναι;
+
+Κωνσταντίνος`,
+  },
+  {
+    icon: "📞",
+    title: "Θέλει demo κλήση",
+    body: `Τέλεια [όνομα]!
+
+Πες μου 2 πράγματα:
+1. Τι ώρα σε βολεύει (πρωί/μεσημέρι/απόγευμα)
+2. Τύπος επιχείρησης (κομμωτήριο/ιατρείο/άλλο)
+
+Θα στήσω σε <24h ένα demo με τα δικά σου services και θα σε καλέσω εγώ ο ίδιος για να ακούσεις το AI live.
+
+Όχι sales pitch — μόνο demo. 5 λεπτά.
+
+Κωνσταντίνος
+6987747434`,
+  },
+  {
+    icon: "🤨",
+    title: "Σκεπτικός (γιατί να εμπιστευτώ)",
+    body: `Έχεις δίκιο να είσαι σκεπτικός [όνομα], υπάρχουν πολλά "AI" tools που δεν δουλεύουν.
+
+Γι' αυτό κάνω αυτό:
+• 14 μέρες δωρεάν δοκιμή — δες αν δουλεύει
+• Όχι setup fee για το chat (€0 upfront)
+• Cancel οποτεδήποτε με 1 click
+• Δεν θες να μιλήσεις με sales team — μιλάς απευθείας με εμένα, τον founder
+
+Είμαι από Ρέθυμνο, φοιτητής οικονομικών, δουλεύω το product μόνος μου. Αν δεν σου αρέσει, δεν πληρώνεις. Fair;
+
+Θες να δοκιμάσεις chat demo τώρα: ran-tevu.gr/beauty-demo
+
+Κωνσταντίνος`,
+  },
+  {
+    icon: "❌",
+    title: "Δεν τον/την ενδιαφέρει",
+    body: `Καταλαβαίνω [όνομα], δεν είναι για όλους.
+
+Αν αλλάξεις γνώμη — ή αν θες να δοκιμάσεις απλά για περιέργεια — εδώ είμαι:
+ran-tevu.gr/beauty-demo (live demo, no signup)
+
+Καλή συνέχεια!
+Κωνσταντίνος`,
+  },
+  {
+    icon: "⏰",
+    title: "Είναι ήδη με ανταγωνιστή",
+    body: `Καλό [όνομα]! Αν σε καλύπτει ο/η [competitor], παραμείνε.
+
+Αν όμως κάποτε θέλεις:
+• Flat €179 χωρίς setup fee (Epic Voice: +€299-999 setup) & 14 μέρες δωρεάν χωρίς κάρτα
+• AI που θυμάται κάθε πελάτη (μοναδικό feature στην Ελλάδα)
+• EU AI Act compliant (νόμος Αυγούστου 2026)
+• Direct founder contact (όχι sales team)
+
+Pingαρε με. Δωρεάν δοκιμή 14 μέρες αν αλλάξεις γνώμη.
+
+Κωνσταντίνος`,
+  },
+  {
+    icon: "📅",
+    title: "Ζητάει meeting/call",
+    body: `Έγινε [όνομα]!
+
+Κλείσε ώρα που σε βολεύει εδώ: https://cal.com/randevu-konstantinois/15min
+
+Ή πες μου εσύ 2-3 διαθέσιμες ώρες και κλείνω.
+
+Θα είμαι έτοιμος με: setup demo για την επιχείρησή σου, pricing details, και απαντήσεις σε ότι θες να ρωτήσεις.
+
+Κωνσταντίνος
+6987747434`,
+  },
+  {
+    icon: "🛡️",
+    title: "Ρωτάει για GDPR / νομικά",
+    body: `Πολύ σωστή ερώτηση [όνομα].
+
+Έχουμε πλήρη συμμόρφωση:
+• GDPR ✓
+• EU AI Act (που ισχύει Αύγουστο 2026) ✓
+• Audit logs για κάθε ενέργεια του AI
+• Right to delete / export για κάθε πελάτη
+• Hashed IPs (καμία plain PII)
+• Hosting στην Ιρλανδία (EU)
+
+Πλήρη τεκμηρίωση εδώ (μπορείς να την δείξεις σε λογιστή/δικηγόρο):
+https://www.ran-tevu.gr/compliance
+
+Δεν έχει κανένας άλλος Έλληνας competitor public docs σε αυτό το βάθος. Είναι ένα από τα κύρια μας selling points.
+
+Κωνσταντίνος`,
+  },
+  {
+    icon: "📧",
+    title: "Unsubscribe request",
+    body: `Φυσικά [όνομα], σε διέγραψα από τη λίστα.
+
+Δεν θα ξαναλάβεις email μου. Αν αλλάξεις γνώμη ποτέ, υπάρχω: ran-tevu.gr.
+
+Καλή συνέχεια!
+Κωνσταντίνος`,
+  },
+  {
+    icon: "🎯",
+    title: "Follow-up μετά από demo (no decision)",
+    body: `Γεια σου [όνομα],
+
+Πέρασαν 3 μέρες από το demo μας. Δεν θέλω να σε πιέσω — απλά να ρωτήσω αν υπάρχουν ερωτήσεις που μένουν.
+
+3 πράγματα που ίσως βοηθήσουν:
+1. Δωρεάν 14 μέρες — δεν χρειάζεται απόφαση τώρα
+2. Cancel anytime, χωρίς αιτιολογία
+3. Αν δεν σου ταιριάζει, refund εντός 14 ημερών
+
+Έτοιμος να ξεκινήσεις ή να σου εξηγήσω κάτι ακόμα;
+
+Κωνσταντίνος`,
+  },
+];
+
+const TEMPLATES_EN = [
+  {
+    icon: "🤔",
+    title: "Generic interest (close the deal)",
+    body: `Hi [name],
+
+Glad you're interested! Quick summary:
+• AI bot answers in Greek + English 24/7 on your site and/or phone
+• Books appointments in your calendar automatically
+• Remembers every returning customer (name, preferences, history)
+• Sends email confirmations + reminders
+
+Free 14-day trial, no card. €179/month afterwards (voice + chat together, flat).
+
+Want me to send a 5-min demo link tailored to your business?
+
+Konstantinos
++30 6987747434`,
+  },
+  {
+    icon: "💰",
+    title: "Asking about price",
+    body: `Hi [name],
+
+Two options:
+
+1️⃣ Standard €179/month flat — AI receptionist (voice + chat): answers calls in Greek, books 24/7, reminders, AI memory.
+
+2️⃣ Premium €299/month — everything in Standard + Revenue Recovery: chases no-shows & lost patients, shows the € it recovered.
+
+No commitment — 14-day free trial. If it doesn't help, you pay nothing.
+
+Want to start with chat to see how easy it is?
+
+Konstantinos`,
+  },
+  {
+    icon: "📞",
+    title: "Wants demo call",
+    body: `Awesome [name]!
+
+Two things:
+1. What time works (morning/afternoon/evening EET — that's GMT+2)?
+2. Type of business (salon/clinic/other)?
+
+I'll set up a custom demo within 24h with your actual services and call you personally so you can hear the AI live.
+
+Not a sales pitch — just a demo. 5 minutes.
+
+Konstantinos
++30 6987747434`,
+  },
+  {
+    icon: "🤨",
+    title: "Skeptical (why trust?)",
+    body: `You're right to be skeptical [name] — lots of "AI" tools don't work.
+
+Here's why mine's different:
+• 14-day free trial — see if it works
+• No setup fee for chat (€0 upfront)
+• Cancel anytime in 1 click
+• No sales team — you talk directly to me, the founder
+
+I'm from Crete, Greece. I build the product myself. If you don't like it, you don't pay. Fair?
+
+Try the live demo now: ran-tevu.gr/beauty-demo?lang=en
+
+Konstantinos`,
+  },
+  {
+    icon: "❌",
+    title: "Not interested",
+    body: `Got it [name], not for everyone.
+
+If you ever change your mind — or just want to try out of curiosity — I'm here:
+ran-tevu.gr/beauty-demo?lang=en (live demo, no signup)
+
+All the best!
+Konstantinos`,
+  },
+  {
+    icon: "⏰",
+    title: "Already using a competitor",
+    body: `Cool [name]! If [competitor] works for you, stay there.
+
+But if you ever want:
+• Flat €179, zero setup fee (Epic Voice: +€299-999 setup) & 14-day free trial, no card
+• AI that remembers every customer (unique feature)
+• EU AI Act compliant (law in effect Aug 2026)
+• Direct founder contact (no sales team)
+
+Ping me. Free 14-day trial whenever you switch.
+
+Konstantinos`,
+  },
+  {
+    icon: "📅",
+    title: "Requests meeting/call",
+    body: `Done [name]!
+
+Pick a time that works for you: https://cal.com/randevu-konstantinois/15min
+
+Or tell me 2-3 times that work and I'll lock one in.
+
+I'll be ready with: custom demo for your business, pricing details, and answers to anything.
+
+Konstantinos
++30 6987747434`,
+  },
+  {
+    icon: "🛡️",
+    title: "Asks about GDPR/legal",
+    body: `Great question [name].
+
+Full compliance:
+• GDPR ✓
+• EU AI Act (in effect Aug 2026) ✓
+• Audit logs for every AI action
+• Right to delete / export for every customer
+• Hashed IPs (no plain PII)
+• Hosting in Ireland (EU)
+
+Full documentation here (show your lawyer/compliance officer):
+https://www.ran-tevu.gr/compliance
+
+No other Greek competitor has public docs at this depth. It's one of our main selling points.
+
+Konstantinos`,
+  },
+  {
+    icon: "📧",
+    title: "Unsubscribe request",
+    body: `Of course [name], unsubscribed.
+
+You won't receive emails from me again. If you change your mind, I'm at ran-tevu.gr.
+
+All the best!
+Konstantinos`,
+  },
+  {
+    icon: "🎯",
+    title: "Follow-up after demo (no decision)",
+    body: `Hi [name],
+
+It's been 3 days since our demo. Not trying to push — just checking if any questions remain.
+
+3 things that might help:
+1. Free 14-day trial — no decision needed now
+2. Cancel anytime, no reason required
+3. If it doesn't fit, full refund within 14 days
+
+Ready to start or want me to explain something else?
+
+Konstantinos`,
+  },
+];
+
+function renderTemplates(lang) {
+  const templates = lang === 'en' ? TEMPLATES_EN : TEMPLATES_EL;
+  const containerId = 'templates-' + lang;
+  const container = document.getElementById(containerId);
+  container.innerHTML = templates.map((t, i) => `
+    <div class="template-card">
+      <div class="template-header">
+        <div class="template-icon">${t.icon}</div>
+        <div class="template-title">${t.title}</div>
+        <span class="template-lang">${lang.toUpperCase()}</span>
+      </div>
+      <div class="template-body" id="body-${lang}-${i}">${t.body.replace(/</g, '&lt;')}</div>
+      <div class="template-actions">
+        <button class="btn btn-primary" onclick="copyTemplate('body-${lang}-${i}', this)">
+          📋 Copy
+        </button>
+        <a class="btn btn-secondary" href="mailto:?body=${encodeURIComponent(t.body)}">
+          ✉️ Open in mail
+        </a>
+      </div>
+    </div>
+  `).join('');
+}
+
+function showLang(lang) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('templates-el').style.display = lang === 'el' ? 'grid' : 'none';
+  document.getElementById('templates-en').style.display = lang === 'en' ? 'grid' : 'none';
+}
+
+function copyTemplate(elemId, btn) {
+  const text = document.getElementById(elemId).innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    const orig = btn.innerHTML;
+    btn.innerHTML = '✓ Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.innerHTML = orig;
+      btn.classList.remove('copied');
+    }, 1500);
+  });
+}
+
+async function loadStats() {
+  try {
+    const token = new URLSearchParams(window.location.search).get('token') || '';
+    const r = await fetch('/api/admin/email-batch/status?token=' + token);
+    const d = await r.json();
+    document.getElementById('stat-sent').textContent = d.already_sent ?? '—';
+    document.getElementById('stat-eligible').textContent = d.eligible_remaining ?? '—';
+    document.getElementById('stat-runway').textContent = (d.days_runway_at_80 ?? '—') + 'd';
+    document.getElementById('stat-greek').textContent = (d.leads_greek ?? '—') + ' / ' + (d.leads_english ?? '—');
+  } catch (e) {
+    console.error('Stats load failed', e);
+  }
+}
+
+renderTemplates('el');
+renderTemplates('en');
+loadStats();
+</script>
+
+</body>
+</html>

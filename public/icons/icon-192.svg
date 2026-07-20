@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7C3AED"/>
+      <stop offset="50%" stop-color="#C084FC"/>
+      <stop offset="100%" stop-color="#FBBF24"/>
+    </linearGradient>
+    <linearGradient id="wave" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#FBBF24"/>
+    </linearGradient>
+  </defs>
+  <rect width="192" height="192" rx="42" fill="url(#bg)"/>
+  <!-- Phone body -->
+  <rect x="58" y="48" width="76" height="96" rx="14" fill="white" opacity="0.95"/>
+  <!-- Waveform inside phone -->
+  <g fill="url(#wave)">
+    <rect x="70" y="84" width="5" height="24" rx="2"/>
+    <rect x="80" y="76" width="5" height="40" rx="2"/>
+    <rect x="90" y="72" width="5" height="48" rx="2"/>
+    <rect x="100" y="68" width="5" height="56" rx="2"/>
+    <rect x="110" y="76" width="5" height="40" rx="2"/>
+    <rect x="120" y="84" width="5" height="24" rx="2"/>
+  </g>
+  <!-- Speaker dot at top -->
+  <circle cx="96" cy="58" r="3" fill="#7C3AED" opacity="0.5"/>
+  <!-- Home button -->
+  <circle cx="96" cy="135" r="4" fill="#7C3AED" opacity="0.3"/>
+</svg>

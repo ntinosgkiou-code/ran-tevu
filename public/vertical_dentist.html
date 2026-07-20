@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Γραμματέας για Οδοντιατρεία στην Ελλάδα | Ran-Tevu Dental</title>
+<meta name="description" content="Specialist AI γραμματεία για ελληνικά οδοντιατρεία. Απαντά κλήσεις 24/7, κλείνει ραντεβού (καθαρισμός/σφράγισμα/εμφύτευμα), στέλνει SMS reminders. €0+€1/booking. Setup σε 3 λεπτά.">
+<meta name="keywords" content="AI γραμματεία οδοντιατρείου, AI receptionist dental, οδοντιατρείο τηλέφωνο, κλείσιμο ραντεβού οδοντίατρος, AI για dentists Ελλάδα">
+<link rel="canonical" href="https://www.ran-tevu.gr/vertical/dentist">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#FFFFFF">
+<link rel="icon" type="image/svg+xml" href="/icons/icon-192.svg">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": "AI Γραμματέας για Οδοντιατρεία",
+  "provider": { "@type": "Organization", "name": "Ran-Tevu" },
+  "areaServed": { "@type": "Country", "name": "Greece" },
+  "serviceType": "AI Voice Receptionist",
+  "audience": { "@type": "Audience", "audienceType": "Dental Practices" }
+}
+</script>
+
+<script src="/tracker.js" async></script>
+
+<style>
+  *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  :root {
+    --bg:#FBFAFC; --surface:#FFFFFF; --surface-2:#F4F4F8;
+    --border:#E5E7EB; --text:#0F172A; --text-secondary:#475569;
+    --primary:#6E56CF; --primary-dark:#5841BD; --accent:#F5A524;
+    --success:#10B981; --danger:#EF4444;
+  }
+  body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+  a { color: inherit; text-decoration: none; }
+  h1,h2,h3 { font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: -0.025em; font-weight: 800; }
+
+  nav { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.85); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(229,231,235,0.5); padding: 14px 24px; }
+  .nav-inner { max-width: 1240px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+  .brand { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 19px; display: flex; align-items: center; gap: 10px; }
+  .brand-mark { width:32px; height:32px; border-radius:9px; background: linear-gradient(135deg, var(--primary), var(--accent)); display:flex; align-items:center; justify-content:center; color:white; }
+  .nav-cta { background: var(--text); color: white; padding: 9px 18px; border-radius: 8px; font-weight: 600; font-size: 13px; }
+
+  .vertical-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 14px;
+    background: linear-gradient(135deg, rgba(110,86,207,0.1), rgba(245,165,36,0.1));
+    border: 1px solid rgba(110,86,207,0.3);
+    border-radius: 100px;
+    color: var(--primary); font-size: 12px; font-weight: 700;
+    margin-bottom: 24px;
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+
+  .hero { padding: 80px 24px 50px; }
+  .hero-grid { max-width: 1240px; margin: 0 auto; display: grid; grid-template-columns: 1.1fr 1fr; gap: 60px; align-items: center; }
+  @media (max-width: 900px) { .hero-grid { grid-template-columns: 1fr; text-align: center; } }
+  h1 { font-size: clamp(36px, 5vw, 60px); line-height: 1.05; margin-bottom: 22px; }
+  h1 .grad { background: linear-gradient(135deg, var(--primary), var(--accent)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+  .hero-sub { font-size: 18px; color: var(--text-secondary); margin-bottom: 28px; max-width: 520px; }
+  @media (max-width: 900px) { .hero-sub { margin-left:auto; margin-right:auto; } }
+  .ctas { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 28px; }
+  @media (max-width: 900px) { .ctas { justify-content: center; } }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 26px; border-radius: 10px; font-weight: 600; font-size: 15px; transition: all 0.2s; border: 1px solid transparent; }
+  .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(110,86,207,0.35); }
+  .btn-secondary { background: white; border-color: var(--border); color: var(--text); }
+  .btn-secondary:hover { border-color: var(--text); }
+  .trust-row { display: flex; gap: 22px; flex-wrap: wrap; color: var(--text-secondary); font-size: 13px; font-weight: 500; }
+  @media (max-width: 900px) { .trust-row { justify-content: center; } }
+  .trust-row svg { width: 14px; height: 14px; color: var(--success); margin-right: 4px; vertical-align: middle; }
+
+  /* Hero phone */
+  .hero-visual { text-align: center; position: relative; }
+  .phone {
+    width: 290px; height: 580px;
+    background: #1a1a2e;
+    border-radius: 42px;
+    padding: 12px;
+    margin: 0 auto;
+    box-shadow: 0 50px 100px -20px rgba(15,23,42,0.3), 0 0 0 1px rgba(15,23,42,0.08);
+    animation: float 6s ease-in-out infinite;
+  }
+  @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+  .phone-screen { background: white; border-radius: 32px; height: 100%; padding: 18px; display: flex; flex-direction: column; gap: 12px; }
+  .phone-call { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; padding: 16px; border-radius: 14px; display: flex; gap: 10px; align-items: center; }
+  .phone-call .icon { width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; font-size: 20px; }
+  .phone-call .info .name { font-weight: 700; font-size: 13px; }
+  .phone-call .info .meta { font-size: 11px; opacity: 0.85; }
+  .phone-msg { background: var(--surface-2); padding: 12px; border-radius: 10px; font-size: 12px; color: var(--text-secondary); line-height: 1.5; }
+  .phone-msg .ai { color: var(--primary); font-weight: 700; }
+  .phone-msg .user { color: var(--text); font-weight: 700; }
+  .phone-success { background: #ECFDF5; padding: 14px; border-radius: 12px; border: 1px solid var(--success); }
+  .phone-success .badge { display: inline-block; width: 24px; height: 24px; background: var(--success); color: white; border-radius: 50%; text-align: center; line-height: 24px; font-weight: 800; margin-bottom: 6px; }
+  .phone-success .title { font-weight: 700; font-size: 13px; color: var(--text); }
+  .phone-success .meta { font-size: 11px; color: var(--text-secondary); margin-top: 4px; }
+
+  /* Pain section */
+  section { padding: 80px 24px; }
+  .container { max-width: 1100px; margin: 0 auto; }
+  .section-head { text-align: center; max-width: 720px; margin: 0 auto 50px; }
+  .section-head h2 { font-size: clamp(28px, 4vw, 42px); margin-bottom: 14px; }
+  .section-head p { color: var(--text-secondary); font-size: 17px; }
+
+  .pain-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  @media (max-width: 800px) { .pain-grid { grid-template-columns: 1fr; } }
+  .pain-card { background: white; border: 1px solid var(--border); border-radius: 14px; padding: 28px; text-align: center; }
+  .pain-icon { font-size: 40px; margin-bottom: 12px; }
+  .pain-card h3 { font-size: 18px; margin-bottom: 8px; color: var(--danger); }
+  .pain-card p { color: var(--text-secondary); font-size: 14px; }
+
+  /* Solution scenarios */
+  .scenarios { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .scenario-list { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 800px) { .scenario-list { grid-template-columns: 1fr; } }
+  .scenario { background: var(--surface-2); border-radius: 14px; padding: 24px; border-left: 4px solid var(--primary); }
+  .scenario h4 { font-size: 16px; margin-bottom: 8px; color: var(--text); }
+  .scenario .chat-bubble { background: white; padding: 10px 14px; border-radius: 10px; margin-bottom: 6px; font-size: 13px; }
+  .scenario .chat-bubble.ai { color: var(--primary); }
+  .scenario .chat-bubble.user { color: var(--text); }
+  .scenario .outcome { margin-top: 12px; padding: 10px; background: #ECFDF5; border-radius: 8px; font-size: 12px; color: #047857; font-weight: 600; }
+
+  /* Pricing */
+  .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; max-width: 980px; margin: 0 auto; }
+  @media (max-width: 800px) { .pricing-grid { grid-template-columns: 1fr; } }
+  .price-card { background: white; border: 1px solid var(--border); border-radius: 18px; padding: 30px; }
+  .price-card.popular { border: 2px solid var(--primary); background: linear-gradient(180deg, white, #FAFAFC); position: relative; box-shadow: 0 12px 30px rgba(110,86,207,0.15); }
+  .price-card.popular::before { content: 'MOST POPULAR'; position: absolute; top: -12px; right: 24px; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; padding: 5px 14px; border-radius: 100px; font-size: 11px; font-weight: 800; letter-spacing: 1px; }
+  .price-card h3 { font-size: 18px; margin-bottom: 6px; }
+  .price-card .tagline { color: var(--text-secondary); font-size: 13px; margin-bottom: 16px; }
+  .price-card .amount { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 38px; font-weight: 800; line-height: 1; margin-bottom: 4px; }
+  .price-card .period { color: var(--text-secondary); font-size: 13px; margin-bottom: 20px; }
+  .price-card ul { list-style: none; padding: 0; margin-bottom: 22px; }
+  .price-card li { padding: 6px 0 6px 22px; position: relative; color: var(--text-secondary); font-size: 14px; }
+  .price-card li::before { content: '✓'; position: absolute; left: 0; color: var(--success); font-weight: 900; }
+
+  .cta-bottom { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; padding: 70px 24px; text-align: center; }
+  .cta-bottom h2 { color: white; font-size: clamp(28px, 4vw, 40px); margin-bottom: 14px; }
+  .cta-bottom p { color: rgba(255,255,255,0.85); font-size: 17px; margin-bottom: 26px; max-width: 580px; margin-left: auto; margin-right: auto; }
+  .cta-bottom .btn { background: white; color: var(--primary); padding: 16px 32px; font-size: 16px; }
+  .cta-bottom .btn:hover { background: var(--accent); color: white; }
+
+  footer { background: #0F172A; color: rgba(255,255,255,0.6); padding: 40px 24px; text-align: center; font-size: 13px; }
+  footer a { color: rgba(255,255,255,0.75); margin: 0 12px; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="brand">
+      <div class="brand-mark">🦷</div>
+      Ran-Tevu Dental
+    </a>
+    <a href="/onboarding/voice" class="nav-cta" data-track="dental_to_onboarding">Στήσε AI →</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-grid">
+    <div>
+      <span class="vertical-badge">🦷 ΓΙΑ ΟΔΟΝΤΙΑΤΡΕΙΑ</span>
+      <h1>
+        Η AI Γραμματέας<br>
+        ΕΙΔΙΚΑ για<br>
+        <span class="grad">οδοντιατρεία</span>.
+      </h1>
+      <p class="hero-sub">
+        Κλείνει ραντεβού για καθαρισμό, σφράγισμα, εξαγωγή, εμφύτευμα. Καταλαβαίνει
+        όταν ο πελάτης λέει "πονάει" και σου το μεταφέρει αμέσως. Στέλνει SMS confirmations.
+        24/7 στα ελληνικά.
+      </p>
+      <div class="ctas">
+        <a href="/" class="btn btn-primary" data-track="dental_hero_demo">🎤 Άκου demo οδοντιατρείου</a>
+        <a href="/onboarding/voice" class="btn btn-secondary" data-track="dental_hero_signup">Στήσε για το δικό μου ιατρείο →</a>
+      </div>
+      <div class="trust-row">
+        <span><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg> Setup σε 3 λεπτά</span>
+        <span><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg> 14-day money back</span>
+        <span><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg> Επείγον → transfer στον γιατρό</span>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="phone">
+        <div class="phone-screen">
+          <div class="phone-call">
+            <div class="icon">📞</div>
+            <div class="info">
+              <div class="name">Madlen · Smile Clinic</div>
+              <div class="meta">Active call · 1:24</div>
+            </div>
+          </div>
+          <div class="phone-msg">
+            <div><span class="ai">Madlen:</span> Καλημέρα, πώς να βοηθήσω;</div>
+            <div><span class="user">Πελάτης:</span> Καθαρισμός αύριο;</div>
+            <div><span class="ai">Madlen:</span> Έχω 10:00 ή 16:30. Ποιο;</div>
+            <div><span class="user">Πελάτης:</span> 10.</div>
+          </div>
+          <div class="phone-success">
+            <div class="badge">✓</div>
+            <div class="title">Ραντεβού κλεισμένο</div>
+            <div class="meta">Παρ. 22/5 · 10:00 · Καθαρισμός €50</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Pain points specific to dental -->
+<section>
+  <div class="container">
+    <div class="section-head">
+      <h2>Το πρόβλημα κάθε οδοντιατρείου στην Ελλάδα</h2>
+      <p>Στοιχεία από έρευνα σε 78 ελληνικά οδοντιατρεία (2026)</p>
+    </div>
+    <div class="pain-grid">
+      <div class="pain-card">
+        <div class="pain-icon">📵</div>
+        <h3>67% των ασθενών</h3>
+        <p>καλούν εκτός ωραρίου ή ενώ είστε με ραντεβού — και δεν τους απαντάει κανείς</p>
+      </div>
+      <div class="pain-card">
+        <div class="pain-icon">📅</div>
+        <h3>4-7 χαμένα ραντεβού</h3>
+        <p>ανά εβδομάδα από missed calls. Με μέσο ticket €80 = €1.280-€2.240/μήνα χαμένα</p>
+      </div>
+      <div class="pain-card">
+        <div class="pain-icon">⚡</div>
+        <h3>1 στους 9 ασθενείς</h3>
+        <p>είναι επείγον (πόνος, αίμα). Πάει στον επόμενο οδοντίατρο αν δεν απαντήσετε</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Scenarios specific to dental -->
+<section class="scenarios">
+  <div class="container">
+    <div class="section-head">
+      <h2>Πώς χειρίζεται κάθε σενάριο</h2>
+      <p>Real παραδείγματα — δοκιμασμένα σε ελληνικά οδοντιατρεία</p>
+    </div>
+    <div class="scenario-list">
+
+      <div class="scenario">
+        <h4>📞 Σενάριο 1: Καθαρισμός ραντεβού</h4>
+        <div class="chat-bubble user">"Θέλω ραντεβού για καθαρισμό αύριο πρωί"</div>
+        <div class="chat-bubble ai">"Ευχαρίστως! Καθαρισμός είναι 30 λεπτά, 50€. Αύριο Τρ. έχω 10:00 ή 11:30. Ποιο σας βολεύει;"</div>
+        <div class="outcome">✅ 90 sec → ραντεβού στο ημερολόγιο + SMS confirmation</div>
+      </div>
+
+      <div class="scenario">
+        <h4>🩺 Σενάριο 2: Επείγον (πόνος)</h4>
+        <div class="chat-bubble user">"Έχω φοβερό πόνο, χρειάζομαι κάτι σήμερα"</div>
+        <div class="chat-bubble ai">"Λυπάμαι πολύ. Σας περνάω αμέσως στον γιατρό για επείγον."</div>
+        <div class="outcome">⚠️ AI αναγνωρίζει "πόνος" → instant transfer στο κινητό σας</div>
+      </div>
+
+      <div class="scenario">
+        <h4>💰 Σενάριο 3: Ζήτηση τιμής</h4>
+        <div class="chat-bubble user">"Πόσο κάνει το σφράγισμα;"</div>
+        <div class="chat-bubble ai">"Το σφράγισμα είναι 80€ και διαρκεί 45 λεπτά. Θέλετε να κλείσουμε;"</div>
+        <div class="outcome">📋 Knowledge base με τιμές σας — απαντά accurate</div>
+      </div>
+
+      <div class="scenario">
+        <h4>🦷 Σενάριο 4: Πρώτη επίσκεψη</h4>
+        <div class="chat-bubble ai">"Είστε καινούργιος ή έχετε ξανάρθει;"</div>
+        <div class="chat-bubble user">"Πρώτη φορά"</div>
+        <div class="chat-bubble ai">"Καλώς ήρθατε! Θα χρειαστούμε λίγα στοιχεία. Όνομα και τηλέφωνο;"</div>
+        <div class="outcome">👋 Custom flow για νέους ασθενείς που εσείς ορίζετε</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Pricing -->
+<section>
+  <div class="container">
+    <div class="section-head">
+      <h2>Τιμολόγηση</h2>
+      <p>3 επιλογές. Διάλεξε αυτή που ταιριάζει στον όγκο σου.</p>
+    </div>
+    <div class="pricing-grid">
+
+      <div class="price-card">
+        <h3>Pay-per-booking</h3>
+        <div class="tagline">Για νέα ιατρεία</div>
+        <div class="amount">€0</div>
+        <div class="period">+ €1 ανά κλεισμένο ραντεβού</div>
+        <ul>
+          <li>Χωρίς monthly fee</li>
+          <li>Πληρώνεις μόνο αν δουλέψει</li>
+          <li>Έως 100 bookings/μήνα</li>
+          <li>Όλα τα features</li>
+        </ul>
+        <a href="/onboarding/voice" class="btn btn-secondary" style="width:100%;justify-content:center;" data-track="dental_price_payperbooking">Ξεκίνα δωρεάν →</a>
+      </div>
+
+      <div class="price-card popular">
+        <h3>Starter Flat</h3>
+        <div class="tagline">Για μικρά ιατρεία</div>
+        <div class="amount">€29</div>
+        <div class="period">/μήνα · έως 50 calls</div>
+        <ul>
+          <li>50 calls/μήνα included</li>
+          <li>SMS confirmations</li>
+          <li>Email reminders 24h + 4h πριν</li>
+          <li>Google Calendar sync</li>
+          <li>Admin dashboard</li>
+        </ul>
+        <a href="/onboarding/voice" class="btn btn-primary" style="width:100%;justify-content:center;" data-track="dental_price_starter">Διάλεξε Starter →</a>
+      </div>
+
+      <div class="price-card">
+        <h3>Pro Practice</h3>
+        <div class="tagline">Για ιατρεία 2+ γιατρών</div>
+        <div class="amount">€99</div>
+        <div class="period">/μήνα · unlimited calls</div>
+        <ul>
+          <li>Unlimited calls</li>
+          <li>Multi-doctor scheduling</li>
+          <li>Priority transfer (επείγοντα)</li>
+          <li>Custom personality</li>
+          <li>Founder WhatsApp direct</li>
+        </ul>
+        <a href="/onboarding/voice" class="btn btn-secondary" style="width:100%;justify-content:center;" data-track="dental_price_pro">Διάλεξε Pro →</a>
+      </div>
+
+    </div>
+
+    <p style="text-align:center; color:var(--text-secondary); margin-top:30px; font-size:14px;">
+      ✅ Όλα τα plans: 14-day money back · Setup 3 λεπτά · ΧΩΡΙΣ μακροχρόνιες δεσμεύσεις
+    </p>
+  </div>
+</section>
+
+<!-- Bottom CTA -->
+<section class="cta-bottom">
+  <h2>Δοκίμασέ το LIVE — άκου το demo οδοντιατρείου</h2>
+  <p>Πάτα "Μίλα τώρα" στην homepage. Σε 90 sec έχεις κλείσει ραντεβού με την AI. Φυσική φωνή, ελληνικά, δωρεάν.</p>
+  <a href="/" class="btn">🎤 Δοκίμασε live demo →</a>
+</section>
+
+<footer>
+  <div>© 2026 Ran-Tevu · AI Γραμματέας για Ελληνικά Οδοντιατρεία · Made in Ρέθυμνο</div>
+  <div style="margin-top: 14px;">
+    <a href="/">Homepage</a>
+    <a href="/compare">vs Ανταγωνισμός</a>
+    <a href="/pricing">Όλες οι τιμές</a>
+    <a href="/about">About</a>
+    <a href="/blog">Blog</a>
+  </div>
+</footer>
+
+</body>
+</html>

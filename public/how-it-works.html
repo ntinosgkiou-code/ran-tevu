@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Πώς δουλεύει — Πλήρης οδηγός από αγορά σε live | Ran-Tevu</title>
+<meta name="description" content="Αναλυτικά βήματα: τι συμβαίνει από τη στιγμή που πληρώνετε μέχρι το AI να αρχίζει να κλείνει ραντεβού. Integration με Google Calendar, WhatsApp, phone. Setup 24-48 ώρες remote.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://www.ran-tevu.gr/how-it-works">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="el_GR">
+<meta property="og:title" content="Πώς δουλεύει Ran-Tevu — Αναλυτικά βήματα">
+<meta property="og:url" content="https://www.ran-tevu.gr/how-it-works">
+<style>
+  *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #050510; color: #E5E7EB; line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  a { color: inherit; text-decoration: none; }
+  .bg-glow { position: fixed; inset: 0; z-index: -1; pointer-events: none; background: radial-gradient(ellipse 800px 600px at 20% 0%, rgba(124,58,237,0.25), transparent 60%), radial-gradient(ellipse 700px 500px at 80% 30%, rgba(251,191,36,0.12), transparent 60%), radial-gradient(ellipse 900px 700px at 50% 100%, rgba(139,92,246,0.18), transparent 70%); animation: bg-shift 20s ease-in-out infinite; }
+  @keyframes bg-shift { 0%,100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+  .bg-stars { position: fixed; inset: 0; z-index: -1; pointer-events: none; background-image: radial-gradient(1px 1px at 20px 30px, rgba(255,255,255,0.5), transparent), radial-gradient(2px 2px at 110px 50px, rgba(255,255,255,0.6), transparent); background-size: 300px 300px; opacity: 0.4; }
+
+  nav { position: sticky; top: 0; z-index: 50; background: rgba(5,5,16,0.7); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.06); padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; }
+  .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 22px; color: white; }
+  .logo-icon { width: 36px; height: 36px; background: linear-gradient(135deg, #7C3AED, #C084FC); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; box-shadow: 0 4px 16px rgba(124,58,237,0.5); }
+  .logo span { background: linear-gradient(135deg, #C084FC, #FBBF24); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .nav-links { display: flex; gap: 24px; font-size: 14px; }
+  .nav-links a { color: rgba(255,255,255,0.7); }
+  .nav-links a:hover { color: #FBBF24; }
+  .nav-cta { background: linear-gradient(135deg, #FBBF24, #F59E0B); color: #050510 !important; padding: 10px 20px; border-radius: 10px; font-weight: 800; }
+  @media (max-width: 720px) { .nav-links a:not(.nav-cta) { display: none; } }
+
+  header { text-align: center; padding: 80px 24px 48px; max-width: 920px; margin: 0 auto; }
+  .badge-glow { display: inline-block; padding: 8px 18px; background: rgba(251,191,36,0.12); border: 1px solid rgba(251,191,36,0.4); border-radius: 100px; color: #FBBF24; font-size: 12px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 24px; box-shadow: 0 0 24px rgba(251,191,36,0.3); animation: pulse 2.5s ease infinite; }
+  @keyframes pulse { 0%,100% { box-shadow: 0 0 24px rgba(251,191,36,0.3); } 50% { box-shadow: 0 0 40px rgba(251,191,36,0.6); } }
+  h1 { font-size: clamp(36px, 6vw, 64px); font-weight: 900; letter-spacing: -1.8px; color: white; margin-bottom: 20px; line-height: 1.05; }
+  .gradient-text { background: linear-gradient(135deg, #FBBF24, #C084FC, #7C3AED); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .lead { font-size: clamp(16px, 2vw, 19px); color: rgba(255,255,255,0.75); max-width: 720px; margin: 0 auto; }
+  .lead strong { color: #FBBF24; }
+
+  .container { max-width: 1000px; margin: 0 auto; padding: 0 24px 80px; }
+  section { padding: 40px 0; }
+
+  .card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 36px; backdrop-filter: blur(20px); margin-bottom: 24px; }
+  .card h2 { color: white; font-size: 26px; margin-bottom: 14px; font-weight: 800; }
+  .card h2 .icon { color: #FBBF24; margin-right: 10px; }
+  .card h3 { color: #FBBF24; font-size: 18px; margin: 20px 0 10px; font-weight: 700; }
+  .card p { color: rgba(255,255,255,0.78); margin-bottom: 12px; }
+  .card p strong { color: #FBBF24; }
+  .card ul { margin-left: 20px; color: rgba(255,255,255,0.78); }
+  .card ul li { padding: 4px 0; }
+  .card ul li strong { color: white; }
+
+  /* Phase timeline */
+  .phases { position: relative; padding-left: 60px; margin: 32px 0; }
+  .phases::before { content: ""; position: absolute; left: 23px; top: 16px; bottom: 16px; width: 2px; background: linear-gradient(180deg, #FBBF24, #C084FC, #7C3AED); opacity: 0.5; }
+  .phase { position: relative; padding: 18px 0; }
+  .phase-num { position: absolute; left: -52px; top: 14px; width: 48px; height: 48px; background: linear-gradient(135deg, #FBBF24, #F59E0B); color: #050510; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 17px; box-shadow: 0 4px 16px rgba(251,191,36,0.4); }
+  .phase h3 { color: white; font-size: 19px; margin-bottom: 6px; }
+  .phase .meta { color: #FBBF24; font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px; }
+  .phase p { color: rgba(255,255,255,0.7); font-size: 14px; }
+  .phase ul { margin: 8px 0 0 18px; font-size: 14px; color: rgba(255,255,255,0.7); }
+
+  /* Integration matrix */
+  table.integrations { width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 16px; background: rgba(0,0,0,0.2); border-radius: 12px; overflow: hidden; }
+  table.integrations th, table.integrations td { padding: 14px 18px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.05); color: rgba(255,255,255,0.85); }
+  table.integrations th { background: rgba(251,191,36,0.08); color: #FBBF24; font-weight: 800; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; }
+  table.integrations .icon { font-size: 20px; margin-right: 8px; }
+  table.integrations td.yes { color: #4ADE80; font-weight: 700; }
+  table.integrations td.partial { color: #FBBF24; font-weight: 700; }
+
+  /* Scenario boxes */
+  .scenarios { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 16px; }
+  @media (max-width: 800px) { .scenarios { grid-template-columns: 1fr; } }
+  .scenario { background: rgba(255,255,255,0.03); border: 1px solid rgba(124,58,237,0.3); border-radius: 14px; padding: 22px; }
+  .scenario h4 { color: white; margin-bottom: 8px; font-size: 16px; }
+  .scenario .tag { display: inline-block; padding: 3px 10px; background: rgba(251,191,36,0.15); color: #FBBF24; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; border-radius: 100px; margin-bottom: 10px; }
+  .scenario p { color: rgba(255,255,255,0.7); font-size: 14px; }
+  .scenario .ai-says { background: rgba(124,58,237,0.1); border-left: 3px solid #C084FC; padding: 10px 14px; margin-top: 12px; border-radius: 8px; font-style: italic; color: rgba(255,255,255,0.9); font-size: 14px; }
+
+  /* Final CTA */
+  .final-cta { background: linear-gradient(135deg, rgba(124,58,237,0.15), rgba(251,191,36,0.1)); border: 1px solid rgba(251,191,36,0.3); border-radius: 24px; padding: 56px 32px; text-align: center; margin-top: 48px; backdrop-filter: blur(20px); }
+  .final-cta h2 { color: white; font-size: 32px; margin-bottom: 14px; font-weight: 900; }
+  .final-cta p { color: rgba(255,255,255,0.85); margin-bottom: 28px; }
+  .final-cta a { display: inline-block; background: linear-gradient(135deg, #FBBF24, #F59E0B); color: #050510; padding: 18px 36px; border-radius: 14px; font-weight: 800; font-size: 16px; box-shadow: 0 8px 32px rgba(251,191,36,0.4); }
+  .final-cta a:hover { transform: translateY(-3px); color: #050510; }
+
+  footer { border-top: 1px solid rgba(255,255,255,0.06); padding: 40px 24px; background: rgba(0,0,0,0.3); text-align: center; color: rgba(255,255,255,0.5); font-size: 13px; }
+  footer a { color: rgba(255,255,255,0.6); margin: 0 12px; }
+  footer a:hover { color: #FBBF24; }
+</style>
+</head>
+<body>
+
+<div class="bg-glow"></div>
+<div class="bg-stars"></div>
+
+<nav>
+  <a href="/" class="logo"><div class="logo-icon">📅</div>Ran<span>-Tevu</span></a>
+  <div class="nav-links">
+    <a href="/pricing">Pricing</a>
+    <a href="/how-it-works" style="color:#FBBF24;">Πώς δουλεύει</a>
+    <a href="/about">About</a>
+    <a href="/founding" class="nav-cta">Founding 5</a>
+  </div>
+</nav>
+
+<header>
+  <div class="badge-glow">⚙️ Πλήρης οδηγός</div>
+  <h1>Από αγορά σε <span class="gradient-text">live AI</span> — 24-48 ώρες</h1>
+  <p class="lead">
+    Αναλυτικά βήματα: τι κάνετε εσείς, τι κάνουμε εμείς, σε ποιο χρόνο, με ποιες ενσωματώσεις.
+    <strong>Όλα remote. Δε χρειάζεται φυσική παρουσία.</strong>
+  </p>
+</header>
+
+<div class="container">
+
+<!-- ─── PHASES ─── -->
+<section>
+  <div class="card">
+    <h2><span class="icon">🚀</span>Οι 5 φάσεις του setup</h2>
+
+    <div class="phases">
+      <div class="phase">
+        <div class="phase-num">1</div>
+        <div class="meta">Λεπτά 0-5 · Εσείς</div>
+        <h3>Αγορά setup μέσω Stripe</h3>
+        <p>Διαλέγετε πακέτο, πατάτε "Αγορά", πληρώνετε με κάρτα (Visa/Mastercard/Amex) μέσω Stripe. Receipt στο email σας αμέσως.</p>
+        <ul>
+          <li><strong>Chat Booking:</strong> €99 (one-time)</li>
+          <li><strong>Voice Receptionist:</strong> €99 setup (+ €49/μήνα ξεκινάει μετά την ενεργοποίηση)</li>
+          <li><strong>Digital Products:</strong> €29-79 (one-time)</li>
+        </ul>
+      </div>
+
+      <div class="phase">
+        <div class="phase-num">2</div>
+        <div class="meta">Λεπτά 5-15 · Εσείς</div>
+        <h3>Συμπληρώνετε φόρμα στο /thank-you</h3>
+        <p>Auto-redirect μετά Stripe. Δίνετε:</p>
+        <ul>
+          <li><strong>Επωνυμία + τύπος επιχείρησης</strong></li>
+          <li><strong>Όνομα ιδιοκτήτη + email + τηλέφωνο</strong></li>
+          <li><strong>Υπηρεσίες + τιμές + διάρκειες</strong> (π.χ. "Καθαρισμός 60€ 30min")</li>
+          <li><strong>Ωράριο λειτουργίας</strong> (ανά μέρα)</li>
+          <li><strong>Πώς να χειρίζεται επείγοντα</strong></li>
+          <li><strong>Ειδικές οδηγίες</strong> (ασφάλειες, payment methods, κτλ.)</li>
+        </ul>
+      </div>
+
+      <div class="phase">
+        <div class="phase-num">3</div>
+        <div class="meta">Ώρες 1-48 · Εμείς</div>
+        <h3>Στήνουμε εμείς το AI σας</h3>
+        <p>Σε 24-48 ώρες (Chat: 24, Voice: 48):</p>
+        <ul>
+          <li><strong>Δημιουργία custom URL:</strong> ran-tevu.gr/η-επιχείρησή-σας</li>
+          <li><strong>System prompt:</strong> Custom personality με όλα τα services/τιμές/πολιτικές σας</li>
+          <li><strong>Calendar integration:</strong> Google Calendar / Cal.com / δικό μας</li>
+          <li><strong>Voice (αν Voice tier):</strong> Vapi setup + ElevenLabs Greek voice (Madlen)</li>
+          <li><strong>Phone number (αν Voice):</strong> Greek number από Yuboto/Modulus ή SIP forwarding</li>
+          <li><strong>Channel connections:</strong> WhatsApp Business, IG, FB</li>
+          <li><strong>SMS provider:</strong> Twilio Greek route</li>
+          <li><strong>Admin dashboard:</strong> URL + credentials στο email σας</li>
+        </ul>
+      </div>
+
+      <div class="phase">
+        <div class="phase-num">4</div>
+        <div class="meta">Ώρα 48-72 · Μαζί</div>
+        <h3>Testing</h3>
+        <p>Σας στέλνουμε email με:</p>
+        <ul>
+          <li>Custom URL σας</li>
+          <li>Phone number (αν Voice)</li>
+          <li>Test instructions (τι να γράψετε/πείτε)</li>
+          <li>Admin dashboard login</li>
+        </ul>
+        <p>Δοκιμάζετε εσείς πρώτος. Λέτε αν θέλετε tweaks (διορθώσεις σε personality, λάθος service info, κτλ.). Δωρεάν ως 5 rounds revisions.</p>
+      </div>
+
+      <div class="phase">
+        <div class="phase-num">5</div>
+        <div class="meta">Ώρα 72+ · Live</div>
+        <h3>Go-live & καθημερινή χρήση</h3>
+        <p>Όταν είστε ικανοποιημένος:</p>
+        <ul>
+          <li><strong>Chat:</strong> Embed iframe στο website σας (1 γραμμή κώδικα), ή share το URL στο IG bio, ή share σε WhatsApp Business</li>
+          <li><strong>Voice:</strong> Setup call forwarding στο app του Cosmote/Vodafone ώστε όταν δεν απαντάτε → πάει στο AI</li>
+          <li>AI απαντά αυτόματα 24/7 από εδώ και πέρα</li>
+          <li>Bookings εμφανίζονται στο calendar σας + admin dashboard</li>
+          <li>Customers λαμβάνουν SMS + email confirmations</li>
+          <li>Reminders αυτόματα 24h + 4h πριν</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── INTEGRATIONS MATRIX ─── -->
+<section>
+  <div class="card">
+    <h2><span class="icon">🔗</span>Με τι integrate-άρουμε</h2>
+    <p>Συμβατότητα με όλα τα κύρια εργαλεία που χρησιμοποιούν Greek SMBs:</p>
+
+    <table class="integrations">
+      <tr>
+        <th>Εργαλείο</th>
+        <th>Τι κάνει</th>
+        <th>Κατάσταση</th>
+      </tr>
+      <tr><td><span class="icon">📅</span><strong>Google Calendar</strong></td><td>Bookings εμφανίζονται σε real-time</td><td class="yes">✓ Full sync</td></tr>
+      <tr><td><span class="icon">📅</span><strong>Cal.com</strong></td><td>Open-source booking, GDPR-friendly</td><td class="yes">✓ Full integration</td></tr>
+      <tr><td><span class="icon">📅</span><strong>Outlook Calendar</strong></td><td>Microsoft 365 / Outlook</td><td class="yes">✓ Via Cal.com</td></tr>
+      <tr><td><span class="icon">📅</span><strong>Apple Calendar</strong></td><td>iCloud calendar sync</td><td class="yes">✓ Via .ics export</td></tr>
+      <tr><td><span class="icon">📱</span><strong>WhatsApp Business</strong></td><td>AI απαντά αυτόματα σε DMs</td><td class="yes">✓ Native</td></tr>
+      <tr><td><span class="icon">📷</span><strong>Instagram Business DMs</strong></td><td>Auto-reply + booking</td><td class="yes">✓ Native</td></tr>
+      <tr><td><span class="icon">📘</span><strong>Facebook Messenger</strong></td><td>Auto-reply + booking</td><td class="yes">✓ Native</td></tr>
+      <tr><td><span class="icon">📞</span><strong>Vapi / Bland.ai</strong></td><td>Voice AI backend</td><td class="yes">✓ Native (Voice tier)</td></tr>
+      <tr><td><span class="icon">🎙️</span><strong>ElevenLabs</strong></td><td>Greek voice generation</td><td class="yes">✓ Madlen/Stefanos/Niki</td></tr>
+      <tr><td><span class="icon">💬</span><strong>Twilio SMS</strong></td><td>Confirmations + reminders</td><td class="yes">✓ Greek number</td></tr>
+      <tr><td><span class="icon">📧</span><strong>Resend Email</strong></td><td>Confirmations + receipts</td><td class="yes">✓ EU-hosted</td></tr>
+      <tr><td><span class="icon">💳</span><strong>Stripe</strong></td><td>Customer payments (αν δέχεστε prepay)</td><td class="yes">✓ Greek IBAN payout</td></tr>
+      <tr><td><span class="icon">🌐</span><strong>WordPress / Wix / Webflow</strong></td><td>Embed widget στο site σας</td><td class="yes">✓ 1 γραμμή iframe</td></tr>
+      <tr><td><span class="icon">🛒</span><strong>WooCommerce / Shopify</strong></td><td>Booking widget σε e-shop</td><td class="partial">⚠ Custom integration</td></tr>
+      <tr><td><span class="icon">📊</span><strong>Google Sheets</strong></td><td>Export bookings σε spreadsheet</td><td class="yes">✓ Auto-sync</td></tr>
+    </table>
+
+    <p style="margin-top:16px;font-size:13px;color:rgba(255,255,255,0.55);">
+      Δε βλέπετε το εργαλείο σας; <a href="mailto:ntinosgkiou@gmail.com" style="color:#FBBF24;">Ρωτήστε</a> — προσθέτουμε integrations για founding members ως υψηλή προτεραιότητα.
+    </p>
+  </div>
+</section>
+
+<!-- ─── SCENARIOS ─── -->
+<section>
+  <div class="card">
+    <h2><span class="icon">🎬</span>Πραγματικά σενάρια χρήσης</h2>
+    <p>Παραδείγματα πώς το AI χειρίζεται καθημερινές περιπτώσεις:</p>
+
+    <div class="scenarios">
+      <div class="scenario">
+        <span class="tag">Σενάριο 1</span>
+        <h4>Νέος πελάτης 23:30, ιατρείο κλειστό</h4>
+        <p>Καλεί για ραντεβού. AI απαντά κανονικά, ρωτάει για συμπτώματα, προτείνει τύπο εξέτασης + ώρες, κλείνει ραντεβού. Στέλνει SMS επιβεβαίωσης.</p>
+        <div class="ai-says">AI: "Καλησπέρα! Είστε στο Ιατρείο. Είστε καινούργιος ή έχετε ξανάρθει;"</div>
+      </div>
+
+      <div class="scenario">
+        <span class="tag">Σενάριο 2</span>
+        <h4>Επείγον στην οδοντιατρική</h4>
+        <p>Άνθρωπος με πόνο καλεί 14:00. AI αναγνωρίζει "πόνο", λέει "Σας μεταφέρω άμεσα στον ιατρό" + κάνει call transfer ή στέλνει SMS escalation σε εσάς.</p>
+        <div class="ai-says">AI: "Σας μεταφέρω άμεσα στη γιατρό. Παρακαλώ μη κλείσετε."</div>
+      </div>
+
+      <div class="scenario">
+        <span class="tag">Σενάριο 3</span>
+        <h4>10 ταυτόχρονες κλήσεις πρωί Δευτέρας</h4>
+        <p>Μετά από διαφήμιση, 10 πελάτες καλούν ταυτόχρονα. Πραγματική γραμματέας θα έχανε 7. AI απαντά σε **όλες ταυτόχρονα** χωρίς να περιμένει κανείς.</p>
+        <div class="ai-says">10 παράλληλες κλήσεις, 0 χαμένες, 7-8 ραντεβού κλεισμένα μέσα σε 15 λεπτά.</div>
+      </div>
+
+      <div class="scenario">
+        <span class="tag">Σενάριο 4</span>
+        <h4>Ρευλιστά πελάτης από Αμερική</h4>
+        <p>Tourist καλεί για ραντεβού σε αισθητική. AI ανιχνεύει English, μιλάει αγγλικά, κλείνει ραντεβού. Στέλνει English SMS confirmation.</p>
+        <div class="ai-says">AI: "Hi! You've reached Beauty Studio. How can I help you today?"</div>
+      </div>
+
+      <div class="scenario">
+        <span class="tag">Σενάριο 5</span>
+        <h4>Πελάτης θέλει να αλλάξει ραντεβού</h4>
+        <p>Καλεί ή γράφει WhatsApp: "Θέλω να αλλάξω το ραντεβού μου της Τρίτης". AI επιβεβαιώνει ταυτότητα (όνομα/τηλ), εμφανίζει διαθέσιμα slots, κλείνει νέο, ακυρώνει παλιό. Όλα αυτόματα.</p>
+        <div class="ai-says">AI: "Φυσικά! Το ραντεβού σας είναι Τρίτη 10:00 για καθαρισμό. Πότε σας βολεύει να το μετακινήσουμε;"</div>
+      </div>
+
+      <div class="scenario">
+        <span class="tag">Σενάριο 6</span>
+        <h4>Ερώτηση για τιμή σε χωρίς booking intent</h4>
+        <p>Καλεί ρωτάει "Πόσο κάνει το botox;" — δεν θέλει να κλείσει. AI δίνει τιμή, λέει "θέλετε να κλείσετε ραντεβού για consultation;". Soft upsell χωρίς pressure.</p>
+        <div class="ai-says">AI: "Το botox είναι 250€ ανά session. Θέλετε να κλείσουμε 15-min δωρεάν consultation με τον ιατρό;"</div>
+      </div>
+
+      <div class="scenario">
+        <span class="tag">Σενάριο 7</span>
+        <h4>Multi-staff scheduling (multiple doctors)</h4>
+        <p>"Θέλω ραντεβού με τη Δρ. Παπαδοπούλου". AI ξέρει ποιοι ιατροί κάνουν ποια services + το ξεχωριστό ωράριο καθενός, προτείνει σωστά slots.</p>
+        <div class="ai-says">AI: "Η Δρ. Παπαδοπούλου είναι διαθέσιμη Τετάρτη 11:00 ή Παρασκευή 17:30. Ποια προτιμάτε;"</div>
+      </div>
+
+      <div class="scenario">
+        <span class="tag">Σενάριο 8</span>
+        <h4>No-show prevention</h4>
+        <p>Στέλνει SMS reminder 24h πριν + 4h πριν. Αν πελάτης δεν επιβεβαιώσει εντός 2h πριν → AI καλεί/γράφει "ισχύει το ραντεβού;". Σώζει 30-50% των no-shows.</p>
+        <div class="ai-says">AI: "Καλημέρα! Ραντεβού σήμερα στις 16:00 για καθαρισμό. Ισχύει;"</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── DAILY OPERATIONS ─── -->
+<section>
+  <div class="card">
+    <h2><span class="icon">📅</span>Καθημερινή λειτουργία (μετά go-live)</h2>
+
+    <h3>Τι κάνει το AI αυτόματα κάθε μέρα</h3>
+    <ul>
+      <li><strong>Απαντά σε όλα τα μηνύματα/κλήσεις 24/7</strong></li>
+      <li><strong>Κλείνει ραντεβού</strong> με βάση το ωράριό σας + διαθεσιμότητα calendar</li>
+      <li><strong>Στέλνει SMS + email confirmation</strong> αμέσως μετά</li>
+      <li><strong>Αποστέλλει reminder 24 ώρες πριν</strong> + 4 ώρες πριν</li>
+      <li><strong>Ζητάει review</strong> μετά την επίσκεψη (Google Reviews link)</li>
+      <li><strong>Re-engagement</strong> σε ανενεργούς πελάτες (κάθε 45 μέρες)</li>
+      <li><strong>Στέλνει σε εσάς daily summary</strong> κάθε πρωί στο email (πόσα ραντεβού, ποιοι, τι revenue)</li>
+    </ul>
+
+    <h3>Τι μπορείτε εσείς να κάνετε</h3>
+    <ul>
+      <li><strong>Admin dashboard:</strong> Δείτε όλα τα ραντεβού, ακυρώσεις, ανακυκλώσεις σε real-time</li>
+      <li><strong>Manual override:</strong> Ακυρώστε/προσθέστε/μετακινήστε ραντεβού manually</li>
+      <li><strong>Pause AI:</strong> Πατήστε "pause" για διακοπές χωρίς να ακυρώσετε την υπηρεσία</li>
+      <li><strong>Update services/prices:</strong> Αλλάξτε όποτε θέλετε, ενεργοποιείται σε 1 ώρα</li>
+      <li><strong>Block dates:</strong> Διακοπές, αργίες, ασθένεια</li>
+      <li><strong>Export CSV:</strong> Όλα τα data σας, όποτε θέλετε</li>
+    </ul>
+
+    <h3>Σε ποιον απευθύνεστε αν υπάρχει πρόβλημα</h3>
+    <ul>
+      <li><strong>Founder direct:</strong> WhatsApp στο 6987 747 434 (Founding 5 έχουν 90 μέρες direct access)</li>
+      <li><strong>Email:</strong> ntinosgkiou@gmail.com (response time: εντός 4 ωρών εργάσιμες, εντός 12 weekends)</li>
+      <li><strong>24/7 emergency:</strong> Αν το AI σταματήσει εντελώς → SMS αυτόματο στο 6987 747 434 → άμεση επέμβαση</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ─── CANCELLATION ─── -->
+<section>
+  <div class="card">
+    <h2><span class="icon">🔓</span>Cancellation & data export</h2>
+    <p>Πάντα δικαίωμά σας:</p>
+    <ul>
+      <li><strong>Cancel anytime</strong> — χωρίς penalty, χωρίς εξήγηση</li>
+      <li><strong>Pro-rated refund</strong> για unused months (αν προπληρωμή annually)</li>
+      <li><strong>Export όλων των data σας</strong> δωρεάν (CSV: bookings, clients, history)</li>
+      <li><strong>Διαγραφή data</strong> εντός 30 ημερών από cancellation (GDPR right to erasure)</li>
+      <li><strong>Bot σας</strong> deactivate-άρεται αμέσως, χωρίς redirect/spam στους πελάτες σας</li>
+    </ul>
+
+    <p style="margin-top:16px;padding:14px 18px;background:rgba(74,222,128,0.08);border-left:3px solid #4ADE80;border-radius:8px;font-size:14px;">
+      <strong style="color:#4ADE80;">✓ Promise:</strong> Δε σας κλειδώνουμε. Αν δεν είστε ικανοποιημένος, φεύγετε εύκολα με όλα τα δεδομένα σας.
+    </p>
+  </div>
+</section>
+
+<div class="final-cta">
+  <h2>Έτοιμοι να ξεκινήσουμε;</h2>
+  <p>5 φάσεις. 24-48 ώρες. €99 setup, αυτόματη ενεργοποίηση μετά την πληρωμή.</p>
+  <a href="/founding">Founding offer — 50% off →</a>
+</div>
+
+</div>
+
+<footer>
+  <a href="/">Αρχική</a> ·
+  <a href="/pricing">Pricing</a> ·
+  <a href="/how-it-works" style="color:#FBBF24;">Πώς δουλεύει</a> ·
+  <a href="/about">About</a> ·
+  <a href="/founding">Founding 5</a> ·
+  <a href="/privacy">Απόρρητο</a> ·
+  <a href="/terms">Όροι</a>
+  <p style="margin-top:14px;">© 2026 Ran-Tevu · Κωνσταντίνος Γκιουλμπαξιώτης · Ρέθυμνο, Κρήτη</p>
+</footer>
+
+</body>
+</html>

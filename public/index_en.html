@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<!-- Force light theme on mobile: prevents Chrome/Samsung auto-dark from inverting site to black -->
+<meta name="color-scheme" content="light">
+<meta name="supported-color-schemes" content="light">
+<title>Ran-Tevu — AI Receptionist (Voice + Chat) that books appointments 24/7</title>
+<meta name="description" content="Ran-Tevu: AI that answers calls & chats 24/7. Books appointments, remembers returning customers, sends emails. EU AI Act + GDPR compliant. Setup in 3 minutes.">
+<meta name="keywords" content="AI receptionist, AI appointment booking, AI voice agent, AI chat bookings, EU AI Act compliant, voice AI, chatbot for bookings">
+<meta name="author" content="Konstantinos Gkioulbaxiotis">
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
+<link rel="canonical" href="https://www.ran-tevu.gr/en">
+<link rel="alternate" hreflang="el" href="https://www.ran-tevu.gr/">
+<link rel="alternate" hreflang="en" href="https://www.ran-tevu.gr/en">
+<link rel="alternate" hreflang="x-default" href="https://www.ran-tevu.gr/">
+
+<meta property="og:type" content="website">
+<meta property="og:locale" content="en_US">
+<meta property="og:url" content="https://www.ran-tevu.gr/en">
+<meta property="og:site_name" content="Ran-Tevu">
+<meta property="og:title" content="Ran-Tevu — AI Receptionist (Voice + Chat) 24/7">
+<meta property="og:description" content="AI that answers calls & chats 24/7. Remembers every customer. EU AI Act ready. Setup in 3 minutes.">
+<meta property="og:image" content="https://www.ran-tevu.gr/og-image-en.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Ran-Tevu — The AI receptionist that speaks human">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://www.ran-tevu.gr/og-image-en.png">
+<meta name="twitter:title" content="Ran-Tevu — AI Receptionist 24/7">
+<meta name="twitter:description" content="AI that answers calls & chats 24/7. Remembers every customer. EU AI Act ready.">
+
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.ico">
+<link rel="apple-touch-icon" href="/icons/icon-192.png">
+
+<style>
+:root {
+  --bg: #FAFAFB;
+  --fg: #1B1B1F;
+  --muted: #6B6B73;
+  --accent: #6E56CF;
+  --accent-dark: #5B47B0;
+  --accent-soft: #F3F1FA;
+  --card: #FFFFFF;
+  --border: #E6E6EA;
+  --ok: #10B981;
+  --warn: #F59E0B;
+}
+* { box-sizing: border-box; }
+html {
+  color-scheme: light only;
+  background: #FAFBFD;
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--bg) !important;
+  color: var(--fg);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: rgba(108, 92, 231, 0.15);
+}
+a[x-apple-data-detectors] { color: inherit !important; text-decoration: none !important; }
+@media (prefers-color-scheme: dark) {
+  html, body { background: #FAFBFD !important; color: #18181B !important; }
+}
+@media (max-width: 600px) {
+  html, body { background: #FAFBFD !important; }
+  .container { padding: 0 16px !important; }
+  h1 { font-size: clamp(26px, 7.5vw, 36px) !important; }
+}
+
+/* ── Nav ── */
+nav {
+  position: sticky; top: 0;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+  z-index: 100;
+  padding: 14px 0;
+}
+nav .container { display: flex; align-items: center; justify-content: space-between; }
+.brand { font-weight: 800; font-size: 18px; color: var(--fg); text-decoration: none; }
+.nav-links { display: flex; gap: 22px; align-items: center; }
+.nav-links a { color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 500; }
+.nav-links a:hover { color: var(--fg); }
+.lang-link { background: var(--accent-soft); padding: 6px 12px; border-radius: 999px; }
+.nav-cta { background: var(--accent); color: #fff !important; padding: 8px 18px; border-radius: 999px; font-weight: 600; font-size: 13px; }
+
+.container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+
+/* ── Hero ── */
+.hero { padding: 72px 0 56px; }
+.hero-grid {
+  display: grid; grid-template-columns: 1.1fr 0.9fr;
+  gap: 56px; align-items: center;
+}
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--accent-soft); color: var(--accent);
+  padding: 6px 14px; border-radius: 999px;
+  font-size: 13px; font-weight: 600;
+  margin-bottom: 18px;
+}
+.eyebrow .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); animation: pulse 2s infinite; }
+@keyframes pulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(110,86,207,0.7); }
+  50%     { box-shadow: 0 0 0 8px rgba(110,86,207,0); }
+}
+.hero h1 {
+  font-size: clamp(36px, 5.5vw, 58px);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin: 0 0 16px;
+}
+.hero h1 .grad {
+  background: linear-gradient(135deg, #6E56CF 0%, #8B6FE7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero .sub {
+  font-size: 18px; color: var(--muted);
+  line-height: 1.55; margin: 0 0 28px;
+  max-width: 540px;
+}
+.hero .sub strong { color: var(--fg); }
+.ctas { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 14px 24px; border-radius: 12px;
+  font-weight: 700; font-size: 15px;
+  text-decoration: none; cursor: pointer; border: 0;
+  transition: transform .15s, box-shadow .15s;
+}
+.btn-primary { background: linear-gradient(135deg, #6E56CF 0%, #8B6FE7 100%); color: #fff; box-shadow: 0 6px 22px rgba(110,86,207,0.35); }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(110,86,207,0.45); }
+.btn-secondary { background: #fff; color: var(--fg); border: 1px solid var(--border); }
+.btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+.trust { display: flex; gap: 18px; flex-wrap: wrap; color: var(--muted); font-size: 13px; }
+.trust span { display: inline-flex; align-items: center; gap: 5px; }
+.trust svg { width: 16px; height: 16px; color: var(--ok); }
+
+/* Hero visual */
+.hero-visual {
+  position: relative; height: 480px;
+  background: linear-gradient(135deg, var(--accent-soft) 0%, #fff 100%);
+  border-radius: 24px; padding: 24px;
+  display: flex; align-items: center; justify-content: center;
+}
+.phone-mock {
+  background: #1B1B1F; border-radius: 32px;
+  padding: 14px; width: 280px; box-shadow: 0 24px 60px rgba(0,0,0,0.2);
+}
+.phone-screen {
+  background: #fff; border-radius: 20px; padding: 18px; height: 380px;
+  display: flex; flex-direction: column;
+}
+.phone-header {
+  display: flex; align-items: center; gap: 10px;
+  padding-bottom: 14px; border-bottom: 1px solid var(--border);
+}
+.phone-avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), #8B6FE7); display: flex; align-items: center; justify-content: center; font-size: 18px; color: #fff; }
+.phone-name { font-weight: 700; font-size: 14px; }
+.phone-status { font-size: 11px; color: var(--ok); }
+.phone-chat { flex: 1; overflow-y: auto; padding: 14px 0; display: flex; flex-direction: column; gap: 10px; }
+.bubble {
+  padding: 10px 14px; border-radius: 16px; max-width: 85%;
+  font-size: 13px; line-height: 1.4;
+}
+.bubble.bot { background: var(--accent-soft); color: var(--fg); align-self: flex-start; border-bottom-left-radius: 4px; }
+.bubble.user { background: var(--accent); color: #fff; align-self: flex-end; border-bottom-right-radius: 4px; }
+
+/* ── Sections ── */
+section { padding: 64px 0; }
+section.alt { background: #fff; }
+.section-head { text-align: center; max-width: 660px; margin: 0 auto 40px; }
+.section-head h2 { font-size: clamp(28px, 4vw, 40px); margin: 14px 0 12px; letter-spacing: -0.01em; }
+.section-head p { color: var(--muted); font-size: 17px; }
+
+/* Future-proof grid */
+.fp-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+}
+.fp-card {
+  background: #fff; border: 1px solid var(--border); border-radius: 18px;
+  padding: 28px; box-shadow: 0 1px 4px rgba(0,0,0,.04);
+}
+.fp-card .icon {
+  width: 48px; height: 48px; border-radius: 12px;
+  background: linear-gradient(135deg, var(--accent), #8B6FE7);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; margin-bottom: 18px;
+}
+.fp-card.green .icon { background: linear-gradient(135deg, var(--ok), #34D399); }
+.fp-card h3 { margin: 0 0 8px; font-size: 18px; font-weight: 700; }
+.fp-card p { color: var(--muted); font-size: 14px; line-height: 1.55; margin: 0; }
+.fp-card a { color: var(--accent); text-decoration: none; font-weight: 600; }
+
+/* Products */
+.products {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 24px; margin-top: 30px;
+}
+.product {
+  background: #fff; border: 1px solid var(--border); border-radius: 20px;
+  padding: 32px; position: relative;
+}
+.product.featured {
+  border: 2px solid var(--accent);
+  box-shadow: 0 24px 60px rgba(110,86,207,0.12);
+}
+.product .ico { font-size: 32px; margin-bottom: 14px; }
+.product h3 { margin: 0 0 6px; font-size: 22px; }
+.product .tag { color: var(--muted); font-size: 14px; margin-bottom: 18px; }
+.product .price { font-size: 36px; font-weight: 800; color: var(--accent); }
+.product .price-sub { color: var(--muted); font-size: 13px; margin-bottom: 18px; }
+.product ul { padding-left: 18px; margin: 16px 0 22px; }
+.product li { font-size: 14px; color: #2A2A30; margin-bottom: 8px; }
+.product li strong { color: var(--fg); }
+.product .cta-stack { display: flex; flex-direction: column; gap: 8px; }
+.live-badge { background: var(--ok); color: #fff; padding: 2px 8px; border-radius: 6px; font-size: 11px; margin-left: 6px; vertical-align: middle; }
+
+/* Footer */
+footer {
+  background: #1B1B1F; color: rgba(255,255,255,0.7);
+  padding: 48px 0 24px; margin-top: 64px;
+}
+footer .footer-grid {
+  display: grid; grid-template-columns: 2fr 1fr 1fr;
+  gap: 40px; margin-bottom: 32px;
+}
+footer h5 { color: #fff; font-size: 14px; margin: 0 0 12px; }
+footer a { display: block; color: rgba(255,255,255,0.6); text-decoration: none; padding: 4px 0; font-size: 14px; }
+footer a:hover { color: #fff; }
+.footer-brand { font-size: 22px; color: #fff; font-weight: 800; }
+.footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; font-size: 12px; color: rgba(255,255,255,0.4); text-align: center; }
+
+@media (max-width: 800px) {
+  .hero-grid { grid-template-columns: 1fr; }
+  .hero-visual { height: 420px; }
+  .products { grid-template-columns: 1fr; }
+  footer .footer-grid { grid-template-columns: 1fr; gap: 24px; }
+  .nav-links { gap: 12px; }
+  .nav-links a:not(.nav-cta):not(.lang-link) { display: none; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="container">
+    <a href="/en" class="brand">📅 Ran-Tevu</a>
+    <div class="nav-links">
+      <a href="#products">Products</a>
+      <a href="/compliance">Compliance</a>
+      <a href="/" class="lang-link">🇬🇷 EL</a>
+      <a href="mailto:ntinosgkiou@gmail.com?subject=Demo%20Request" class="nav-cta">Request demo</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════ HERO ═══════════ -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <span class="eyebrow"><span class="dot"></span> Voice + Chat AI · Made in Greece</span>
+        <h1>The AI receptionist<br>that speaks <span class="grad">human</span>.</h1>
+        <p class="sub">
+          Answers calls &amp; chats 24/7. Books appointments in your calendar,
+          remembers every customer, sends email confirmations. <strong>EU AI Act ready.</strong>
+        </p>
+        <div class="ctas">
+          <a href="/beauty-demo?lang=en" class="btn btn-primary">💬 Try live demo</a>
+          <a href="mailto:ntinosgkiou@gmail.com?subject=Voice%20Demo%20Request" class="btn btn-secondary">📞 Request voice demo</a>
+        </div>
+        <div class="trust">
+          <span><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg> Voice + Chat</span>
+          <span><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg> Remembers every customer</span>
+          <span><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg> <a href="/compliance" style="color:inherit;text-decoration:none;">EU AI Act ready</a></span>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="phone-mock">
+          <div class="phone-screen">
+            <div class="phone-header">
+              <div class="phone-avatar">💅</div>
+              <div>
+                <div class="phone-name">Beauty Salon</div>
+                <div class="phone-status">● Available now</div>
+              </div>
+            </div>
+            <div class="phone-chat">
+              <div class="bubble bot">Hi Maria! 👋 It's been a month since your last facial. Same Thursday evening as you like?</div>
+              <div class="bubble user">Yes please! With Dimitra again.</div>
+              <div class="bubble bot">Done! Thursday 18:00 with Dimitra. How's your little one? Hope the cold cleared up. 💜</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ FUTURE-PROOF ═══════════ -->
+<section class="alt" style="background:linear-gradient(180deg,#FAFAFB 0%,#F3F1FA 100%);">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow"><span class="dot"></span> Built for 2030</span>
+      <h2>Not just another chatbot. The first <em style="color:var(--accent);font-style:normal;">future-proof</em> AI receptionist.</h2>
+      <p>Designed for the 4 waves dominating the next 5 years — not yesterday's chat hype.</p>
+    </div>
+
+    <div class="fp-grid">
+      <div class="fp-card">
+        <div class="icon">🎙️</div>
+        <h3>Voice + Chat 24/7</h3>
+        <p>Answers calls &amp; messages in English &amp; Greek. Books appointments, sends emails automatically.</p>
+      </div>
+      <div class="fp-card">
+        <div class="icon">🧠</div>
+        <h3>Remembers every customer</h3>
+        <p>Name, preferences, history, family. The bot recognizes returning customers like a 10-year personal secretary.</p>
+      </div>
+      <div class="fp-card">
+        <div class="icon">❤️</div>
+        <h3>Warm, not robotic</h3>
+        <p>Personality layer that sounds human. Customers say "I thought it was Dimitra."</p>
+      </div>
+      <div class="fp-card green">
+        <div class="icon">🛡️</div>
+        <h3>EU AI Act ready</h3>
+        <p>Full compliance with the law in effect Aug 2026. Audit logs, consent, right-to-delete. <a href="/compliance">See the docs →</a></p>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:36px;">
+      <a href="/compliance" class="btn btn-secondary" style="display:inline-flex;">
+        🛡️ Compliance &amp; Privacy Statement →
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ PRODUCTS ═══════════ -->
+<section id="products">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow"><span class="dot"></span> Plans</span>
+      <h2>One platform: voice + chat + revenue recovery</h2>
+      <p>Flat monthly price. No setup fee. 14 days free, no card.</p>
+    </div>
+
+    <div class="products">
+      <div class="product">
+        <div class="ico">📞</div>
+        <h3>Standard — AI Receptionist</h3>
+        <p class="tag">Answers calls 24/7 like a real human, books straight into your calendar. Voice + chat together.</p>
+        <div class="price">€179</div>
+        <div class="price-sub">/month flat · <strong>14 days free · no card</strong></div>
+        <ul>
+          <li><strong>Natural Greek voice</strong> · answers 24/7 · transfers urgent calls to you</li>
+          <li>Voice + web chat, one calendar</li>
+          <li>Bookings in your calendar · email/SMS confirmations &amp; reminders</li>
+          <li><strong>AI Memory</strong> — remembers repeat callers</li>
+          <li>Patient records + Excel import · revenue dashboard</li>
+          <li>Admin dashboard with transcripts &amp; analytics</li>
+          <li><strong><a href="/compliance">EU AI Act + GDPR compliant</a></strong></li>
+        </ul>
+        <div class="cta-stack">
+          <a href="mailto:ntinosgkiou@gmail.com?subject=Ran-Tevu%20Demo%20Request&body=I'd%20like%20a%20live%20demo%20of%20the%20AI%20receptionist%20for%20my%20practice." class="btn btn-primary">📞 Request live demo →</a>
+          <a href="/beauty-demo?lang=en" class="btn btn-secondary">💬 Try live demo</a>
+        </div>
+      </div>
+
+      <div class="product featured">
+        <div class="ico">🔄</div>
+        <h3>Premium — + Revenue Recovery</h3>
+        <p class="tag">Everything in Standard, plus an autopilot that chases the money you're losing.</p>
+        <div class="price">€299</div>
+        <div class="price-sub">/month flat · <strong>14 days free · no card</strong></div>
+        <ul>
+          <li>Everything in Standard</li>
+          <li><strong>No-show recovery</strong> — re-books missed appointments automatically</li>
+          <li><strong>Win-back</strong> for inactive patients · recall campaigns</li>
+          <li>Waitlist auto-fill for freed slots</li>
+          <li><strong>Recovered-€ dashboard</strong> — see exactly what it brought back</li>
+          <li>Priority support</li>
+          <li><strong><a href="/compliance">EU AI Act + GDPR compliant</a></strong></li>
+        </ul>
+        <div class="cta-stack">
+          <a href="mailto:ntinosgkiou@gmail.com?subject=Ran-Tevu%20Premium%20Demo&body=I'd%20like%20a%20live%20demo%20of%20Revenue%20Recovery%20for%20my%20practice." class="btn btn-primary">Start free trial →</a>
+          <a href="/beauty-demo?lang=en" class="btn btn-secondary">💬 Try live demo</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ FOOTER ═══════════ -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">📅 Ran-Tevu</div>
+        <p style="margin-top:14px;font-size:14px;line-height:1.7;">
+          AI Voice + Chat Receptionist for SMBs.<br>
+          Made in Rethymno, Greece.<br>
+          Founder: Konstantinos Gkioulbaxiotis
+        </p>
+      </div>
+      <div>
+        <h5>Product</h5>
+        <a href="#products">Voice Receptionist</a>
+        <a href="#products">Chat Booking</a>
+        <a href="/pricing">Pricing</a>
+        <a href="/compliance">Compliance &amp; Privacy</a>
+      </div>
+      <div>
+        <h5>Contact</h5>
+        <a href="mailto:ntinosgkiou@gmail.com">ntinosgkiou@gmail.com</a>
+        <a href="tel:+306987747434">+30 6987747434</a>
+        <a href="/">🇬🇷 Ελληνικά</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      © 2026 Ran-Tevu · Rethymno, Crete, Greece · <a href="/compliance" style="display:inline;color:rgba(255,255,255,0.6);">Privacy &amp; Compliance</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

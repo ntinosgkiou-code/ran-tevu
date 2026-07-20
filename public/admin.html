@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel</title>
+<style>
+  :root {
+    --primary: #7C3AED;
+    --primary-light: #EDE9FE;
+    --danger: #EF4444;
+    --success: #10B981;
+    --bg: #F9FAFB;
+    --surface: #FFFFFF;
+    --text: #111827;
+    --text-muted: #6B7280;
+    --border: #E5E7EB;
+    --shadow: 0 1px 3px rgba(0,0,0,.08);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  #auth-screen {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+  }
+  .auth-card {
+    background: white;
+    border-radius: 16px;
+    padding: 40px;
+    width: 100%;
+    max-width: 380px;
+    box-shadow: 0 4px 24px rgba(0,0,0,.08);
+    text-align: center;
+  }
+  .auth-card h1 { font-size: 22px; margin-bottom: 6px; }
+  .auth-card p { color: var(--text-muted); font-size: 14px; margin-bottom: 24px; }
+  .auth-card input {
+    width: 100%;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 15px;
+    outline: none;
+    margin-bottom: 14px;
+  }
+  .auth-card input:focus { border-color: var(--primary); }
+  .btn-primary {
+    width: 100%;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .15s;
+  }
+  .btn-primary:hover { background: #6D28D9; }
+  #auth-error { color: var(--danger); font-size: 13px; margin-top: 10px; }
+
+  #app { display: none; }
+
+  header {
+    background: white;
+    border-bottom: 1px solid var(--border);
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: var(--shadow);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  header h1 { font-size: 18px; font-weight: 700; }
+  .badge {
+    background: var(--primary-light);
+    color: var(--primary);
+    border-radius: 20px;
+    padding: 3px 10px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  #chat-link {
+    margin-left: auto;
+    background: var(--primary);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  main { padding: 24px; max-width: 1100px; margin: 0 auto; }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .stat-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: var(--shadow);
+  }
+  .stat-card .num {
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .stat-card .label { font-size: 13px; color: var(--text-muted); }
+  .stat-card.purple .num { color: var(--primary); }
+  .stat-card.green  .num { color: var(--success); }
+  .stat-card.orange .num { color: #F59E0B; }
+
+  .controls {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .controls input, .controls select {
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 14px;
+    outline: none;
+    background: white;
+  }
+  .controls input:focus, .controls select:focus { border-color: var(--primary); }
+  .refresh-btn {
+    background: white;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 13px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all .15s;
+  }
+  .refresh-btn:hover { border-color: var(--primary); color: var(--primary); }
+
+  .table-wrap {
+    background: white;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  thead { background: #F8F7FF; }
+  th {
+    padding: 13px 16px;
+    text-align: left;
+    font-weight: 600;
+    color: var(--text-muted);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    border-bottom: 1px solid var(--border);
+  }
+  td {
+    padding: 13px 16px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #FAFAFA; }
+  tr.cancelled td { opacity: .5; }
+
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    border-radius: 20px;
+    padding: 3px 10px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .status-badge.confirmed { background: #ECFDF5; color: #059669; }
+  .status-badge.cancelled { background: #FEF2F2; color: #EF4444; }
+  .status-badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  .cancel-btn {
+    background: transparent;
+    border: 1.5px solid var(--danger);
+    color: var(--danger);
+    border-radius: 6px;
+    padding: 5px 12px;
+    font-size: 12px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all .15s;
+  }
+  .cancel-btn:hover { background: var(--danger); color: white; }
+
+  .empty-state {
+    padding: 60px 20px;
+    text-align: center;
+    color: var(--text-muted);
+  }
+  .empty-state .icon { font-size: 48px; margin-bottom: 12px; }
+
+  #loading-state {
+    padding: 60px;
+    text-align: center;
+    color: var(--text-muted);
+  }
+
+  @media (max-width: 640px) {
+    main { padding: 16px; }
+    th:nth-child(4), td:nth-child(4),
+    th:nth-child(5), td:nth-child(5) { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div id="auth-screen">
+  <div class="auth-card">
+    <div style="font-size:40px;margin-bottom:16px">🔐</div>
+    <h1>Admin Panel</h1>
+    <p id="auth-biz-name">Φόρτωση...</p>
+    <input type="password" id="token-input" placeholder="Admin Token" autocomplete="off">
+    <button class="btn-primary" onclick="login()">Είσοδος</button>
+    <div id="auth-error"></div>
+  </div>
+</div>
+
+<div id="app">
+  <!-- Banner pointing to new unified dashboard -->
+  <div id="new-dash-banner" style="background:linear-gradient(135deg,#7c3aed,#ec4899);color:white;padding:12px 20px;display:flex;justify-content:space-between;align-items:center;font-size:14px;flex-wrap:wrap;gap:10px;">
+    <div>✨ <strong>Νέο unified dashboard διαθέσιμο!</strong> Voice κλήσεις, leads, pipeline, campaigns όλα μαζί.</div>
+    <a id="new-dash-link" href="#" style="background:rgba(255,255,255,0.25);color:white;padding:8px 16px;border-radius:8px;text-decoration:none;font-weight:700;">Άνοιξε νέο Dashboard →</a>
+  </div>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const slug = location.pathname.split("/").pop();
+      const tok = new URLSearchParams(location.search).get("token") || localStorage.getItem("admin_token") || "";
+      document.getElementById("new-dash-link").href = `/admin/${slug}/dashboard?token=${encodeURIComponent(tok)}`;
+    });
+  </script>
+
+  <header>
+    <div>
+      <h1 id="biz-title">Admin Panel</h1>
+    </div>
+    <span class="badge" id="header-badge">0 ραντεβού</span>
+    <a id="chat-link" href="#" target="_blank">💬 Chat</a>
+    <button id="settings-btn" onclick="openSettings()" style="background:none;border:1.5px solid var(--border);border-radius:8px;padding:7px 14px;font-size:13px;cursor:pointer;color:var(--text-muted)">⚙️ Ρυθμίσεις</button>
+  </header>
+
+  <!-- Settings Modal -->
+  <div id="settings-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:100;align-items:center;justify-content:center;padding:20px;">
+    <div style="background:#fff;border-radius:18px;padding:32px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.15);">
+      <h2 style="font-size:18px;margin-bottom:6px;">⚙️ Ρυθμίσεις</h2>
+      <p style="font-size:13px;color:var(--text-muted);margin-bottom:24px;">Email επιβεβαιώσεων & βασικά στοιχεία</p>
+
+      <div style="margin-bottom:16px">
+        <label style="font-size:13px;font-weight:500;color:var(--text-muted);display:block;margin-bottom:6px">Όνομα Επιχείρησης</label>
+        <input id="s-name" type="text" style="width:100%;border:1.5px solid var(--border);border-radius:8px;padding:10px 12px;font-size:14px;outline:none;box-sizing:border-box">
+      </div>
+      <div style="margin-bottom:16px">
+        <label style="font-size:13px;font-weight:500;color:var(--text-muted);display:block;margin-bottom:6px">Τηλέφωνο</label>
+        <input id="s-phone" type="tel" style="width:100%;border:1.5px solid var(--border);border-radius:8px;padding:10px 12px;font-size:14px;outline:none;box-sizing:border-box">
+      </div>
+      <div style="margin-bottom:16px">
+        <label style="font-size:13px;font-weight:500;color:var(--text-muted);display:block;margin-bottom:6px">Διεύθυνση</label>
+        <input id="s-address" type="text" style="width:100%;border:1.5px solid var(--border);border-radius:8px;padding:10px 12px;font-size:14px;outline:none;box-sizing:border-box">
+      </div>
+
+      <div style="margin-bottom:16px">
+        <label style="font-size:13px;font-weight:500;color:var(--text-muted);display:block;margin-bottom:6px">🎨 Χρώμα Chat</label>
+        <div style="display:flex;align-items:center;gap:10px">
+          <input id="s-accent" type="color" value="#7C3AED" style="width:44px;height:44px;border:1.5px solid var(--border);border-radius:8px;cursor:pointer;padding:2px">
+          <span style="font-size:13px;color:var(--text-muted)">Χρώμα που βλέπουν οι πελάτες σου στο chat</span>
+        </div>
+      </div>
+
+      <div style="border-top:1px solid var(--border);padding-top:20px;margin-top:8px;margin-bottom:16px">
+        <div style="font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:14px">📧 Email Επιβεβαιώσεων (Gmail)</div>
+        <div style="margin-bottom:12px">
+          <label style="font-size:13px;font-weight:500;color:var(--text-muted);display:block;margin-bottom:6px">Gmail διεύθυνση</label>
+          <input id="s-smtp-email" type="email" placeholder="yourname@gmail.com" style="width:100%;border:1.5px solid var(--border);border-radius:8px;padding:10px 12px;font-size:14px;outline:none;box-sizing:border-box">
+        </div>
+        <div style="margin-bottom:8px">
+          <label style="font-size:13px;font-weight:500;color:var(--text-muted);display:block;margin-bottom:6px">Gmail App Password</label>
+          <input id="s-smtp-pass" type="password" placeholder="xxxx xxxx xxxx xxxx" style="width:100%;border:1.5px solid var(--border);border-radius:8px;padding:10px 12px;font-size:14px;outline:none;box-sizing:border-box">
+        </div>
+        <p style="font-size:12px;color:var(--text-muted);margin:0">Χρησιμοποίησε <strong>App Password</strong> από το Google Account → Security → 2-Step → App passwords</p>
+      </div>
+
+      <div style="border-top:1px solid var(--border);padding-top:20px;margin-top:8px;margin-bottom:16px">
+        <div style="font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:14px">⭐ Google Reviews & Pre-visit</div>
+        <div style="margin-bottom:12px">
+          <label style="font-size:13px;font-weight:500;color:var(--text-muted);display:block;margin-bottom:6px">Google Review Link</label>
+          <input id="s-review-url" type="url" placeholder="https://g.page/r/..." style="width:100%;border:1.5px solid var(--border);border-radius:8px;padding:10px 12px;font-size:14px;outline:none;box-sizing:border-box">
+          <p style="font-size:12px;color:var(--text-muted);margin:6px 0 0">Το link για να αφήνουν κριτική στο Google. Βρες το: Google Business → Reviews → Get more reviews</p>
+        </div>
+        <div style="margin-bottom:8px">
+          <label style="font-size:13px;font-weight:500;color:var(--text-muted);display:block;margin-bottom:6px">Ερώτηση Pre-visit</label>
+          <textarea id="s-questionnaire" rows="2" maxlength="300"
+            placeholder="π.χ. Έχεις αλλεργίες ή ειδικές προτιμήσεις που πρέπει να γνωρίζουμε;"
+            style="width:100%;border:1.5px solid var(--border);border-radius:8px;padding:10px 12px;font-size:14px;outline:none;box-sizing:border-box;resize:vertical;font-family:inherit"></textarea>
+          <p style="font-size:12px;color:var(--text-muted);margin:6px 0 0">Στέλνεται αυτόματα 1-3h μετά την κράτηση.</p>
+        </div>
+      </div>
+
+      <!-- Blocked days section -->
+      <div style="border-top:1px solid var(--border);padding-top:20px;margin-top:8px;margin-bottom:16px">
+        <div style="font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:14px">🚫 Κλειστές Ημέρες & Ημερομηνίες</div>
+
+        <label style="font-size:13px;font-weight:500;color:var(--text-muted);display:block;margin-bottom:8px">Σταθερά κλειστές ημέρες εβδομάδας</label>
+        <div id="closed-days-grid" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px">
+          <!-- checkboxes injected by JS -->
+        </div>
+
+        <label style="font-size:13px;font-weight:500;color:var(--text-muted);display:block;margin-bottom:8px">Αποκλεισμένες συγκεκριμένες ημερομηνίες</label>
+        <div style="display:flex;gap:8px;margin-bottom:10px">
+          <input type="date" id="s-blocked-date-input"
+            style="flex:1;border:1.5px solid var(--border);border-radius:8px;padding:8px 12px;font-size:14px;outline:none">
+          <button onclick="addBlockedDate()"
+            style="background:var(--primary);color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap">+ Προσθήκη</button>
+        </div>
+        <div id="blocked-dates-list" style="display:flex;flex-wrap:wrap;gap:6px;min-height:24px"></div>
+        <p style="font-size:12px;color:var(--text-muted);margin:8px 0 0">Αυτές οι ημέρες/ημερομηνίες εμφανίζονται ως μη διαθέσιμες στο chat.</p>
+      </div>
+
+      <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px">
+        <button onclick="closeSettings()" style="background:none;border:1.5px solid var(--border);border-radius:8px;padding:10px 20px;font-size:14px;cursor:pointer">Άκυρο</button>
+        <button id="save-settings-btn" onclick="saveSettings()" style="background:var(--primary);color:#fff;border:none;border-radius:8px;padding:10px 24px;font-size:14px;font-weight:600;cursor:pointer">Αποθήκευση</button>
+      </div>
+      <div id="settings-msg" style="font-size:13px;text-align:center;margin-top:12px"></div>
+    </div>
+  </div>
+
+  <main>
+    <div class="stats-grid">
+      <div class="stat-card purple">
+        <div class="num" id="stat-total">—</div>
+        <div class="label">Σύνολο</div>
+      </div>
+      <div class="stat-card green">
+        <div class="num" id="stat-today">—</div>
+        <div class="label">Σήμερα</div>
+      </div>
+      <div class="stat-card orange">
+        <div class="num" id="stat-upcoming">—</div>
+        <div class="label">Επερχόμενα</div>
+      </div>
+      <div class="stat-card green">
+        <div class="num" id="stat-revenue">—</div>
+        <div class="label">Έσοδα μήνα (€)</div>
+      </div>
+    </div>
+
+    <div id="extra-stats" style="display:none;display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;">
+      <div style="background:#fff;border-radius:10px;padding:14px 18px;box-shadow:var(--shadow);flex:1;min-width:160px;">
+        <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;font-weight:600;margin-bottom:4px">💅 Δημοφιλέστερη</div>
+        <div id="stat-top-service" style="font-size:14px;font-weight:700;color:var(--text)">—</div>
+      </div>
+      <div style="background:#fff;border-radius:10px;padding:14px 18px;box-shadow:var(--shadow);flex:1;min-width:160px;">
+        <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;font-weight:600;margin-bottom:4px">📅 Πιο πολυάσχολη</div>
+        <div id="stat-top-day" style="font-size:14px;font-weight:700;color:var(--text)">—</div>
+      </div>
+    </div>
+
+    <!-- Campaigns Card -->
+    <div id="campaigns-card" style="background:#fff;border-radius:12px;padding:20px 24px;box-shadow:var(--shadow);margin-bottom:20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+      <div style="flex:1;min-width:200px">
+        <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:3px">📣 Reactivation Campaign</div>
+        <div style="font-size:13px;color:var(--text-muted)">Στείλε email σε πελάτες που δεν ήρθαν 45+ μέρες</div>
+      </div>
+      <div id="campaign-eligible" style="font-size:13px;color:var(--text-muted)"></div>
+      <button id="reactivate-btn" onclick="runReactivation()"
+        style="background:var(--primary);color:#fff;border:none;border-radius:8px;padding:10px 20px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap">
+        🚀 Στείλε τώρα
+      </button>
+    </div>
+
+    <div class="controls">
+      <input type="date" id="filter-date" title="Φιλτράρισμα ημέρας">
+      <select id="filter-status">
+        <option value="">Όλα</option>
+        <option value="confirmed">Επιβεβαιωμένα</option>
+        <option value="cancelled">Ακυρωμένα</option>
+      </select>
+      <button class="refresh-btn" onclick="loadBookings()">↻ Ανανέωση</button>
+      <button class="refresh-btn" onclick="exportCSV()" style="background:var(--green);color:#fff;border-color:var(--green)">📥 Excel</button>
+    </div>
+
+    <div class="table-wrap">
+      <div id="loading-state">Φόρτωση ραντεβού...</div>
+      <table id="bookings-table" style="display:none">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Πελάτης</th>
+            <th>Υπηρεσία</th>
+            <th>Ημ/νία &amp; Ώρα</th>
+            <th>Κατάσταση</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+      <div id="empty-state" class="empty-state" style="display:none">
+        <div class="icon">📅</div>
+        <div style="font-weight:600;margin-bottom:4px">Δεν βρέθηκαν ραντεβού</div>
+        <div style="font-size:13px">Δοκίμασε διαφορετικό φίλτρο.</div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+  const SLUG = location.pathname.replace(/^\/admin\/?/, '').split('/')[0];
+  let TOKEN = localStorage.getItem('admin_token_' + SLUG) || '';
+  let allBookings = [];
+
+  async function loadBizName() {
+    try {
+      const r = await fetch('/api/' + SLUG + '/info');
+      if (r.ok) {
+        const d = await r.json();
+        document.getElementById('auth-biz-name').textContent = d.name;
+      }
+    } catch(e) {}
+  }
+  loadBizName();
+
+  async function login() {
+    const tok = document.getElementById('token-input').value.trim();
+    if (!tok) return;
+    const r = await fetch('/api/' + SLUG + '/bookings', {
+      headers: { Authorization: 'Bearer ' + tok }
+    });
+    if (r.ok) {
+      TOKEN = tok;
+      localStorage.setItem('admin_token_' + SLUG, TOKEN);
+      showApp();
+    } else {
+      document.getElementById('auth-error').textContent = 'Λαθος token';
+    }
+  }
+
+  document.getElementById('token-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') login();
+  });
+
+  if (TOKEN) {
+    fetch('/api/' + SLUG + '/bookings', { headers: { Authorization: 'Bearer ' + TOKEN } })
+      .then(function(r) { if (r.ok) showApp(); })
+      .catch(function() {});
+  }
+
+  function showApp() {
+    document.getElementById('auth-screen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    document.getElementById('chat-link').href = '/' + SLUG;
+    loadInfo();
+    loadBookings();
+    loadCampaignStats();
+  }
+
+  async function loadCampaignStats() {
+    try {
+      var r = await fetch('/api/' + SLUG + '/campaigns/stats', {
+        headers: { Authorization: 'Bearer ' + TOKEN }
+      });
+      if (r.ok) {
+        var d = await r.json();
+        var el = document.getElementById('campaign-eligible');
+        if (d.reactivation_eligible > 0) {
+          el.textContent = d.reactivation_eligible + ' πελάτες έτοιμοι';
+          el.style.color = '#7C3AED';
+          el.style.fontWeight = '600';
+        } else {
+          el.textContent = 'Δεν υπάρχουν ανενεργοί πελάτες ακόμα';
+        }
+      }
+    } catch(e) {}
+  }
+
+  async function runReactivation() {
+    var btn = document.getElementById('reactivate-btn');
+    if (!confirm('Να σταλούν emails σε όλους τους ανενεργούς πελάτες (45+ μέρες);')) return;
+    btn.textContent = 'Αποστολή...'; btn.disabled = true;
+    try {
+      var r = await fetch('/api/' + SLUG + '/campaigns/reactivate', {
+        method: 'POST',
+        headers: { Authorization: 'Bearer ' + TOKEN }
+      });
+      var d = await r.json();
+      if (d.success) {
+        btn.textContent = '✅ Εστάλησαν ' + d.sent + ' emails';
+        btn.style.background = 'var(--success)';
+      } else {
+        btn.textContent = '🚀 Στείλε τώρα';
+        btn.disabled = false;
+      }
+    } catch(e) {
+      btn.textContent = 'Σφάλμα'; btn.disabled = false;
+    }
+  }
+
+  var servicePrices = {};
+
+  async function loadInfo() {
+    try {
+      const r = await fetch('/api/' + SLUG + '/info');
+      if (!r.ok) return;
+      const d = await r.json();
+      document.getElementById('biz-title').textContent = d.name;
+      document.title = 'Admin — ' + d.name;
+      bizInfo = d;
+      servicePrices = d.service_prices || {};
+      if (allBookings.length) renderStats(allBookings);
+    } catch(e) {}
+  }
+
+  async function loadBookings() {
+    try {
+      const r = await fetch('/api/' + SLUG + '/bookings', {
+        headers: { Authorization: 'Bearer ' + TOKEN }
+      });
+      if (!r.ok) {
+        if (r.status === 401) {
+          localStorage.removeItem('admin_token_' + SLUG);
+          location.reload();
+        }
+        return;
+      }
+      allBookings = await r.json();
+      renderStats(allBookings);
+      renderTable(allBookings);
+    } catch(e) { console.error(e); }
+  }
+
+  function renderStats(bookings) {
+    var today     = new Date().toISOString().split('T')[0];
+    var monthStart = today.slice(0,7) + '-01';
+    var confirmed = bookings.filter(function(b) { return b.status === 'confirmed'; });
+    var todayBk   = confirmed.filter(function(b) { return b.date === today; });
+    var upcoming  = confirmed.filter(function(b) { return b.date >= today; });
+    var thisMonth = confirmed.filter(function(b) { return b.date >= monthStart && b.date <= today; });
+
+    document.getElementById('stat-total').textContent    = confirmed.length;
+    document.getElementById('stat-today').textContent    = todayBk.length;
+    document.getElementById('stat-upcoming').textContent = upcoming.length;
+    document.getElementById('header-badge').textContent  = upcoming.length + ' επερχομενα';
+
+    // Revenue this month
+    var revenue = thisMonth.reduce(function(sum, b) {
+      return sum + (servicePrices[b.service] || 0);
+    }, 0);
+    document.getElementById('stat-revenue').textContent = revenue > 0 ? revenue + '€' : '—';
+
+    // Top service
+    var svcCount = {};
+    confirmed.forEach(function(b) { svcCount[b.service] = (svcCount[b.service] || 0) + 1; });
+    var topSvc = Object.keys(svcCount).sort(function(a,b){ return svcCount[b]-svcCount[a]; })[0];
+
+    // Busiest day
+    var dayNames = ['Κυριακή','Δευτέρα','Τρίτη','Τετάρτη','Πέμπτη','Παρασκευή','Σάββατο'];
+    var dayCount = {};
+    confirmed.forEach(function(b) {
+      var d = new Date(b.date + 'T00:00:00').getDay();
+      dayCount[d] = (dayCount[d] || 0) + 1;
+    });
+    var topDayIdx = Object.keys(dayCount).sort(function(a,b){ return dayCount[b]-dayCount[a]; })[0];
+    var topDay    = topDayIdx !== undefined ? dayNames[parseInt(topDayIdx)] : null;
+
+    if (topSvc || topDay) {
+      document.getElementById('extra-stats').style.display = 'flex';
+      document.getElementById('stat-top-service').textContent = topSvc ? topSvc + ' (' + svcCount[topSvc] + 'x)' : '—';
+      document.getElementById('stat-top-day').textContent     = topDay ? topDay + ' (' + dayCount[topDayIdx] + ' ραντ.)' : '—';
+    }
+  }
+
+  function renderTable(bookings) {
+    var filterDate = document.getElementById('filter-date').value;
+    var filterStatus = document.getElementById('filter-status').value;
+    var filtered = bookings;
+    if (filterDate) filtered = filtered.filter(function(b) { return b.date === filterDate; });
+    if (filterStatus) filtered = filtered.filter(function(b) { return b.status === filterStatus; });
+
+    var tbody = document.getElementById('tbody');
+    var table = document.getElementById('bookings-table');
+    var empty = document.getElementById('empty-state');
+    var loading = document.getElementById('loading-state');
+    loading.style.display = 'none';
+
+    if (!filtered.length) {
+      table.style.display = 'none';
+      empty.style.display = 'block';
+      return;
+    }
+    empty.style.display = 'none';
+    table.style.display = 'table';
+
+    filtered.sort(function(a, b) {
+      return (b.date + ' ' + b.time).localeCompare(a.date + ' ' + a.time);
+    });
+
+    tbody.innerHTML = filtered.map(function(b) {
+      var isCancelled = b.status === 'cancelled';
+      return '<tr class="' + (isCancelled ? 'cancelled' : '') + '">' +
+        '<td style="color:var(--text-muted);font-size:13px">#' + b.id + '</td>' +
+        '<td><div style="font-weight:600">' + esc(b.name) + '</div>' +
+        '<div style="font-size:12px;color:var(--text-muted)">' + esc(b.phone) + '</div></td>' +
+        '<td>' + esc(b.service) + '</td>' +
+        '<td><div style="font-weight:500">' + formatDate(b.date) + '</div>' +
+        '<div style="font-size:13px;color:var(--text-muted)">' + b.time + ' · ' + b.duration + 'λ</div></td>' +
+        '<td><span class="status-badge ' + b.status + '">' +
+        (b.status === 'confirmed' ? 'Επιβεβαιωμενο' : 'Ακυρωμενο') + '</span></td>' +
+        '<td>' + (!isCancelled ? '<button class="cancel-btn" onclick="cancelBooking(' + b.id + ')">Ακυρωση</button>' : '') + '</td>' +
+        '</tr>';
+    }).join('');
+  }
+
+  async function cancelBooking(id) {
+    if (!confirm('Ακυρωση ραντεβου;')) return;
+    var r = await fetch('/api/' + SLUG + '/bookings/' + id, {
+      method: 'DELETE',
+      headers: { Authorization: 'Bearer ' + TOKEN }
+    });
+    if (r.ok) loadBookings();
+    else alert('Αποτυχια ακυρωσης');
+  }
+
+  document.getElementById('filter-date').addEventListener('change', function() { renderTable(allBookings); });
+  document.getElementById('filter-status').addEventListener('change', function() { renderTable(allBookings); });
+
+  var bizInfo = {};
+  var _closedDays   = [];   // array of ints 0-6
+  var _blockedDates = [];   // array of 'YYYY-MM-DD'
+
+  var DAY_NAMES = ['Δευτέρα','Τρίτη','Τετάρτη','Πέμπτη','Παρασκευή','Σάββατο','Κυριακή'];
+
+  function buildClosedDaysGrid() {
+    var grid = document.getElementById('closed-days-grid');
+    if (grid.children.length) return;  // already built
+    DAY_NAMES.forEach(function(name, idx) {
+      var label = document.createElement('label');
+      label.style.cssText = 'display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer;background:#f3f4f6;border-radius:8px;padding:6px 12px;user-select:none;border:1.5px solid transparent';
+      var cb = document.createElement('input');
+      cb.type = 'checkbox';
+      cb.value = idx;
+      cb.id = 'cd-' + idx;
+      cb.addEventListener('change', function() {
+        label.style.background = cb.checked ? '#EDE9FE' : '#f3f4f6';
+        label.style.borderColor = cb.checked ? 'var(--primary)' : 'transparent';
+        label.style.color = cb.checked ? 'var(--primary)' : '';
+      });
+      label.appendChild(cb);
+      label.appendChild(document.createTextNode(name));
+      grid.appendChild(label);
+    });
+  }
+
+  function renderBlockedDatesList() {
+    var list = document.getElementById('blocked-dates-list');
+    list.innerHTML = _blockedDates.map(function(d) {
+      return '<span style="display:inline-flex;align-items:center;gap:4px;background:#FEF2F2;color:#EF4444;border-radius:20px;padding:3px 10px;font-size:12px;font-weight:600">' +
+        formatDate(d) +
+        '<button onclick="removeBlockedDate(\'' + d + '\')" style="background:none;border:none;color:#EF4444;cursor:pointer;font-size:14px;padding:0 0 0 2px;line-height:1">×</button>' +
+        '</span>';
+    }).join('');
+  }
+
+  function addBlockedDate() {
+    var v = document.getElementById('s-blocked-date-input').value;
+    if (!v) return;
+    if (_blockedDates.indexOf(v) === -1) {
+      _blockedDates.push(v);
+      _blockedDates.sort();
+    }
+    document.getElementById('s-blocked-date-input').value = '';
+    renderBlockedDatesList();
+  }
+
+  function removeBlockedDate(d) {
+    _blockedDates = _blockedDates.filter(function(x) { return x !== d; });
+    renderBlockedDatesList();
+  }
+
+  async function openSettings() {
+    buildClosedDaysGrid();
+    try {
+      const r = await fetch('/api/' + SLUG + '/info');
+      if (r.ok) {
+        bizInfo = await r.json();
+        document.getElementById('s-name').value    = bizInfo.name    || '';
+        document.getElementById('s-phone').value   = bizInfo.phone   || '';
+        document.getElementById('s-address').value = bizInfo.address || '';
+        document.getElementById('s-smtp-email').value = bizInfo.smtp_email || '';
+        document.getElementById('s-smtp-pass').value  = '';
+        document.getElementById('s-accent').value = bizInfo.accent_color || '#7C3AED';
+        document.getElementById('s-review-url').value    = bizInfo.google_review_url || '';
+        document.getElementById('s-questionnaire').value = bizInfo.questionnaire || '';
+
+        // Closed days — need to fetch from admin endpoint (info doesn't return them)
+        _closedDays   = Array.isArray(bizInfo.closed_days)   ? bizInfo.closed_days   : [];
+        _blockedDates = Array.isArray(bizInfo.blocked_dates) ? bizInfo.blocked_dates : [];
+
+        // Tick the right checkboxes
+        DAY_NAMES.forEach(function(_, idx) {
+          var cb = document.getElementById('cd-' + idx);
+          if (!cb) return;
+          cb.checked = _closedDays.indexOf(idx) !== -1;
+          var label = cb.parentElement;
+          label.style.background   = cb.checked ? '#EDE9FE' : '#f3f4f6';
+          label.style.borderColor  = cb.checked ? 'var(--primary)' : 'transparent';
+          label.style.color        = cb.checked ? 'var(--primary)' : '';
+        });
+        renderBlockedDatesList();
+      }
+    } catch(e) {}
+    document.getElementById('settings-overlay').style.display = 'flex';
+    document.getElementById('settings-msg').textContent = '';
+  }
+
+  function closeSettings() {
+    document.getElementById('settings-overlay').style.display = 'none';
+  }
+
+  async function saveSettings() {
+    var btn = document.getElementById('save-settings-btn');
+    btn.textContent = 'Αποθήκευση...'; btn.disabled = true;
+    var payload = {
+      name:    document.getElementById('s-name').value.trim(),
+      phone:   document.getElementById('s-phone').value.trim(),
+      address: document.getElementById('s-address').value.trim(),
+    };
+    var smtpEmail   = document.getElementById('s-smtp-email').value.trim();
+    var smtpPass    = document.getElementById('s-smtp-pass').value.trim();
+    var accentColor = document.getElementById('s-accent').value.trim();
+    var reviewUrl   = document.getElementById('s-review-url').value.trim();
+    var questionnaire = document.getElementById('s-questionnaire').value.trim();
+    if (smtpEmail)    payload.smtp_email       = smtpEmail;
+    if (smtpPass)     payload.smtp_password    = smtpPass;
+    if (accentColor)  payload.accent_color     = accentColor;
+    payload.google_review_url = reviewUrl;
+    payload.questionnaire     = questionnaire;
+    // Collect closed weekdays from checkboxes
+    var closedDays = [];
+    DAY_NAMES.forEach(function(_, idx) {
+      var cb = document.getElementById('cd-' + idx);
+      if (cb && cb.checked) closedDays.push(idx);
+    });
+    payload.closed_days   = closedDays;
+    payload.blocked_dates = _blockedDates.slice();
+    try {
+      var r = await fetch('/api/' + SLUG + '/settings', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + TOKEN },
+        body: JSON.stringify(payload)
+      });
+      var msg = document.getElementById('settings-msg');
+      if (r.ok) {
+        msg.style.color = 'var(--green)';
+        msg.textContent = '✅ Αποθηκεύτηκε!';
+        setTimeout(closeSettings, 1200);
+        loadInfo();
+      } else {
+        msg.style.color = '#e53e3e';
+        msg.textContent = 'Σφάλμα αποθήκευσης';
+      }
+    } catch(e) {
+      document.getElementById('settings-msg').textContent = 'Σφάλμα σύνδεσης';
+    } finally {
+      btn.textContent = 'Αποθήκευση'; btn.disabled = false;
+    }
+  }
+
+  document.getElementById('settings-overlay').addEventListener('click', function(e) {
+    if (e.target === this) closeSettings();
+  });
+
+  function exportCSV() {
+    var a = document.createElement('a');
+    a.href = '/api/' + SLUG + '/bookings/export';
+    a.download = 'randevou.csv';
+    a.setAttribute('authorization', TOKEN);
+    // Pass token via URL won't work — use fetch + blob instead
+    fetch('/api/' + SLUG + '/bookings/export', {
+      headers: { Authorization: 'Bearer ' + TOKEN }
+    }).then(function(r) { return r.blob(); })
+      .then(function(blob) {
+        var url = URL.createObjectURL(blob);
+        var a2 = document.createElement('a');
+        a2.href = url; a2.download = 'randevou-' + SLUG + '.csv';
+        a2.click(); URL.revokeObjectURL(url);
+      });
+  }
+
+  function esc(s) {
+    return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+  function formatDate(d) {
+    try {
+      return new Date(d + 'T00:00:00').toLocaleDateString('el-GR', {
+        weekday: 'short', day: 'numeric', month: 'short'
+      });
+    } catch(e) { return d; }
+  }
+</script>
+</body>
+</html>

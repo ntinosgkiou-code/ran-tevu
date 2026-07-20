@@ -1,0 +1,1418 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<title>Ran-Tevu · The AI receptionist that never sleeps</title>
+<meta name="description" content="AI receptionist για ελληνικές επιχειρήσεις. Απαντά 24/7, κλείνει ραντεβού σε 10 γλώσσες. €1 per booking. Πρώτος μήνας δωρεάν.">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Ran-Tevu — The AI receptionist that never sleeps">
+<meta property="og:description" content="€1 per booking. 1st month free. No commitment.">
+<meta property="og:url" content="https://www.ran-tevu.gr/premium">
+<link rel="canonical" href="https://www.ran-tevu.gr/premium">
+
+<!-- Tailwind -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        ink: { 50:'#f8fafc',100:'#f1f5f9',200:'#e2e8f0',300:'#cbd5e1',400:'#94a3b8',500:'#64748b',600:'#475569',700:'#334155',800:'#1e293b',900:'#0f172a',950:'#020617' }
+      },
+      fontFamily: {
+        sans:['Inter','system-ui','sans-serif'],
+        display:['"Instrument Serif"','Georgia','serif'],
+        mono:['"JetBrains Mono"','monospace']
+      },
+    }
+  }
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://unpkg.com/lenis@1.0.42/dist/lenis.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.8.1/dist/vanilla-tilt.min.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<style>
+* { margin:0; padding:0; box-sizing:border-box; -webkit-font-smoothing:antialiased; }
+html, body { background:#fbfaff; color:#0f172a; font-family:'Inter',system-ui,sans-serif; overflow-x:hidden; letter-spacing:-0.011em; }
+
+::-webkit-scrollbar { width:10px; }
+::-webkit-scrollbar-track { background:#f1f5f9; }
+::-webkit-scrollbar-thumb { background:linear-gradient(180deg,#818cf8,#c084fc); border-radius:5px; }
+::selection { background:#c4b5fd; color:#1e1b4b; }
+
+/* Custom cursor */
+.cursor-dot,.cursor-ring { position:fixed; top:0; left:0; pointer-events:none; z-index:9999; }
+.cursor-dot { width:6px; height:6px; background:#6366f1; border-radius:50%; transform:translate(-50%,-50%); }
+.cursor-ring { width:38px; height:38px; border:1.5px solid rgba(99,102,241,0.5); border-radius:50%; transform:translate(-50%,-50%); transition:width 0.2s,height 0.2s,background 0.2s; }
+.cursor-ring.hover { width:64px; height:64px; background:rgba(168,85,247,0.08); border-color:#a855f7; }
+@media (hover:none),(max-width:768px){ .cursor-dot,.cursor-ring{display:none;} }
+
+/* Aurora gradient background */
+.aurora-bg {
+  position:fixed; inset:0; z-index:-4;
+  background:
+    radial-gradient(at 27% 37%, hsla(215,98%,80%,0.55) 0px, transparent 50%),
+    radial-gradient(at 97% 21%, hsla(269,98%,85%,0.55) 0px, transparent 50%),
+    radial-gradient(at 52% 99%, hsla(330,95%,88%,0.5) 0px, transparent 50%),
+    radial-gradient(at 10% 29%, hsla(189,100%,80%,0.5) 0px, transparent 50%),
+    radial-gradient(at 97% 96%, hsla(264,100%,88%,0.45) 0px, transparent 50%),
+    radial-gradient(at 33% 50%, hsla(46,100%,85%,0.4) 0px, transparent 50%),
+    radial-gradient(at 79% 53%, hsla(160,80%,85%,0.4) 0px, transparent 50%),
+    #fbfaff;
+}
+
+/* MASSIVE futuristic perspective grid floor */
+.grid-floor {
+  position:fixed; bottom:-10%; left:-10%; right:-10%; height:80vh; z-index:-3; pointer-events:none;
+  perspective:600px; perspective-origin:50% 0%;
+  opacity:0.45;
+}
+.grid-floor::before {
+  content:''; position:absolute; inset:0;
+  background-image:
+    linear-gradient(rgba(99,102,241,0.4) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(168,85,247,0.4) 1px, transparent 1px);
+  background-size:80px 80px;
+  transform:rotateX(60deg) translateZ(0);
+  transform-origin:50% 0%;
+  animation:grid-move 20s linear infinite;
+  mask-image:radial-gradient(ellipse at 50% 0%, black 0%, transparent 70%);
+  -webkit-mask-image:radial-gradient(ellipse at 50% 0%, black 0%, transparent 70%);
+}
+@keyframes grid-move { from { background-position: 0 0, 0 0; } to { background-position: 0 160px, 0 0; } }
+
+/* Massive pulsing sun/orb at top center */
+.sun-orb {
+  position:fixed; top:-15vh; left:50%; transform:translateX(-50%); z-index:-3; pointer-events:none;
+  width:90vmin; height:90vmin; max-width:900px; max-height:900px;
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 50% 50%,
+      rgba(168,85,247,0.35) 0%,
+      rgba(236,72,153,0.2) 25%,
+      rgba(99,102,241,0.15) 45%,
+      transparent 70%);
+  filter:blur(40px);
+  animation:sun-pulse 8s ease-in-out infinite;
+}
+@keyframes sun-pulse {
+  0%,100% { transform:translateX(-50%) scale(1); opacity:0.7; }
+  50% { transform:translateX(-50%) scale(1.15); opacity:1; }
+}
+
+/* Concentric pulse rings under hero */
+.pulse-rings {
+  position:fixed; top:40%; left:50%; transform:translate(-50%,-50%); z-index:-3; pointer-events:none;
+  width:70vmin; height:70vmin; max-width:700px; max-height:700px;
+}
+.pulse-ring {
+  position:absolute; inset:0; border-radius:50%;
+  border:1px solid rgba(99,102,241,0.15);
+  animation:ring-expand 6s ease-out infinite;
+  opacity:0;
+}
+.pulse-ring:nth-child(1) { animation-delay:0s; }
+.pulse-ring:nth-child(2) { animation-delay:2s; }
+.pulse-ring:nth-child(3) { animation-delay:4s; }
+@keyframes ring-expand {
+  0% { transform:scale(0.3); opacity:0; }
+  20% { opacity:1; }
+  100% { transform:scale(1.6); opacity:0; }
+}
+
+/* Cinematic conic light rays from sun */
+.sun-rays {
+  position:fixed; top:-25vh; left:50%; transform:translateX(-50%); z-index:-3; pointer-events:none;
+  width:140vmin; height:140vmin; max-width:1400px; max-height:1400px;
+  background:conic-gradient(from 0deg,
+    transparent 0deg, rgba(168,85,247,0.10) 10deg, transparent 20deg,
+    transparent 50deg, rgba(99,102,241,0.08) 60deg, transparent 70deg,
+    transparent 100deg, rgba(236,72,153,0.10) 110deg, transparent 120deg,
+    transparent 150deg, rgba(167,139,250,0.08) 160deg, transparent 170deg,
+    transparent 200deg, rgba(244,114,182,0.08) 210deg, transparent 220deg,
+    transparent 250deg, rgba(129,140,248,0.08) 260deg, transparent 270deg,
+    transparent 300deg, rgba(196,181,253,0.08) 310deg, transparent 320deg);
+  border-radius:50%;
+  animation:rotate-rays 60s linear infinite;
+  filter:blur(20px);
+}
+@keyframes rotate-rays {
+  from { transform:translateX(-50%) rotate(0deg); }
+  to { transform:translateX(-50%) rotate(360deg); }
+}
+
+/* Voice waveform bars */
+.waveform { display:flex; align-items:center; gap:3px; height:24px; }
+.waveform-bar {
+  width:3px; background:linear-gradient(180deg,#6366f1,#a855f7,#ec4899);
+  border-radius:2px; transform-origin:center;
+  animation:wave 1.2s ease-in-out infinite;
+}
+.waveform-bar:nth-child(1) { height:30%; animation-delay:0.0s; }
+.waveform-bar:nth-child(2) { height:60%; animation-delay:0.1s; }
+.waveform-bar:nth-child(3) { height:90%; animation-delay:0.2s; }
+.waveform-bar:nth-child(4) { height:100%; animation-delay:0.3s; }
+.waveform-bar:nth-child(5) { height:70%; animation-delay:0.4s; }
+.waveform-bar:nth-child(6) { height:45%; animation-delay:0.5s; }
+.waveform-bar:nth-child(7) { height:85%; animation-delay:0.6s; }
+.waveform-bar:nth-child(8) { height:55%; animation-delay:0.7s; }
+.waveform-bar:nth-child(9) { height:75%; animation-delay:0.8s; }
+.waveform-bar:nth-child(10) { height:35%; animation-delay:0.9s; }
+.waveform-bar:nth-child(11) { height:65%; animation-delay:1.0s; }
+.waveform-bar:nth-child(12) { height:25%; animation-delay:1.1s; }
+@keyframes wave { 0%,100% { transform:scaleY(0.4); } 50% { transform:scaleY(1); } }
+
+/* Subtle noise overlay */
+.noise-overlay {
+  position:fixed; inset:0; z-index:-1; pointer-events:none; opacity:0.04;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Three.js orbs canvas */
+#three-canvas { position:fixed; top:0; left:0; width:100%; height:100%; z-index:-2; pointer-events:none; opacity:0.75; }
+
+/* Glass cards */
+.glass {
+  background:rgba(255,255,255,0.55);
+  backdrop-filter:blur(20px) saturate(180%);
+  -webkit-backdrop-filter:blur(20px) saturate(180%);
+  border:1px solid rgba(255,255,255,0.85);
+  box-shadow:0 8px 32px rgba(99,102,241,0.08), inset 0 1px 0 rgba(255,255,255,0.9);
+}
+.glass-soft {
+  background:rgba(255,255,255,0.7);
+  backdrop-filter:blur(24px);
+  border:1px solid rgba(226,232,240,0.8);
+  box-shadow:0 4px 24px rgba(99,102,241,0.06);
+}
+.glass-nav {
+  background:rgba(251,250,255,0.75);
+  backdrop-filter:blur(28px) saturate(200%);
+  -webkit-backdrop-filter:blur(28px) saturate(200%);
+  border-bottom:1px solid rgba(226,232,240,0.5);
+}
+
+/* Gradient text */
+.gradient-text {
+  background:linear-gradient(135deg,#6366f1 0%,#a855f7 50%,#ec4899 100%);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  background-clip:text;
+  background-size:200% auto;
+  animation:gradient-shift 6s ease infinite;
+}
+@keyframes gradient-shift { 0%,100%{background-position:0% 50%;} 50%{background-position:100% 50%;} }
+.gradient-text-static { background:linear-gradient(135deg,#6366f1,#a855f7); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+
+.display-italic { font-family:'Instrument Serif',serif; font-style:italic; font-weight:400; }
+
+/* Magnetic transforms */
+.magnetic { transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1); }
+
+/* Buttons */
+.btn-primary {
+  display:inline-flex; align-items:center; gap:10px;
+  padding:15px 30px; border-radius:999px;
+  background:linear-gradient(135deg,#6366f1 0%,#a855f7 100%);
+  color:white; font-weight:600; font-size:15px;
+  box-shadow:0 10px 30px -10px rgba(99,102,241,0.5), inset 0 1px 0 rgba(255,255,255,0.3);
+  position:relative; overflow:hidden;
+  transition:transform 0.3s, box-shadow 0.3s;
+}
+.btn-primary::before {
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(135deg,#4f46e5 0%,#9333ea 100%);
+  opacity:0; transition:opacity 0.3s;
+}
+.btn-primary:hover { transform:translateY(-2px); box-shadow:0 20px 40px -10px rgba(99,102,241,0.6); }
+.btn-primary:hover::before { opacity:1; }
+.btn-primary > * { position:relative; z-index:1; }
+
+.btn-ghost {
+  display:inline-flex; align-items:center; gap:10px;
+  padding:15px 30px; border-radius:999px;
+  background:rgba(255,255,255,0.6); backdrop-filter:blur(10px);
+  color:#0f172a; font-weight:500; font-size:15px;
+  border:1px solid rgba(99,102,241,0.2);
+  transition:background 0.2s, border 0.2s, transform 0.3s;
+}
+.btn-ghost:hover { background:rgba(255,255,255,0.95); border-color:rgba(99,102,241,0.4); transform:translateY(-2px); }
+
+/* Tag */
+.tag {
+  display:inline-flex; align-items:center; gap:6px;
+  padding:6px 14px; border-radius:999px;
+  background:rgba(255,255,255,0.7); backdrop-filter:blur(10px);
+  border:1px solid rgba(99,102,241,0.15);
+  font-size:12px; font-weight:500; color:#4f46e5;
+}
+.tag-dot { width:6px; height:6px; border-radius:50%; background:#10b981; animation:pulse-dot 2s infinite; }
+@keyframes pulse-dot { 0%{box-shadow:0 0 0 0 rgba(16,185,129,0.7);} 70%{box-shadow:0 0 0 10px rgba(16,185,129,0);} 100%{box-shadow:0 0 0 0 rgba(16,185,129,0);} }
+
+/* Marquee */
+.marquee { display:flex; overflow:hidden; user-select:none; gap:60px; mask-image:linear-gradient(90deg,transparent,black 10%,black 90%,transparent); }
+.marquee-track { display:flex; flex-shrink:0; gap:60px; animation:scroll 30s linear infinite; align-items:center; }
+@keyframes scroll { from{transform:translateX(0);} to{transform:translateX(calc(-50% - 30px));} }
+
+/* Float */
+@keyframes float { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-15px);} }
+.float-a { animation:float 6s ease-in-out infinite; }
+.float-b { animation:float 7s ease-in-out infinite; animation-delay:-2s; }
+
+/* Card lift */
+.card-lift { transition:transform 0.4s cubic-bezier(0.4,0,0.2,1), box-shadow 0.4s; }
+.card-lift:hover { transform:translateY(-6px); box-shadow:0 30px 60px -20px rgba(99,102,241,0.2); }
+
+/* Reveal — NO initial hidden state in CSS so content stays visible if JS fails.
+   GSAP sets opacity:0 only after page loads, then animates to visible. */
+.reveal { will-change: opacity, transform; }
+.js-ready .reveal { opacity: 0; transform: translateY(40px); }
+
+/* Phone */
+.phone-shell {
+  background:linear-gradient(145deg,#1e293b,#0f172a);
+  border-radius:40px; padding:14px;
+  box-shadow:
+    0 60px 80px -20px rgba(99,102,241,0.4),
+    0 30px 60px -30px rgba(168,85,247,0.3),
+    inset 0 2px 0 rgba(255,255,255,0.1),
+    0 0 0 1px rgba(15,23,42,0.8);
+  position:relative;
+}
+.phone-shell::before { content:''; position:absolute; top:14px; left:50%; transform:translateX(-50%); width:100px; height:28px; background:#0f172a; border-radius:0 0 18px 18px; z-index:2; }
+.phone-screen { background:linear-gradient(180deg,#fefdff 0%,#f3f0ff 100%); border-radius:28px; padding:42px 16px 16px; min-height:490px; position:relative; overflow:hidden; }
+
+/* Pricing card gradient border */
+.ring-gradient {
+  position:relative; border-radius:28px;
+  background:linear-gradient(white,white) padding-box,
+             linear-gradient(135deg,#6366f1,#a855f7,#ec4899) border-box;
+  border:2px solid transparent;
+  box-shadow:0 20px 50px -15px rgba(168,85,247,0.3);
+}
+
+/* Feature icon */
+.feature-icon {
+  width:48px; height:48px; border-radius:14px;
+  background:linear-gradient(135deg,#eef2ff,#faf5ff);
+  border:1px solid rgba(99,102,241,0.15);
+  display:inline-flex; align-items:center; justify-content:center;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.8);
+}
+
+.ticker-digit { font-variant-numeric:tabular-nums; }
+
+/* Mobile menu */
+.mobile-menu { transform:translateX(100%); transition:transform 0.4s cubic-bezier(0.4,0,0.2,1); }
+.mobile-menu.open { transform:translateX(0); }
+
+/* Glow dot */
+.glow-dot { width:8px; height:8px; border-radius:50%; background:#818cf8; box-shadow:0 0 20px 4px rgba(129,140,248,0.5); }
+
+/* ════════ LIVE CHAT WIDGET ════════ */
+.chat-fab {
+  position:fixed; bottom:24px; right:24px; z-index:998;
+  display:flex; align-items:center; gap:12px;
+  padding:14px 22px 14px 16px; border-radius:999px;
+  background:linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
+  color:white; font-weight:600; font-size:14px;
+  border:none; cursor:pointer;
+  box-shadow:0 12px 40px -10px rgba(168,85,247,0.6), 0 0 0 0 rgba(168,85,247,0.4);
+  animation:fab-pulse 2.5s ease-out infinite;
+  transition:transform 0.3s, box-shadow 0.3s;
+}
+.chat-fab:hover { transform:translateY(-3px) scale(1.03); }
+.chat-fab-icon { width:32px; height:32px; border-radius:50%; background:rgba(255,255,255,0.2); display:flex; align-items:center; justify-content:center; }
+@keyframes fab-pulse {
+  0% { box-shadow:0 12px 40px -10px rgba(168,85,247,0.6), 0 0 0 0 rgba(168,85,247,0.5); }
+  70% { box-shadow:0 12px 40px -10px rgba(168,85,247,0.6), 0 0 0 24px rgba(168,85,247,0); }
+  100% { box-shadow:0 12px 40px -10px rgba(168,85,247,0.6), 0 0 0 0 rgba(168,85,247,0); }
+}
+
+.chat-overlay {
+  position:fixed; inset:0; background:rgba(15,23,42,0.4); backdrop-filter:blur(8px);
+  z-index:999; opacity:0; pointer-events:none; transition:opacity 0.3s;
+}
+.chat-overlay.open { opacity:1; pointer-events:auto; }
+
+.chat-panel {
+  position:fixed; bottom:0; right:0; z-index:1000;
+  width:100%; max-width:420px; height:100vh; max-height:680px;
+  background:rgba(255,255,255,0.98);
+  backdrop-filter:blur(40px) saturate(180%);
+  border-radius:24px 24px 0 0;
+  box-shadow:-20px 0 60px -10px rgba(99,102,241,0.3), 0 -10px 40px -10px rgba(168,85,247,0.2);
+  display:flex; flex-direction:column; overflow:hidden;
+  transform:translateY(100%); transition:transform 0.4s cubic-bezier(0.4,0,0.2,1);
+}
+@media (min-width:640px) {
+  .chat-panel { bottom:24px; right:24px; height:600px; border-radius:24px; }
+}
+.chat-panel.open { transform:translateY(0); }
+
+.chat-header {
+  padding:18px 20px; border-bottom:1px solid rgba(226,232,240,0.6);
+  display:flex; align-items:center; justify-content:space-between;
+  background:linear-gradient(135deg, rgba(238,242,255,0.6), rgba(250,245,255,0.6));
+}
+.chat-header-info { display:flex; align-items:center; gap:12px; }
+.chat-avatar { width:42px; height:42px; border-radius:50%; background:linear-gradient(135deg,#6366f1,#ec4899); display:flex; align-items:center; justify-content:center; color:white; font-weight:700; position:relative; }
+.chat-avatar::after { content:''; position:absolute; bottom:-1px; right:-1px; width:12px; height:12px; border-radius:50%; background:#10b981; border:2px solid white; }
+.chat-title { font-weight:600; font-size:15px; color:#0f172a; }
+.chat-subtitle { font-size:11px; color:#64748b; display:flex; align-items:center; gap:4px; }
+.chat-subtitle::before { content:''; width:6px; height:6px; border-radius:50%; background:#10b981; animation:pulse-dot 2s infinite; }
+.chat-close { background:rgba(255,255,255,0.6); border:none; width:34px; height:34px; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; color:#475569; transition:background 0.2s; }
+.chat-close:hover { background:rgba(255,255,255,1); }
+
+.chat-messages { flex:1; overflow-y:auto; padding:18px 16px; display:flex; flex-direction:column; gap:10px; }
+.chat-messages::-webkit-scrollbar { width:4px; }
+.chat-messages::-webkit-scrollbar-thumb { background:rgba(99,102,241,0.3); border-radius:2px; }
+
+.chat-msg { max-width:80%; padding:11px 14px; border-radius:18px; font-size:14px; line-height:1.5; animation:msg-in 0.3s ease-out; }
+@keyframes msg-in { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+.chat-msg.bot { align-self:flex-start; background:#f1f5f9; color:#0f172a; border-bottom-left-radius:4px; }
+.chat-msg.user { align-self:flex-end; background:linear-gradient(135deg,#6366f1,#8b5cf6); color:white; border-bottom-right-radius:4px; }
+.chat-msg.typing { background:#f1f5f9; padding:14px 16px; }
+.chat-typing-dot { display:inline-block; width:7px; height:7px; border-radius:50%; background:#94a3b8; margin:0 2px; animation:typing 1.4s infinite ease-in-out; }
+.chat-typing-dot:nth-child(2) { animation-delay:0.2s; }
+.chat-typing-dot:nth-child(3) { animation-delay:0.4s; }
+@keyframes typing { 0%,60%,100% { opacity:0.3; transform:translateY(0); } 30% { opacity:1; transform:translateY(-4px); } }
+
+.chat-input-area { padding:14px 16px; border-top:1px solid rgba(226,232,240,0.6); background:rgba(255,255,255,0.8); }
+.chat-input-wrap { display:flex; gap:8px; align-items:flex-end; background:#f8fafc; border:1px solid rgba(226,232,240,0.8); border-radius:20px; padding:6px 6px 6px 16px; transition:border 0.2s; }
+.chat-input-wrap:focus-within { border-color:#a78bfa; box-shadow:0 0 0 3px rgba(167,139,250,0.15); }
+.chat-input { flex:1; background:transparent; border:none; outline:none; font-size:14px; color:#0f172a; resize:none; padding:8px 0; font-family:inherit; max-height:100px; }
+.chat-send { width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg,#6366f1,#a855f7); border:none; color:white; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:transform 0.2s; }
+.chat-send:hover { transform:scale(1.08); }
+.chat-send:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
+
+.chat-foot { padding:6px 16px 10px; text-align:center; font-size:10px; color:#94a3b8; }
+.chat-foot a { color:#6366f1; }
+
+/* Link underline */
+.link-underline { position:relative; }
+.link-underline::after { content:''; position:absolute; left:0; bottom:-2px; width:100%; height:1px; background:linear-gradient(90deg,#6366f1,#a855f7); transform:scaleX(0); transform-origin:right; transition:transform 0.4s cubic-bezier(0.4,0,0.2,1); }
+.link-underline:hover::after { transform:scaleX(1); transform-origin:left; }
+
+/* FAQ */
+details summary { list-style:none; cursor:pointer; }
+details summary::-webkit-details-marker { display:none; }
+details[open] .faq-icon { transform:rotate(45deg); }
+.faq-icon { transition:transform 0.3s; }
+
+@media (prefers-reduced-motion:reduce) {
+  *,*::before,*::after { animation:none !important; transition:none !important; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="cursor-dot"></div>
+<div class="cursor-ring"></div>
+
+<div class="aurora-bg"></div>
+<div class="sun-rays"></div>
+<div class="sun-orb"></div>
+<div class="pulse-rings">
+  <div class="pulse-ring"></div>
+  <div class="pulse-ring"></div>
+  <div class="pulse-ring"></div>
+</div>
+<div class="grid-floor"></div>
+<div class="noise-overlay"></div>
+<canvas id="three-canvas"></canvas>
+
+<!-- NAV -->
+<nav class="fixed top-0 left-0 right-0 z-50 glass-nav">
+  <div class="max-w-7xl mx-auto px-6 py-3.5 flex items-center justify-between">
+    <a href="#hero" class="flex items-center gap-3 group">
+      <div class="relative w-9 h-9 rounded-xl overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-br from-indigo-500 via-violet-500 to-pink-500"></div>
+        <div class="absolute inset-0 flex items-center justify-center text-white font-bold text-base">R</div>
+      </div>
+      <span class="font-semibold text-ink-900 tracking-tight">Ran-Tevu</span>
+    </a>
+
+    <div class="hidden md:flex items-center gap-9 text-sm text-ink-600 font-medium">
+      <a href="#features" class="link-underline hover:text-ink-900 transition">Features</a>
+      <a href="#how" class="link-underline hover:text-ink-900 transition">How it works</a>
+      <a href="#pricing" class="link-underline hover:text-ink-900 transition">Pricing</a>
+      <a href="#faq" class="link-underline hover:text-ink-900 transition">FAQ</a>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <a href="https://cal.com/randevu-konstantinois/15min" target="_blank" class="hidden md:inline-flex btn-primary magnetic" style="padding:11px 22px; font-size:14px;">
+        Book demo
+        <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+      </a>
+      <button id="menu-btn" class="md:hidden text-ink-900 p-2"><i data-lucide="menu"></i></button>
+    </div>
+  </div>
+</nav>
+
+<div id="mobile-menu" class="mobile-menu fixed top-0 right-0 h-full w-80 glass-nav z-40 p-8 pt-24">
+  <div class="flex flex-col gap-6 text-lg">
+    <a href="#features" class="text-ink-700">Features</a>
+    <a href="#how" class="text-ink-700">How it works</a>
+    <a href="#pricing" class="text-ink-700">Pricing</a>
+    <a href="#faq" class="text-ink-700">FAQ</a>
+    <a href="https://cal.com/randevu-konstantinois/15min" target="_blank" class="btn-primary mt-6 justify-center">Book demo</a>
+  </div>
+</div>
+
+<!-- HERO -->
+<section id="hero" class="relative min-h-screen flex items-center pt-32 pb-24 px-6">
+  <div class="max-w-7xl mx-auto w-full grid lg:grid-cols-[1.1fr_0.9fr] gap-16 items-center">
+
+    <div>
+      <div class="reveal tag mb-8">
+        <span class="tag-dot"></span>
+        New · €1 per booking · 1st month free
+      </div>
+
+      <h1 class="font-display text-[clamp(2.75rem,8vw,6.5rem)] leading-[0.95] tracking-tight text-ink-950 mb-8">
+        <span class="block reveal">The receptionist</span>
+        <span class="block reveal">that <span class="display-italic gradient-text">never sleeps.</span></span>
+      </h1>
+
+      <p class="reveal text-lg md:text-xl text-ink-600 mb-10 max-w-xl leading-relaxed font-light">
+        AI που απαντά σε κάθε κλήση, κλείνει κάθε ραντεβού σε <span class="text-ink-900 font-medium">10 γλώσσες</span>, και χρεώνει
+        <span class="text-ink-900 font-medium">μόνο όταν δουλέψει</span>.
+      </p>
+
+      <div class="reveal flex flex-col sm:flex-row gap-4 mb-12">
+        <a href="https://cal.com/randevu-konstantinois/15min" target="_blank" class="btn-primary magnetic">
+          Book free 15-min demo
+          <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </a>
+        <a href="#how" class="btn-ghost magnetic">
+          <i data-lucide="play" class="w-4 h-4"></i>
+          See how it works
+        </a>
+      </div>
+
+      <div class="reveal flex flex-wrap items-center gap-6 text-sm text-ink-500 mb-8">
+        <div class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-indigo-500"></i> No credit card</div>
+        <div class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-indigo-500"></i> 30-day refund</div>
+        <div class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-indigo-500"></i> 3-min setup</div>
+      </div>
+
+      <div class="reveal flex items-center gap-3 text-ink-500 text-xs uppercase tracking-widest font-medium">
+        <span>Voice active</span>
+        <div class="waveform">
+          <div class="waveform-bar"></div><div class="waveform-bar"></div><div class="waveform-bar"></div>
+          <div class="waveform-bar"></div><div class="waveform-bar"></div><div class="waveform-bar"></div>
+          <div class="waveform-bar"></div><div class="waveform-bar"></div><div class="waveform-bar"></div>
+          <div class="waveform-bar"></div><div class="waveform-bar"></div><div class="waveform-bar"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="reveal flex justify-center lg:justify-end">
+      <div class="phone-shell w-[300px] md:w-[340px] float-a" data-tilt data-tilt-max="6" data-tilt-speed="800" data-tilt-glare data-tilt-max-glare="0.15">
+        <div class="phone-screen">
+          <div class="flex items-center justify-between mb-4 pt-2">
+            <div class="flex items-center gap-3">
+              <div class="relative">
+                <div class="w-11 h-11 rounded-full bg-gradient-to-br from-indigo-500 to-pink-500 flex items-center justify-center text-white text-lg font-semibold">M</div>
+                <div class="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-emerald-400 border-2 border-white"></div>
+              </div>
+              <div>
+                <div class="font-semibold text-sm text-ink-900">Madlen · AI</div>
+                <div class="text-xs text-ink-500 flex items-center gap-1.5">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                  In call · 01:24
+                </div>
+              </div>
+            </div>
+            <i data-lucide="phone-call" class="w-5 h-5 text-indigo-500"></i>
+          </div>
+
+          <div class="space-y-2.5 text-sm">
+            <div class="bg-white/80 rounded-2xl rounded-bl-md p-3 max-w-[85%] shadow-sm border border-ink-100">
+              <div class="text-[10px] font-semibold text-indigo-500 mb-1 uppercase tracking-wider">AI</div>
+              <span class="text-ink-800">Καλημέρα! Πώς μπορώ να σας εξυπηρετήσω;</span>
+            </div>
+            <div class="bg-gradient-to-br from-indigo-500 to-violet-600 text-white rounded-2xl rounded-br-md p-3 max-w-[85%] ml-auto shadow-sm">
+              <div class="text-[10px] font-semibold text-white/70 mb-1 uppercase tracking-wider">Caller</div>
+              Θέλω ραντεβού για αύριο 10:00
+            </div>
+            <div class="bg-white/80 rounded-2xl rounded-bl-md p-3 max-w-[85%] shadow-sm border border-ink-100">
+              <div class="text-[10px] font-semibold text-indigo-500 mb-1 uppercase tracking-wider">AI</div>
+              <span class="text-ink-800">Διαθέσιμη! Σας έκλεισα. Έρχεται SMS τώρα.</span>
+            </div>
+          </div>
+
+          <div class="absolute bottom-4 left-4 right-4 p-3 rounded-2xl bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200">
+            <div class="flex items-center gap-2 text-emerald-700 text-xs font-semibold">
+              <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+              Booking confirmed · €1 earned
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-ink-400">
+    <span class="text-[10px] uppercase tracking-widest">Scroll</span>
+    <div class="w-px h-12 bg-gradient-to-b from-indigo-400 to-transparent"></div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<section class="py-12 px-6">
+  <div class="max-w-7xl mx-auto">
+    <p class="reveal text-center text-xs uppercase tracking-[0.2em] text-ink-400 mb-8 font-medium">Powered by the world's best AI stack</p>
+    <div class="marquee">
+      <div class="marquee-track text-ink-500 font-mono text-base font-medium">
+        <span>Claude · Anthropic</span><span class="text-indigo-300">•</span>
+        <span>Vapi Voice AI</span><span class="text-indigo-300">•</span>
+        <span>ElevenLabs</span><span class="text-indigo-300">•</span>
+        <span>Twilio</span><span class="text-indigo-300">•</span>
+        <span>Resend</span><span class="text-indigo-300">•</span>
+        <span>Stripe</span><span class="text-indigo-300">•</span>
+        <span>Railway · EU</span><span class="text-indigo-300">•</span>
+      </div>
+      <div class="marquee-track text-ink-500 font-mono text-base font-medium" aria-hidden="true">
+        <span>Claude · Anthropic</span><span class="text-indigo-300">•</span>
+        <span>Vapi Voice AI</span><span class="text-indigo-300">•</span>
+        <span>ElevenLabs</span><span class="text-indigo-300">•</span>
+        <span>Twilio</span><span class="text-indigo-300">•</span>
+        <span>Resend</span><span class="text-indigo-300">•</span>
+        <span>Stripe</span><span class="text-indigo-300">•</span>
+        <span>Railway · EU</span><span class="text-indigo-300">•</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="py-32 px-6 relative">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-20">
+      <div class="reveal tag mb-6">
+        <i data-lucide="alert-triangle" class="w-3 h-3"></i>
+        Tα νούμερα που κρύβει η σιωπή
+      </div>
+      <h2 class="reveal font-display text-[clamp(2.5rem,7vw,5.5rem)] leading-[1.02] tracking-tight text-ink-950 mb-6 max-w-5xl mx-auto">
+        Κάθε χρόνο χάνεις<br>
+        <span class="display-italic gradient-text">€126.000.</span>
+      </h2>
+      <p class="reveal text-lg md:text-2xl text-ink-600 max-w-3xl mx-auto font-light leading-relaxed">
+        Σε χαμένες κλήσεις. Σε χαμένα ραντεβού. Σε πελάτες που πήγαν στον <span class="text-ink-900 font-medium">πιο γρήγορο ανταγωνιστή</span>.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+      <div class="reveal glass-soft rounded-3xl p-8 card-lift" data-tilt data-tilt-max="8">
+        <div class="text-6xl md:text-7xl font-display gradient-text-static mb-3 ticker-digit" data-counter="74" data-suffix="%">0%</div>
+        <div class="text-ink-700 font-medium mb-1">των κλήσεων αναπάντητες</div>
+        <div class="text-ink-400 text-sm">όταν είσαι με πελάτη ή εκτός ωραρίου</div>
+      </div>
+      <div class="reveal glass-soft rounded-3xl p-8 card-lift" data-tilt data-tilt-max="8">
+        <div class="text-6xl md:text-7xl font-display gradient-text-static mb-3 ticker-digit" data-counter="450" data-prefix="€">€0</div>
+        <div class="text-ink-700 font-medium mb-1">μέσο έσοδο ανά ραντεβού</div>
+        <div class="text-ink-400 text-sm">υγεία, ομορφιά, ξενοδοχεία</div>
+      </div>
+      <div class="reveal glass-soft rounded-3xl p-8 card-lift" data-tilt data-tilt-max="8">
+        <div class="text-6xl md:text-7xl font-display gradient-text-static mb-3 ticker-digit" data-counter="93" data-suffix="%">0%</div>
+        <div class="text-ink-700 font-medium mb-1">δεν σε ξανακαλούν ποτέ</div>
+        <div class="text-ink-400 text-sm">πάνε στον επόμενο που απαντά</div>
+      </div>
+      <div class="reveal ring-gradient p-8 card-lift" data-tilt data-tilt-max="8">
+        <div class="text-6xl md:text-7xl font-display gradient-text mb-3 ticker-digit" data-counter="126" data-prefix="€" data-suffix="K">€0K</div>
+        <div class="text-ink-900 font-semibold mb-1">καθαρή απώλεια / χρόνο</div>
+        <div class="text-ink-500 text-sm">μέσος όρος SMB Ελλάδα 2025</div>
+      </div>
+    </div>
+
+    <div class="reveal mt-14 text-center">
+      <p class="text-ink-500 text-sm max-w-2xl mx-auto">
+        Πηγές: NextPhone SMB Research 2025 · McKinsey Hospitality 2024 · Greek SMB Voice Benchmark
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features" class="py-32 px-6 relative">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-20">
+      <div class="reveal tag mb-6"><i data-lucide="sparkles" class="w-3 h-3"></i> Built for revenue</div>
+      <h2 class="reveal font-display text-[clamp(2.5rem,6vw,5rem)] leading-[1.02] tracking-tight text-ink-950 mb-6">
+        Six superpowers,<br>
+        <span class="display-italic gradient-text">one tireless agent.</span>
+      </h2>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+      <div class="reveal glass rounded-3xl p-7 card-lift" data-tilt data-tilt-max="6" data-tilt-glare data-tilt-max-glare="0.1">
+        <div class="feature-icon mb-5"><i data-lucide="phone-call" class="w-5 h-5 text-indigo-600"></i></div>
+        <h3 class="text-xl font-semibold text-ink-900 mb-2.5 tracking-tight">Real Greek Voice</h3>
+        <p class="text-ink-600 leading-relaxed">Native Greek + 9 γλώσσες. Tourist καλεί ξενοδοχείο → AI απαντά στη γλώσσα του.</p>
+      </div>
+
+      <div class="reveal glass rounded-3xl p-7 card-lift" data-tilt data-tilt-max="6" data-tilt-glare data-tilt-max-glare="0.1">
+        <div class="feature-icon mb-5"><i data-lucide="calendar-check" class="w-5 h-5 text-violet-600"></i></div>
+        <h3 class="text-xl font-semibold text-ink-900 mb-2.5 tracking-tight">Auto-Book Calendar</h3>
+        <p class="text-ink-600 leading-relaxed">Συνδέεται με Google Calendar, Outlook, ή το PMS σου. Zero double-bookings.</p>
+      </div>
+
+      <div class="reveal glass rounded-3xl p-7 card-lift" data-tilt data-tilt-max="6" data-tilt-glare data-tilt-max-glare="0.1">
+        <div class="feature-icon mb-5"><i data-lucide="brain-circuit" class="w-5 h-5 text-pink-600"></i></div>
+        <h3 class="text-xl font-semibold text-ink-900 mb-2.5 tracking-tight">Customer Memory</h3>
+        <p class="text-ink-600 leading-relaxed">Θυμάται κάθε καλούντα. "Καλώς ήρθατε κ. Παπαδόπουλε — ίδια ώρα όπως τον προηγούμενο μήνα;"</p>
+      </div>
+
+      <div class="reveal glass rounded-3xl p-7 card-lift" data-tilt data-tilt-max="6" data-tilt-glare data-tilt-max-glare="0.1">
+        <div class="feature-icon mb-5"><i data-lucide="message-square" class="w-5 h-5 text-cyan-600"></i></div>
+        <h3 class="text-xl font-semibold text-ink-900 mb-2.5 tracking-tight">Chat Everywhere</h3>
+        <p class="text-ink-600 leading-relaxed">Site widget + WhatsApp + Instagram DM + Booking.com — all in one unified inbox.</p>
+      </div>
+
+      <div class="reveal glass rounded-3xl p-7 card-lift" data-tilt data-tilt-max="6" data-tilt-glare data-tilt-max-glare="0.1">
+        <div class="feature-icon mb-5"><i data-lucide="bell-ring" class="w-5 h-5 text-amber-600"></i></div>
+        <h3 class="text-xl font-semibold text-ink-900 mb-2.5 tracking-tight">Smart Reminders</h3>
+        <p class="text-ink-600 leading-relaxed">SMS + email 24h και 4h πριν. Μειώνει τα no-shows κατά <span class="font-semibold text-ink-900">40%</span>.</p>
+      </div>
+
+      <div class="reveal glass rounded-3xl p-7 card-lift" data-tilt data-tilt-max="6" data-tilt-glare data-tilt-max-glare="0.1">
+        <div class="feature-icon mb-5"><i data-lucide="shield-check" class="w-5 h-5 text-emerald-600"></i></div>
+        <h3 class="text-xl font-semibold text-ink-900 mb-2.5 tracking-tight">GDPR + EU AI Act</h3>
+        <p class="text-ink-600 leading-relaxed">EU-hosted (Ireland), audit-logged, fully compliant. Optional BAA για healthcare.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW -->
+<section id="how" class="py-32 px-6 relative">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-20">
+      <div class="reveal tag mb-6"><i data-lucide="rocket" class="w-3 h-3"></i> Live in 3 minutes</div>
+      <h2 class="reveal font-display text-[clamp(2.5rem,6vw,5rem)] leading-[1.02] tracking-tight text-ink-950">
+        From signup to<br>
+        <span class="display-italic gradient-text">first booking.</span>
+      </h2>
+    </div>
+
+    <div class="space-y-6">
+      <div class="reveal glass rounded-3xl p-8 md:p-12 grid md:grid-cols-[auto_1fr_auto] gap-8 items-center card-lift">
+        <div class="text-7xl md:text-8xl font-display gradient-text-static leading-none">01</div>
+        <div>
+          <h3 class="text-2xl md:text-3xl font-semibold text-ink-900 mb-3 tracking-tight">Sign up & tell us your services</h3>
+          <p class="text-ink-600 text-lg leading-relaxed">Όνομα, ώρες λειτουργίας, υπηρεσίες με τιμές. Διάρκεια: 3 λεπτά.</p>
+        </div>
+        <div class="hidden md:flex w-20 h-20 rounded-2xl bg-gradient-to-br from-indigo-100 to-violet-100 items-center justify-center"><i data-lucide="user-plus" class="w-8 h-8 text-indigo-600"></i></div>
+      </div>
+
+      <div class="reveal glass rounded-3xl p-8 md:p-12 grid md:grid-cols-[auto_1fr_auto] gap-8 items-center card-lift">
+        <div class="text-7xl md:text-8xl font-display gradient-text-static leading-none">02</div>
+        <div>
+          <h3 class="text-2xl md:text-3xl font-semibold text-ink-900 mb-3 tracking-tight">We give you your AI number</h3>
+          <p class="text-ink-600 text-lg leading-relaxed">Πραγματικός ελληνικός αριθμός. Δημοσίευσέ τον σαν νέα γραμμή Ή κάνε forward την υπάρχουσα.</p>
+        </div>
+        <div class="hidden md:flex w-20 h-20 rounded-2xl bg-gradient-to-br from-violet-100 to-pink-100 items-center justify-center"><i data-lucide="phone-incoming" class="w-8 h-8 text-violet-600"></i></div>
+      </div>
+
+      <div class="reveal glass rounded-3xl p-8 md:p-12 grid md:grid-cols-[auto_1fr_auto] gap-8 items-center card-lift">
+        <div class="text-7xl md:text-8xl font-display gradient-text-static leading-none">03</div>
+        <div>
+          <h3 class="text-2xl md:text-3xl font-semibold text-ink-900 mb-3 tracking-tight">First booking → €1 charged</h3>
+          <p class="text-ink-600 text-lg leading-relaxed">Πληρώνεις μόνο όταν το AI κλείσει πραγματικό ραντεβού. Zero risk. Πρώτος μήνας: <span class="font-semibold text-ink-900">δωρεάν</span>.</p>
+        </div>
+        <div class="hidden md:flex w-20 h-20 rounded-2xl bg-gradient-to-br from-pink-100 to-amber-100 items-center justify-center"><i data-lucide="sparkles" class="w-8 h-8 text-pink-600"></i></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing" class="py-32 px-6 relative">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-20">
+      <div class="reveal tag mb-6"><i data-lucide="tag" class="w-3 h-3"></i> Pay for results, not promises</div>
+      <h2 class="reveal font-display text-[clamp(2.5rem,6vw,5rem)] leading-[1.02] tracking-tight text-ink-950 mb-6">
+        Honest <span class="display-italic gradient-text">pricing.</span>
+      </h2>
+      <p class="reveal text-lg text-ink-600 max-w-2xl mx-auto font-light">Tρεις τρόποι να κερδίσεις. Διάλεξε αυτό που ταιριάζει.</p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="reveal glass rounded-[28px] p-8 card-lift">
+        <div class="inline-flex items-center gap-2 mb-6 text-xs font-semibold text-indigo-600 uppercase tracking-wider">
+          <div class="w-1.5 h-1.5 rounded-full bg-indigo-500"></div> Performance
+        </div>
+        <div class="mb-6">
+          <div class="flex items-baseline gap-2">
+            <span class="text-6xl font-display text-ink-950">€1</span>
+            <span class="text-ink-500 text-sm">per booking</span>
+          </div>
+          <div class="text-emerald-600 text-sm mt-2 font-medium">€0 monthly · cancel anytime</div>
+        </div>
+        <ul class="space-y-3 text-ink-700 mb-8">
+          <li class="flex items-start gap-3"><i data-lucide="check" class="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5"></i><span>Pay only when AI books a real customer</span></li>
+          <li class="flex items-start gap-3"><i data-lucide="check" class="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5"></i><span>Chat στο website + WhatsApp</span></li>
+          <li class="flex items-start gap-3"><i data-lucide="check" class="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5"></i><span>10+ γλώσσες auto-detected</span></li>
+          <li class="flex items-start gap-3"><i data-lucide="check" class="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5"></i><span>Calendar sync + reminders</span></li>
+          <li class="flex items-start gap-3"><i data-lucide="check" class="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5"></i><span>Cancel anytime, no commitment</span></li>
+        </ul>
+        <a href="https://cal.com/randevu-konstantinois/15min" target="_blank" class="block text-center btn-ghost w-full justify-center">Start free trial →</a>
+      </div>
+
+      <div class="reveal ring-gradient p-8 card-lift relative">
+        <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full bg-gradient-to-r from-indigo-500 to-pink-500 text-white text-xs font-semibold tracking-wide uppercase shadow-lg">Most Popular</div>
+        <div class="inline-flex items-center gap-2 mb-6 mt-2 text-xs font-semibold text-violet-600 uppercase tracking-wider">
+          <div class="w-1.5 h-1.5 rounded-full bg-violet-500"></div> Voice Receptionist
+        </div>
+        <div class="mb-6">
+          <div class="flex items-baseline gap-2">
+            <span class="text-6xl font-display text-ink-950">€99</span>
+            <span class="text-ink-500 text-sm">/ month</span>
+          </div>
+          <div class="text-emerald-600 text-sm mt-2 font-medium">1st month FREE · no card</div>
+        </div>
+        <ul class="space-y-3 text-ink-700 mb-8">
+          <li class="flex items-start gap-3"><i data-lucide="check" class="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5"></i><span><strong>Πραγματικός Ελληνικός αριθμός</strong></span></li>
+          <li class="flex items-start gap-3"><i data-lucide="check" class="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5"></i><span>AI φωνή 24/7</span></li>
+          <li class="flex items-start gap-3"><i data-lucide="check" class="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5"></i><span>Unlimited calls + bookings</span></li>
+          <li class="flex items-start gap-3"><i data-lucide="check" class="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5"></i><span>Transfer σε εσένα για urgent</span></li>
+          <li class="flex items-start gap-3"><i data-lucide="check" class="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5"></i><span>Chat + SMS confirmations</span></li>
+          <li class="flex items-start gap-3"><i data-lucide="check" class="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5"></i><span>Admin dashboard + analytics</span></li>
+        </ul>
+        <a href="https://cal.com/randevu-konstantinois/15min" target="_blank" class="block text-center btn-primary w-full justify-center">Start free trial →</a>
+      </div>
+
+      <div class="reveal glass rounded-[28px] p-8 card-lift">
+        <div class="inline-flex items-center gap-2 mb-6 text-xs font-semibold text-pink-600 uppercase tracking-wider">
+          <div class="w-1.5 h-1.5 rounded-full bg-pink-500"></div> Hotel Pro
+        </div>
+        <div class="mb-6">
+          <div class="flex items-baseline gap-2">
+            <span class="text-6xl font-display text-ink-950">€199</span>
+            <span class="text-ink-500 text-sm">/ month</span>
+          </div>
+          <div class="text-emerald-600 text-sm mt-2 font-medium">For 30+ rooms · founder priority</div>
+        </div>
+        <ul class="space-y-3 text-ink-700 mb-8">
+          <li class="flex items-start gap-3"><i data-lucide="check" class="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5"></i><span><strong>Everything in Voice +</strong></span></li>
+          <li class="flex items-start gap-3"><i data-lucide="check" class="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5"></i><span>Memory layer (guest history)</span></li>
+          <li class="flex items-start gap-3"><i data-lucide="check" class="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5"></i><span>Proactive outbound (upsells)</span></li>
+          <li class="flex items-start gap-3"><i data-lucide="check" class="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5"></i><span>Multi-channel inbox</span></li>
+          <li class="flex items-start gap-3"><i data-lucide="check" class="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5"></i><span>Booking.com + Airbnb sync</span></li>
+          <li class="flex items-start gap-3"><i data-lucide="check" class="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5"></i><span>Priority founder support</span></li>
+        </ul>
+        <a href="https://cal.com/randevu-konstantinois/15min" target="_blank" class="block text-center btn-ghost w-full justify-center">Book demo →</a>
+      </div>
+    </div>
+
+    <div class="reveal mt-12 max-w-3xl mx-auto glass-soft rounded-2xl p-6 text-center">
+      <div class="flex items-center justify-center gap-3 mb-2">
+        <i data-lucide="shield-check" class="w-5 h-5 text-emerald-600"></i>
+        <span class="font-semibold text-ink-900">30-day money-back guarantee</span>
+      </div>
+      <p class="text-ink-500 text-sm">Aν δεν φέρει περισσότερα bookings από όσο κοστίζει τον πρώτο μήνα, full refund. No questions.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" class="py-32 px-6 relative">
+  <div class="max-w-3xl mx-auto">
+    <div class="text-center mb-16">
+      <div class="reveal tag mb-6"><i data-lucide="help-circle" class="w-3 h-3"></i> Common questions</div>
+      <h2 class="reveal font-display text-[clamp(2.5rem,6vw,5rem)] leading-[1.02] tracking-tight text-ink-950">
+        <span class="display-italic gradient-text">Questions?</span>
+      </h2>
+    </div>
+
+    <div class="space-y-3">
+      <details class="reveal glass-soft rounded-2xl p-6 group">
+        <summary class="flex items-center justify-between font-semibold text-ink-900 text-lg">
+          <span>Πρέπει να αλλάξω τον αριθμό μου;</span>
+          <span class="faq-icon w-8 h-8 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600 text-xl leading-none">+</span>
+        </summary>
+        <p class="text-ink-600 mt-4 leading-relaxed">Όχι. Παίρνεις νέο Ελληνικό αριθμό. Δημοσίευσέ τον σαν νέα γραμμή, ή κάνε forward τον υπάρχοντα μετά τις ώρες σου.</p>
+      </details>
+
+      <details class="reveal glass-soft rounded-2xl p-6 group">
+        <summary class="flex items-center justify-between font-semibold text-ink-900 text-lg">
+          <span>Tι αν ρωτήσει κάποιος κάτι πολύπλοκο;</span>
+          <span class="faq-icon w-8 h-8 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600 text-xl leading-none">+</span>
+        </summary>
+        <p class="text-ink-600 mt-4 leading-relaxed">Tο AI κάνει transfer σε εσένα (ή όποιον ορίσεις). Standard policy: οτιδήποτε πέρα από booking/info → human.</p>
+      </details>
+
+      <details class="reveal glass-soft rounded-2xl p-6 group">
+        <summary class="flex items-center justify-between font-semibold text-ink-900 text-lg">
+          <span>Πραγματικά €1/booking χωρίς hidden fees;</span>
+          <span class="faq-icon w-8 h-8 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600 text-xl leading-none">+</span>
+        </summary>
+        <p class="text-ink-600 mt-4 leading-relaxed">Ναι. €0 monthly, €0 setup, €1 μόνο όταν το AI κλείσει επιβεβαιωμένο ραντεβού. Aν θέλεις predictability, υπάρχουν flat plans.</p>
+      </details>
+
+      <details class="reveal glass-soft rounded-2xl p-6 group">
+        <summary class="flex items-center justify-between font-semibold text-ink-900 text-lg">
+          <span>GDPR + data protection;</span>
+          <span class="faq-icon w-8 h-8 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600 text-xl leading-none">+</span>
+        </summary>
+        <p class="text-ink-600 mt-4 leading-relaxed">EU-hosted (Ireland), encrypted στο rest + transit, audit-logged, full DPA διαθέσιμο. Δεν εκπαιδεύουμε ποτέ AI στα δεδομένα σου.</p>
+      </details>
+
+      <details class="reveal glass-soft rounded-2xl p-6 group">
+        <summary class="flex items-center justify-between font-semibold text-ink-900 text-lg">
+          <span>Μπορώ να ακυρώσω οποτεδήποτε;</span>
+          <span class="faq-icon w-8 h-8 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600 text-xl leading-none">+</span>
+        </summary>
+        <p class="text-ink-600 mt-4 leading-relaxed">Nαι. Ένα κλικ. No long-term contracts. Επιπλέον 30-day money-back σε flat plans.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="py-32 px-6 relative">
+  <div class="max-w-5xl mx-auto reveal">
+    <div class="glass rounded-[40px] p-12 md:p-20 text-center relative overflow-hidden">
+      <div class="absolute -top-20 -right-20 w-64 h-64 rounded-full bg-gradient-to-br from-indigo-300 to-pink-300 opacity-30 blur-3xl float-a"></div>
+      <div class="absolute -bottom-20 -left-20 w-64 h-64 rounded-full bg-gradient-to-br from-cyan-300 to-violet-300 opacity-30 blur-3xl float-b"></div>
+
+      <div class="relative">
+        <h2 class="font-display text-[clamp(2.25rem,6vw,5rem)] leading-[1.02] tracking-tight text-ink-950 mb-6">
+          Stop losing<br>
+          <span class="display-italic gradient-text">€450 every call.</span>
+        </h2>
+        <p class="text-lg md:text-xl text-ink-600 mb-10 max-w-2xl mx-auto font-light">
+          15 λεπτά. Πραγματικό demo στον δικό σου αριθμό. Δες ακριβώς τι θα ακούσουν οι πελάτες σου.
+        </p>
+        <a href="https://cal.com/randevu-konstantinois/15min" target="_blank" class="btn-primary magnetic text-base" style="padding:18px 36px;">
+          Book free 15-min demo
+          <i data-lucide="arrow-right" class="w-5 h-5"></i>
+        </a>
+        <p class="mt-6 text-sm text-ink-500">No hard sell. No slides. Just a live call on your line.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ LIVE CHAT WIDGET ════════ -->
+<button id="chat-fab" class="chat-fab" aria-label="Open live chat">
+  <span class="chat-fab-icon">
+    <i data-lucide="message-circle" class="w-4 h-4"></i>
+  </span>
+  Try it live
+</button>
+
+<div id="chat-overlay" class="chat-overlay"></div>
+
+<div id="chat-panel" class="chat-panel" role="dialog" aria-label="Live AI chat">
+  <div class="chat-header">
+    <div class="chat-header-info">
+      <div class="chat-avatar">M</div>
+      <div>
+        <div class="chat-title">Madlen · AI Receptionist</div>
+        <div class="chat-subtitle">Live · απαντά σε &lt;2s</div>
+      </div>
+    </div>
+    <button id="chat-close" class="chat-close" aria-label="Close chat">
+      <i data-lucide="x" class="w-4 h-4"></i>
+    </button>
+  </div>
+
+  <div id="chat-messages" class="chat-messages">
+    <!-- messages injected here -->
+  </div>
+
+  <div class="chat-input-area">
+    <div class="chat-input-wrap">
+      <textarea id="chat-input" class="chat-input" rows="1" placeholder="Γράψε το μήνυμά σου..." aria-label="Message"></textarea>
+      <button id="chat-send" class="chat-send" aria-label="Send">
+        <i data-lucide="arrow-up" class="w-4 h-4"></i>
+      </button>
+    </div>
+    <div class="chat-foot">Powered by Ran-Tevu AI · <a href="#pricing">Demo only</a></div>
+  </div>
+</div>
+
+<footer class="border-t border-ink-200/50 py-12 px-6">
+  <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+    <div class="flex items-center gap-3 text-sm">
+      <div class="w-7 h-7 rounded-lg bg-gradient-to-br from-indigo-500 to-pink-500 flex items-center justify-center text-white font-bold text-xs">R</div>
+      <span class="font-semibold text-ink-900">Ran-Tevu</span>
+      <span class="text-ink-400">© 2026 · Κωνσταντίνος Γκιουλμπαξιώτης</span>
+    </div>
+    <div class="flex items-center gap-6 text-sm text-ink-500">
+      <a href="/legal/terms" class="link-underline hover:text-ink-900">Terms</a>
+      <a href="/legal/privacy" class="link-underline hover:text-ink-900">Privacy</a>
+      <a href="/legal/dpa" class="link-underline hover:text-ink-900">DPA</a>
+      <a href="/legal/refunds" class="link-underline hover:text-ink-900">Refunds</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+lucide.createIcons();
+
+// Lenis smooth scroll
+const lenis = new Lenis({ duration:1.2, smoothWheel:true, lerp:0.08 });
+function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+requestAnimationFrame(raf);
+
+gsap.registerPlugin(ScrollTrigger);
+lenis.on('scroll', ScrollTrigger.update);
+gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+gsap.ticker.lagSmoothing(0);
+
+// Custom cursor
+const cursorDot = document.querySelector('.cursor-dot');
+const cursorRing = document.querySelector('.cursor-ring');
+let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+document.addEventListener('mousemove', (e) => {
+  mouseX = e.clientX; mouseY = e.clientY;
+  cursorDot.style.left = mouseX + 'px';
+  cursorDot.style.top = mouseY + 'px';
+});
+function updateRing() {
+  ringX += (mouseX - ringX) * 0.18;
+  ringY += (mouseY - ringY) * 0.18;
+  cursorRing.style.left = ringX + 'px';
+  cursorRing.style.top = ringY + 'px';
+  requestAnimationFrame(updateRing);
+}
+updateRing();
+document.querySelectorAll('a, button, .card-lift, [data-tilt], details summary').forEach(el => {
+  el.addEventListener('mouseenter', () => cursorRing.classList.add('hover'));
+  el.addEventListener('mouseleave', () => cursorRing.classList.remove('hover'));
+});
+
+// Magnetic buttons
+document.querySelectorAll('.magnetic').forEach(btn => {
+  btn.addEventListener('mousemove', (e) => {
+    const rect = btn.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+    btn.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
+  });
+  btn.addEventListener('mouseleave', () => { btn.style.transform = ''; });
+});
+
+// VanillaTilt
+VanillaTilt.init(document.querySelectorAll('[data-tilt]'), { max:6, speed:600, scale:1, glare:false });
+
+// Mobile menu
+const menuBtn = document.getElementById('menu-btn');
+const mobileMenu = document.getElementById('mobile-menu');
+let menuOpen = false;
+menuBtn?.addEventListener('click', () => { menuOpen = !menuOpen; mobileMenu.classList.toggle('open', menuOpen); });
+mobileMenu?.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { menuOpen = false; mobileMenu.classList.remove('open'); }));
+
+// Mark JS as ready — now CSS hides .reveal elements safely
+document.documentElement.classList.add('js-ready');
+
+// Hero timeline + section reveals (use fromTo to be explicit about both states)
+gsap.fromTo('#hero .reveal',
+  { opacity: 0, y: 40 },
+  { opacity: 1, y: 0, duration: 1, stagger: 0.08, ease: 'power3.out', delay: 0.1 }
+);
+
+document.querySelectorAll('section:not(#hero) .reveal').forEach(el => {
+  gsap.fromTo(el,
+    { opacity: 0, y: 40 },
+    { opacity: 1, y: 0, duration: 1, ease: 'power3.out',
+      scrollTrigger: { trigger: el, start: 'top 85%', toggleActions: 'play none none reverse' }
+    }
+  );
+});
+
+// Fallback: if GSAP didn't fire for some reason, force-show after 3s
+setTimeout(() => {
+  document.querySelectorAll('.reveal').forEach(el => {
+    if (window.getComputedStyle(el).opacity === '0') {
+      el.style.opacity = '1';
+      el.style.transform = 'none';
+    }
+  });
+}, 3000);
+
+// ═══════ COUNTERS — triple-redundant trigger system ═══════
+function animateCounter(el) {
+  if (el.dataset.animated === '1') return;
+  el.dataset.animated = '1';
+  const target = parseInt(el.dataset.counter, 10) || 0;
+  const prefix = el.dataset.prefix || '';
+  const suffix = el.dataset.suffix || '';
+  const startTime = performance.now();
+  const duration = 2200;
+  function step(now) {
+    const t = Math.min((now - startTime) / duration, 1);
+    const eased = 1 - Math.pow(1 - t, 3);
+    const value = Math.round(target * eased);
+    try {
+      el.textContent = prefix + value.toLocaleString('el-GR') + suffix;
+    } catch (e) {
+      el.textContent = prefix + value + suffix;
+    }
+    if (t < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+const counters = document.querySelectorAll('[data-counter]');
+
+// Trigger 1: IntersectionObserver (preferred)
+if ('IntersectionObserver' in window) {
+  const counterObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) animateCounter(entry.target);
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px 100px 0px' });
+  counters.forEach(el => counterObserver.observe(el));
+}
+
+// Trigger 2: scroll-based fallback (if observer never fires)
+function checkCountersByScroll() {
+  counters.forEach(el => {
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight && rect.bottom > 0) animateCounter(el);
+  });
+}
+window.addEventListener('scroll', checkCountersByScroll, { passive: true });
+checkCountersByScroll();  // run once on page load
+
+// Trigger 3: guaranteed force-animate after 4 seconds (covers all edge cases)
+setTimeout(() => {
+  counters.forEach(el => animateCounter(el));
+}, 4000);
+
+// ═══════════ CINEMATIC THREE.JS SCENE ═══════════
+const canvas = document.getElementById('three-canvas');
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(55, window.innerWidth/window.innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+// Multi-source lighting for cinematic depth
+scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+const keyLight = new THREE.DirectionalLight(0xc4b5fd, 0.8);
+keyLight.position.set(5, 8, 5);
+scene.add(keyLight);
+const rimLight = new THREE.DirectionalLight(0xf472b6, 0.5);
+rimLight.position.set(-5, -2, 3);
+scene.add(rimLight);
+const fillLight = new THREE.PointLight(0x67e8f9, 1, 30);
+fillLight.position.set(0, 0, 5);
+scene.add(fillLight);
+
+// CENTERPIECE — Big iridescent wireframe icosahedron
+const icoGroup = new THREE.Group();
+const icoGeo = new THREE.IcosahedronGeometry(2.8, 1);
+const icoMat = new THREE.MeshPhysicalMaterial({
+  color: 0xe9d5ff,
+  transparent: true, opacity: 0.25,
+  roughness: 0.0, metalness: 0.4,
+  transmission: 0.85, thickness: 1.5,
+  clearcoat: 1, clearcoatRoughness: 0,
+  ior: 1.4,
+});
+// Add iridescence if supported (Three.js r127+)
+try { icoMat.iridescence = 1; icoMat.iridescenceIOR = 1.3; } catch(e) {}
+const ico = new THREE.Mesh(icoGeo, icoMat);
+icoGroup.add(ico);
+
+const wireGeo = new THREE.IcosahedronGeometry(2.82, 1);
+const edges = new THREE.EdgesGeometry(wireGeo);
+const wireMat = new THREE.LineBasicMaterial({ color: 0xa855f7, transparent: true, opacity: 0.55 });
+const wireframe = new THREE.LineSegments(edges, wireMat);
+icoGroup.add(wireframe);
+icoGroup.position.set(0, 0.5, -5);
+scene.add(icoGroup);
+
+// Secondary torus knot for depth
+const torusGeo = new THREE.TorusKnotGeometry(0.9, 0.28, 100, 16);
+const torusMat = new THREE.MeshPhysicalMaterial({
+  color: 0xf0abfc,
+  transparent: true, opacity: 0.5,
+  roughness: 0.1, metalness: 0.5,
+  transmission: 0.7, thickness: 1,
+  clearcoat: 1,
+});
+try { torusMat.iridescence = 1; torusMat.iridescenceIOR = 1.4; } catch(e) {}
+const torus = new THREE.Mesh(torusGeo, torusMat);
+torus.position.set(-6, 2.5, -3);
+scene.add(torus);
+
+// Foreground glass orbs
+const sphereColors = [0x818cf8, 0xc084fc, 0xf0abfc, 0x67e8f9, 0xa78bfa, 0xfbbf24, 0x86efac];
+const spheres = [];
+const sphereCount = window.innerWidth < 768 ? 7 : 14;
+for (let i = 0; i < sphereCount; i++) {
+  const radius = 0.3 + Math.random() * 0.7;
+  const geo = new THREE.SphereGeometry(radius, 32, 32);
+  const mat = new THREE.MeshPhysicalMaterial({
+    color: sphereColors[i % sphereColors.length],
+    transparent: true, opacity: 0.45,
+    roughness: 0.05, metalness: 0.3,
+    transmission: 0.7, thickness: 1,
+    clearcoat: 1, clearcoatRoughness: 0.05,
+  });
+  try { mat.iridescence = 0.8; mat.iridescenceIOR = 1.3 + Math.random() * 0.2; } catch(e) {}
+  const sphere = new THREE.Mesh(geo, mat);
+  sphere.position.set(
+    (Math.random() - 0.5) * 18,
+    (Math.random() - 0.5) * 12,
+    (Math.random() - 0.5) * 10 - 2
+  );
+  sphere.userData = {
+    speedX: (Math.random() - 0.5) * 0.0025,
+    speedRot: (Math.random() - 0.5) * 0.006,
+    initialY: sphere.position.y,
+    phase: Math.random() * Math.PI * 2,
+    floatAmp: 0.4 + Math.random() * 0.4,
+  };
+  scene.add(sphere);
+  spheres.push(sphere);
+}
+
+// Distant particle field (depth haze)
+const particleCount = window.innerWidth < 768 ? 200 : 500;
+const particlePositions = new Float32Array(particleCount * 3);
+const particleColors = new Float32Array(particleCount * 3);
+const palette = [
+  [0.51, 0.55, 0.97],  // indigo
+  [0.66, 0.33, 0.97],  // violet
+  [0.94, 0.45, 0.74],  // pink
+  [0.40, 0.91, 0.98],  // cyan
+];
+for (let i = 0; i < particleCount; i++) {
+  particlePositions[i*3] = (Math.random() - 0.5) * 50;
+  particlePositions[i*3+1] = (Math.random() - 0.5) * 30;
+  particlePositions[i*3+2] = (Math.random() - 0.5) * 20 - 10;
+  const c = palette[Math.floor(Math.random() * palette.length)];
+  particleColors[i*3] = c[0]; particleColors[i*3+1] = c[1]; particleColors[i*3+2] = c[2];
+}
+const particleGeo = new THREE.BufferGeometry();
+particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
+particleGeo.setAttribute('color', new THREE.BufferAttribute(particleColors, 3));
+const particleMat = new THREE.PointsMaterial({
+  size: 0.08, vertexColors: true, transparent: true, opacity: 0.6,
+  blending: THREE.AdditiveBlending, depthWrite: false,
+});
+const particles = new THREE.Points(particleGeo, particleMat);
+scene.add(particles);
+
+camera.position.set(0, 0, 10);
+camera.lookAt(scene.position);
+
+// Interaction state
+let parallaxX = 0, parallaxY = 0;
+let scrollProgress = 0;
+document.addEventListener('mousemove', (e) => {
+  parallaxX = (e.clientX / window.innerWidth - 0.5) * 2;
+  parallaxY = (e.clientY / window.innerHeight - 0.5) * 2;
+});
+
+// Scroll-driven cinematic camera dolly
+function updateScrollCamera() {
+  const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+  scrollProgress = maxScroll > 0 ? window.scrollY / maxScroll : 0;
+}
+window.addEventListener('scroll', updateScrollCamera, { passive: true });
+if (typeof lenis !== 'undefined') {
+  lenis.on('scroll', updateScrollCamera);
+}
+
+const clock = new THREE.Clock();
+function animate3d() {
+  requestAnimationFrame(animate3d);
+  const t = clock.getElapsedTime();
+
+  // Centerpiece — slow majestic rotation
+  icoGroup.rotation.x = t * 0.08;
+  icoGroup.rotation.y = t * 0.12;
+  icoGroup.position.y = 0.5 + Math.sin(t * 0.4) * 0.3;
+
+  // Torus knot rotation
+  torus.rotation.x = t * 0.3;
+  torus.rotation.y = t * 0.2;
+  torus.position.x = -6 + Math.sin(t * 0.3) * 0.5;
+
+  // Floating spheres
+  spheres.forEach((s) => {
+    s.position.y = s.userData.initialY + Math.sin(t * 0.7 + s.userData.phase) * s.userData.floatAmp;
+    s.position.x += s.userData.speedX;
+    if (Math.abs(s.position.x) > 11) s.userData.speedX *= -1;
+    s.rotation.y += s.userData.speedRot;
+    s.rotation.x += s.userData.speedRot * 0.5;
+  });
+
+  // Particles slow drift
+  particles.rotation.y = t * 0.015;
+  particles.rotation.x = Math.sin(t * 0.05) * 0.1;
+
+  // Cinematic camera — mouse parallax + scroll dolly
+  const targetX = parallaxX * 0.6;
+  const targetY = -parallaxY * 0.4 + scrollProgress * 1.5;
+  const targetZ = 10 + scrollProgress * 3;  // pull back as you scroll
+  camera.position.x += (targetX - camera.position.x) * 0.04;
+  camera.position.y += (targetY - camera.position.y) * 0.04;
+  camera.position.z += (targetZ - camera.position.z) * 0.04;
+  camera.lookAt(0, scrollProgress * 1.2, 0);
+
+  renderer.render(scene, camera);
+}
+animate3d();
+
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+// ════════ LIVE CHAT WIDGET LOGIC ════════
+const chatFab = document.getElementById('chat-fab');
+const chatOverlay = document.getElementById('chat-overlay');
+const chatPanel = document.getElementById('chat-panel');
+const chatClose = document.getElementById('chat-close');
+const chatMessages = document.getElementById('chat-messages');
+const chatInput = document.getElementById('chat-input');
+const chatSend = document.getElementById('chat-send');
+
+const CHAT_SLUG = 'beauty-demo';  // demo bot — γενικό ραντεβού
+const chatHistory = [];
+let chatOpened = false;
+
+function openChat() {
+  chatOverlay.classList.add('open');
+  chatPanel.classList.add('open');
+  if (!chatOpened) {
+    chatOpened = true;
+    setTimeout(() => {
+      appendMessage('bot', 'Καλημέρα! 👋 Είμαι η Madlen, η AI γραμματέας. Πες μου τι ραντεβού θες — π.χ. "θέλω καθαρισμό αύριο 10:00".');
+    }, 300);
+  }
+  setTimeout(() => chatInput.focus(), 400);
+}
+
+function closeChat() {
+  chatOverlay.classList.remove('open');
+  chatPanel.classList.remove('open');
+}
+
+chatFab.addEventListener('click', openChat);
+chatOverlay.addEventListener('click', closeChat);
+chatClose.addEventListener('click', closeChat);
+
+function appendMessage(role, text) {
+  const msg = document.createElement('div');
+  msg.className = 'chat-msg ' + (role === 'user' ? 'user' : 'bot');
+  msg.textContent = text;
+  chatMessages.appendChild(msg);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+  return msg;
+}
+
+function showTyping() {
+  const t = document.createElement('div');
+  t.className = 'chat-msg bot typing';
+  t.id = 'chat-typing';
+  t.innerHTML = '<span class="chat-typing-dot"></span><span class="chat-typing-dot"></span><span class="chat-typing-dot"></span>';
+  chatMessages.appendChild(t);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function hideTyping() {
+  const t = document.getElementById('chat-typing');
+  if (t) t.remove();
+}
+
+async function sendChatMessage() {
+  const text = chatInput.value.trim();
+  if (!text) return;
+
+  chatInput.value = '';
+  chatInput.style.height = 'auto';
+  chatSend.disabled = true;
+
+  appendMessage('user', text);
+  chatHistory.push({ role: 'user', content: text });
+  showTyping();
+
+  try {
+    const res = await fetch(`/api/${CHAT_SLUG}/chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ history: chatHistory, lang: 'el' })
+    });
+    const data = await res.json();
+    hideTyping();
+    const reply = data.reply || 'Συγγνώμη, κάτι δεν πήγε καλά. Δοκίμασε ξανά.';
+    appendMessage('bot', reply);
+    chatHistory.push({ role: 'assistant', content: reply });
+  } catch (err) {
+    hideTyping();
+    appendMessage('bot', '⚠️ Σφάλμα σύνδεσης. Δοκίμασε σε λίγο ή πάτησε "Book demo" παραπάνω.');
+    console.error(err);
+  } finally {
+    chatSend.disabled = false;
+    chatInput.focus();
+  }
+}
+
+chatSend.addEventListener('click', sendChatMessage);
+chatInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendChatMessage();
+  }
+});
+chatInput.addEventListener('input', () => {
+  chatInput.style.height = 'auto';
+  chatInput.style.height = Math.min(chatInput.scrollHeight, 100) + 'px';
+});
+
+// Aurora shift
+let auroraT = 0;
+function animateAurora() {
+  auroraT += 0.001;
+  const x1 = 27 + Math.sin(auroraT) * 15;
+  const y1 = 37 + Math.cos(auroraT * 0.8) * 12;
+  const x2 = 97 - Math.sin(auroraT * 1.2) * 10;
+  const y2 = 21 + Math.cos(auroraT) * 14;
+  const x3 = 52 + Math.cos(auroraT * 0.6) * 18;
+  const y3 = 99 - Math.sin(auroraT) * 10;
+  document.querySelector('.aurora-bg').style.background = `
+    radial-gradient(at ${x1}% ${y1}%, hsla(215,98%,80%,0.55) 0px, transparent 50%),
+    radial-gradient(at ${x2}% ${y2}%, hsla(269,98%,85%,0.55) 0px, transparent 50%),
+    radial-gradient(at ${x3}% ${y3}%, hsla(330,95%,88%,0.5) 0px, transparent 50%),
+    radial-gradient(at 10% 29%, hsla(189,100%,80%,0.5) 0px, transparent 50%),
+    radial-gradient(at 97% 96%, hsla(264,100%,88%,0.45) 0px, transparent 50%),
+    radial-gradient(at 33% 50%, hsla(46,100%,85%,0.4) 0px, transparent 50%),
+    radial-gradient(at 79% 53%, hsla(160,80%,85%,0.4) 0px, transparent 50%),
+    #fbfaff
+  `;
+  requestAnimationFrame(animateAurora);
+}
+animateAurora();
+</script>
+
+<script>
+  !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init capture register register_once register_for_session unregister unregister_for_session getFeatureFlag getFeatureFlagPayload isFeatureEnabled reloadFeatureFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSurveysLoaded onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException loadToolbar get_property getSessionProperty createPersonProfile opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing clear_opt_in_out_capturing debug getPageViewId captureTraceFeedback captureTraceMetric".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+  // posthog.init('phc_YOUR_KEY', { api_host: 'https://eu.i.posthog.com', person_profiles: 'always' });
+</script>
+
+</body>
+</html>

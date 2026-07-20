@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Compliance · GDPR + EU AI Act · Ran-Tevu</title>
+<meta name="description" content="Πλήρης τεκμηρίωση συμμόρφωσης Ran-Tevu με GDPR, EU AI Act, και privacy standards.">
+<style>
+  :root {
+    --bg: #FAFAFB;
+    --fg: #1B1B1F;
+    --muted: #6B6B73;
+    --accent: #6E56CF;
+    --card: #FFFFFF;
+    --border: #E6E6EA;
+    --ok: #10B981;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 0;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--fg);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  header {
+    background: linear-gradient(135deg, var(--accent) 0%, #8B6FE7 100%);
+    color: #fff;
+    padding: 56px 24px 72px;
+    text-align: center;
+  }
+  header h1 {
+    margin: 0 0 8px;
+    font-size: clamp(28px, 4vw, 42px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  header p {
+    margin: 0 auto;
+    max-width: 620px;
+    font-size: 17px;
+    opacity: 0.95;
+  }
+  .lang-toggle {
+    margin-top: 24px;
+    display: inline-flex;
+    gap: 8px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 999px;
+    padding: 4px;
+  }
+  .lang-toggle button {
+    background: transparent;
+    color: #fff;
+    border: 0;
+    padding: 8px 18px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+  }
+  .lang-toggle button.active {
+    background: #fff;
+    color: var(--accent);
+  }
+  main {
+    max-width: 880px;
+    margin: -40px auto 0;
+    padding: 0 24px 80px;
+  }
+  .badge-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 32px;
+  }
+  .badge {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--fg);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+  .badge .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--ok); }
+  section.card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+  }
+  section.card h2 {
+    margin: 0 0 14px;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  section.card h2 .num {
+    display: inline-block;
+    width: 28px;
+    height: 28px;
+    line-height: 28px;
+    text-align: center;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 8px;
+    font-size: 13px;
+  }
+  section.card p, section.card li { color: #2A2A30; font-size: 15px; }
+  section.card ul { padding-left: 22px; }
+  section.card li { margin-bottom: 6px; }
+  code { background: #F1F0F5; padding: 2px 6px; border-radius: 4px; font-size: 13px; }
+  .meta {
+    color: var(--muted);
+    font-size: 13px;
+    text-align: center;
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+  }
+  .meta a { color: var(--accent); text-decoration: none; }
+  table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 14px; }
+  table th, table td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); }
+  table th { background: #F7F6FA; font-weight: 600; color: var(--muted); font-size: 13px; }
+  .hide { display: none !important; }
+  .contact-box {
+    background: #F7F6FA;
+    border-left: 4px solid var(--accent);
+    padding: 16px 20px;
+    border-radius: 8px;
+    margin-top: 16px;
+  }
+  .contact-box strong { display: block; margin-bottom: 6px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1 id="title">Compliance &amp; Διαφάνεια</h1>
+  <p id="subtitle">GDPR · EU AI Act · ISO Privacy Standards</p>
+  <div class="lang-toggle">
+    <button id="btn-el" class="active" onclick="setLang('el')">Ελληνικά</button>
+    <button id="btn-en" onclick="setLang('en')">English</button>
+  </div>
+</header>
+
+<main>
+
+<div class="badge-row">
+  <span class="badge"><span class="dot"></span> <span data-el="GDPR Συμμορφωμένο" data-en="GDPR Compliant">GDPR Συμμορφωμένο</span></span>
+  <span class="badge"><span class="dot"></span> <span data-el="EU AI Act Ready" data-en="EU AI Act Ready">EU AI Act Ready</span></span>
+  <span class="badge"><span class="dot"></span> <span data-el="ISO 27001 Aligned" data-en="ISO 27001 Aligned">ISO 27001 Aligned</span></span>
+  <span class="badge"><span class="dot"></span> <span data-el="Δεδομένα στην EU" data-en="EU Data Residency">Δεδομένα στην EU</span></span>
+</div>
+
+<!-- 1. AI DISCLOSURE -->
+<section class="card">
+  <h2><span class="num">1</span><span data-el="Δήλωση AI" data-en="AI Disclosure">Δήλωση AI</span></h2>
+  <div data-el>
+    <p>Το Ran-Tevu χρησιμοποιεί <strong>Generative AI</strong> για να συνομιλεί με τους πελάτες σας και να κλείνει ραντεβού. Ακολουθούμε τις απαιτήσεις του <strong>EU AI Act (Άρθρο 50)</strong>:</p>
+    <ul>
+      <li>Ο bot ΑΥΤΟΠΡΟΣΔΙΟΡΙΖΕΤΑΙ ως AI στο πρώτο μήνυμα κάθε νέας συνομιλίας.</li>
+      <li>Καμία προσπάθεια να "μιμηθεί" άνθρωπο όταν ρωτηθεί ευθέως.</li>
+      <li>AI-generated περιεχόμενο (όπως συνόψεις) επισημαίνεται.</li>
+      <li>Κάθε απόφαση που επηρεάζει τον χρήστη (π.χ. ακύρωση/απόρριψη ραντεβού) εξηγείται με σαφή λόγο.</li>
+    </ul>
+    <p><strong>Μοντέλα που χρησιμοποιούμε</strong>:</p>
+    <table>
+      <tr><th>Σκοπός</th><th>Μοντέλο</th><th>Πάροχος</th></tr>
+      <tr><td>Συνομιλία/κρατήσεις</td><td>claude-sonnet-4-5</td><td>Anthropic (EU-served)</td></tr>
+      <tr><td>Memory extraction</td><td>claude-haiku-4-5</td><td>Anthropic</td></tr>
+      <tr><td>Voice synthesis</td><td>multilingual_v2</td><td>ElevenLabs (EU servers)</td></tr>
+      <tr><td>Voice orchestration</td><td>Vapi</td><td>Vapi.ai</td></tr>
+    </table>
+  </div>
+  <div data-en class="hide">
+    <p>Ran-Tevu uses <strong>Generative AI</strong> to converse with your customers and book appointments. We comply with <strong>EU AI Act (Article 50)</strong>:</p>
+    <ul>
+      <li>The bot SELF-DISCLOSES as AI in the first message of every new conversation.</li>
+      <li>No attempt to impersonate a human when directly asked.</li>
+      <li>AI-generated content (e.g., summaries) is labeled.</li>
+      <li>Any decision affecting the user (e.g., cancellation/rejection) is explained with a clear reason.</li>
+    </ul>
+    <p><strong>Models we use</strong>:</p>
+    <table>
+      <tr><th>Purpose</th><th>Model</th><th>Provider</th></tr>
+      <tr><td>Chat/bookings</td><td>claude-sonnet-4-5</td><td>Anthropic (EU-served)</td></tr>
+      <tr><td>Memory extraction</td><td>claude-haiku-4-5</td><td>Anthropic</td></tr>
+      <tr><td>Voice synthesis</td><td>multilingual_v2</td><td>ElevenLabs (EU servers)</td></tr>
+      <tr><td>Voice orchestration</td><td>Vapi</td><td>Vapi.ai</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- 2. DATA WE COLLECT -->
+<section class="card">
+  <h2><span class="num">2</span><span data-el="Τι δεδομένα συλλέγουμε" data-en="What data we collect">Τι δεδομένα συλλέγουμε</span></h2>
+  <div data-el>
+    <table>
+      <tr><th>Κατηγορία</th><th>Δεδομένα</th><th>Διατήρηση</th></tr>
+      <tr><td>Στοιχεία ραντεβού</td><td>Όνομα, τηλέφωνο, email, υπηρεσία, ώρα</td><td>24 μήνες μετά την τελευταία επίσκεψη</td></tr>
+      <tr><td>Memory (AI)</td><td>Προτιμήσεις, σύντομες σημειώσεις, ιστορικό συνομιλίας</td><td>24 μήνες</td></tr>
+      <tr><td>Συνομιλίες</td><td>Κείμενο μηνυμάτων με τον bot</td><td>90 μέρες</td></tr>
+      <tr><td>Audit logs</td><td>Timestamp, ενέργεια, hashed IP</td><td>13 μήνες (legal requirement)</td></tr>
+      <tr><td>Consent logs</td><td>Acceptance records</td><td>5 χρόνια (GDPR proof)</td></tr>
+    </table>
+    <p><strong>Δεν συλλέγουμε ΠΟΤΕ</strong>: ΑΜΚΑ, ΑΦΜ, ιατρικά δεδομένα, οικονομικά στοιχεία, βιομετρικά.</p>
+  </div>
+  <div data-en class="hide">
+    <table>
+      <tr><th>Category</th><th>Data</th><th>Retention</th></tr>
+      <tr><td>Booking info</td><td>Name, phone, email, service, time</td><td>24 months after last visit</td></tr>
+      <tr><td>AI Memory</td><td>Preferences, short notes, conversation history</td><td>24 months</td></tr>
+      <tr><td>Conversations</td><td>Message text with the bot</td><td>90 days</td></tr>
+      <tr><td>Audit logs</td><td>Timestamp, action, hashed IP</td><td>13 months (legal requirement)</td></tr>
+      <tr><td>Consent logs</td><td>Acceptance records</td><td>5 years (GDPR proof)</td></tr>
+    </table>
+    <p><strong>We NEVER collect</strong>: national ID, tax IDs, medical data, financial data, biometrics.</p>
+  </div>
+</section>
+
+<!-- 3. YOUR RIGHTS -->
+<section class="card">
+  <h2><span class="num">3</span><span data-el="Τα δικαιώματά σας" data-en="Your rights">Τα δικαιώματά σας (GDPR)</span></h2>
+  <div data-el>
+    <ul>
+      <li><strong>Δικαίωμα πρόσβασης (Άρθρο 15)</strong> — Λήψη όλων των δεδομένων σου σε JSON.</li>
+      <li><strong>Δικαίωμα διόρθωσης (Άρθρο 16)</strong> — Διόρθωση λαθεμένων στοιχείων.</li>
+      <li><strong>Δικαίωμα διαγραφής (Άρθρο 17)</strong> — Διαγραφή ΟΛΩΝ των δεδομένων ("forget me").</li>
+      <li><strong>Δικαίωμα περιορισμού (Άρθρο 18)</strong> — Pause AI memory για τον λογαριασμό σου.</li>
+      <li><strong>Δικαίωμα φορητότητας (Άρθρο 20)</strong> — Λήψη machine-readable export.</li>
+      <li><strong>Δικαίωμα εναντίωσης (Άρθρο 21)</strong> — Άρνηση συγκεκριμένης επεξεργασίας.</li>
+    </ul>
+    <p>Για να ασκήσεις ένα δικαίωμα, στείλε email στο <a href="mailto:privacy@ran-tevu.gr">privacy@ran-tevu.gr</a> με το τηλέφωνο ή email σου. Θα ανταποκριθούμε εντός <strong>30 ημερών</strong> (όπως ορίζει ο GDPR).</p>
+  </div>
+  <div data-en class="hide">
+    <ul>
+      <li><strong>Right of access (Art. 15)</strong> — Get all your data as JSON.</li>
+      <li><strong>Right of rectification (Art. 16)</strong> — Correct inaccurate data.</li>
+      <li><strong>Right of erasure (Art. 17)</strong> — Delete ALL data ("forget me").</li>
+      <li><strong>Right to restrict (Art. 18)</strong> — Pause AI memory for your account.</li>
+      <li><strong>Right of portability (Art. 20)</strong> — Machine-readable export.</li>
+      <li><strong>Right to object (Art. 21)</strong> — Refuse specific processing.</li>
+    </ul>
+    <p>To exercise a right, email <a href="mailto:privacy@ran-tevu.gr">privacy@ran-tevu.gr</a> with your phone or email. We respond within <strong>30 days</strong> (per GDPR).</p>
+  </div>
+</section>
+
+<!-- 4. AI MEMORY -->
+<section class="card">
+  <h2><span class="num">4</span><span data-el="AI Memory — Πώς λειτουργεί" data-en="AI Memory — How it works">AI Memory — Πώς λειτουργεί</span></h2>
+  <div data-el>
+    <p>Ο bot μας <strong>θυμάται</strong> πελάτες σε επόμενες επισκέψεις (όνομα, προτιμήσεις, σύντομα προσωπικά σημεία). Αυτό βελτιώνει την εξυπηρέτηση.</p>
+    <p><strong>Τι θυμάμαι</strong>: όνομα, προτιμώμενη υπηρεσία, προτιμώμενη ώρα, οικογενειακό context (π.χ. "έχει παιδί που ήταν άρρωστο") εάν αναφερθεί.</p>
+    <p><strong>Τι ΔΕΝ θυμάμαι</strong>: ευαίσθητα δεδομένα υγείας, οικονομικά, ολόκληρες συνομιλίες (μόνο σύνοψη).</p>
+    <p>Μπορείς να ζητήσεις <strong>memory reset</strong> ανά πάσα στιγμή στο <code>privacy@ran-tevu.gr</code> ή λέγοντας στον bot "ξέχνα με".</p>
+  </div>
+  <div data-en class="hide">
+    <p>Our bot <strong>remembers</strong> returning customers (name, preferences, brief personal notes). This improves service quality.</p>
+    <p><strong>What we remember</strong>: name, preferred service, preferred time, family context (e.g., "has a child who was sick") if mentioned.</p>
+    <p><strong>What we DO NOT remember</strong>: sensitive health data, financial data, full conversations (only summaries).</p>
+    <p>You can request a <strong>memory reset</strong> anytime at <code>privacy@ran-tevu.gr</code> or by telling the bot "forget me".</p>
+  </div>
+</section>
+
+<!-- 5. SECURITY -->
+<section class="card">
+  <h2><span class="num">5</span><span data-el="Ασφάλεια" data-en="Security">Ασφάλεια</span></h2>
+  <div data-el>
+    <ul>
+      <li>HTTPS παντού (TLS 1.3).</li>
+      <li>Database encrypted at rest.</li>
+      <li>IP addresses αποθηκεύονται μόνο ως SHA-256 hash με salt.</li>
+      <li>Admin access protected με token authentication.</li>
+      <li>Rate limiting σε όλα τα public endpoints.</li>
+      <li>Tenant isolation: κάθε επιχείρηση βλέπει ΜΟΝΟ τα δικά της δεδομένα.</li>
+      <li>Hosting: Railway (Ireland EU region) + Cloudflare CDN.</li>
+    </ul>
+  </div>
+  <div data-en class="hide">
+    <ul>
+      <li>HTTPS everywhere (TLS 1.3).</li>
+      <li>Database encrypted at rest.</li>
+      <li>IP addresses stored only as SHA-256 hash with salt.</li>
+      <li>Admin access protected via token authentication.</li>
+      <li>Rate limiting on all public endpoints.</li>
+      <li>Tenant isolation: each business sees ONLY its own data.</li>
+      <li>Hosting: Railway (Ireland EU region) + Cloudflare CDN.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 6. SUBPROCESSORS -->
+<section class="card">
+  <h2><span class="num">6</span><span data-el="Υπεργολάβοι" data-en="Subprocessors">Υπεργολάβοι (Subprocessors)</span></h2>
+  <div data-el>
+    <table>
+      <tr><th>Πάροχος</th><th>Σκοπός</th><th>Τοποθεσία</th></tr>
+      <tr><td>Anthropic</td><td>AI conversation engine</td><td>USA (DPA signed, SCCs)</td></tr>
+      <tr><td>Railway</td><td>App hosting + database</td><td>Ireland (EU)</td></tr>
+      <tr><td>Cloudflare</td><td>CDN + DDoS protection</td><td>Global (EU edges)</td></tr>
+      <tr><td>Resend</td><td>Transactional email</td><td>Ireland (EU)</td></tr>
+      <tr><td>Twilio</td><td>SMS + voice telephony</td><td>Ireland (EU)</td></tr>
+      <tr><td>ElevenLabs</td><td>Voice synthesis</td><td>EU regional</td></tr>
+      <tr><td>Vapi</td><td>Voice agent orchestration</td><td>USA (DPA signed)</td></tr>
+      <tr><td>Stripe</td><td>Billing</td><td>Ireland (EU)</td></tr>
+    </table>
+  </div>
+  <div data-en class="hide">
+    <table>
+      <tr><th>Provider</th><th>Purpose</th><th>Location</th></tr>
+      <tr><td>Anthropic</td><td>AI conversation engine</td><td>USA (DPA signed, SCCs)</td></tr>
+      <tr><td>Railway</td><td>App hosting + database</td><td>Ireland (EU)</td></tr>
+      <tr><td>Cloudflare</td><td>CDN + DDoS protection</td><td>Global (EU edges)</td></tr>
+      <tr><td>Resend</td><td>Transactional email</td><td>Ireland (EU)</td></tr>
+      <tr><td>Twilio</td><td>SMS + voice telephony</td><td>Ireland (EU)</td></tr>
+      <tr><td>ElevenLabs</td><td>Voice synthesis</td><td>EU regional</td></tr>
+      <tr><td>Vapi</td><td>Voice agent orchestration</td><td>USA (DPA signed)</td></tr>
+      <tr><td>Stripe</td><td>Billing</td><td>Ireland (EU)</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- 7. CONTACT -->
+<section class="card">
+  <h2><span class="num">7</span><span data-el="Επικοινωνία DPO" data-en="DPO Contact">Επικοινωνία DPO</span></h2>
+  <div data-el>
+    <div class="contact-box">
+      <strong>Data Protection Officer (DPO)</strong>
+      Κωνσταντίνος Γκιουλμπαξιώτης<br>
+      Email: <a href="mailto:privacy@ran-tevu.gr">privacy@ran-tevu.gr</a><br>
+      Τηλέφωνο: +30 6987747434<br>
+      Έδρα: Ρέθυμνο, Κρήτη, Ελλάδα
+    </div>
+    <p style="margin-top: 16px;">Σε περίπτωση παράπονου, έχεις δικαίωμα προσφυγής στην <a href="https://www.dpa.gr" target="_blank" rel="noopener">Αρχή Προστασίας Δεδομένων Προσωπικού Χαρακτήρα (ΑΠΔΠΧ)</a>.</p>
+  </div>
+  <div data-en class="hide">
+    <div class="contact-box">
+      <strong>Data Protection Officer (DPO)</strong>
+      Konstantinos Gkioulbaxiotis<br>
+      Email: <a href="mailto:privacy@ran-tevu.gr">privacy@ran-tevu.gr</a><br>
+      Phone: +30 6987747434<br>
+      Address: Rethymno, Crete, Greece
+    </div>
+    <p style="margin-top: 16px;">If you have a complaint, you may file with the <a href="https://www.dpa.gr/en" target="_blank" rel="noopener">Hellenic Data Protection Authority (HDPA)</a>.</p>
+  </div>
+</section>
+
+<div class="meta">
+  <span data-el="Έκδοση εγγράφου" data-en="Document version">Έκδοση εγγράφου</span>: <strong>1.0</strong> ·
+  <span data-el="Τελευταία ενημέρωση" data-en="Last updated">Τελευταία ενημέρωση</span>: <strong>21 Μαΐου 2026</strong><br>
+  <a href="/">← <span data-el="Επιστροφή" data-en="Back home">Επιστροφή</span></a>
+</div>
+
+</main>
+
+<script>
+function setLang(lang) {
+  document.getElementById('btn-el').classList.toggle('active', lang === 'el');
+  document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+  document.documentElement.lang = lang;
+  document.querySelectorAll('[data-el]').forEach(el => {
+    if (el.hasAttribute('data-en') && el.children.length === 0) {
+      el.textContent = el.getAttribute(lang === 'el' ? 'data-el' : 'data-en');
+    } else if (el.tagName === 'DIV') {
+      el.classList.toggle('hide', false);
+    }
+  });
+  document.querySelectorAll('div[data-el]').forEach(el => el.classList.remove('hide'));
+  document.querySelectorAll('div[data-en]').forEach(el => el.classList.add('hide'));
+  if (lang === 'en') {
+    document.querySelectorAll('div[data-el]').forEach(el => el.classList.add('hide'));
+    document.querySelectorAll('div[data-en]').forEach(el => el.classList.remove('hide'));
+  }
+  document.getElementById('title').textContent = lang === 'el' ? 'Compliance & Διαφάνεια' : 'Compliance & Transparency';
+  document.getElementById('subtitle').textContent = lang === 'el' ? 'GDPR · EU AI Act · ISO Privacy Standards' : 'GDPR · EU AI Act · ISO Privacy Standards';
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ευχαριστώ! Επόμενα βήματα · Ran-Tevu</title>
+<meta name="robots" content="noindex">
+<style>
+  *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #FAFAFA 0%, #F5F3FF 100%);
+    color: #111827; line-height: 1.6; min-height: 100vh; padding: 32px 20px;
+  }
+  .container { max-width: 720px; margin: 0 auto; }
+
+  .success-banner {
+    background: linear-gradient(135deg, #10B981, #059669);
+    color: white; border-radius: 16px;
+    padding: 32px; text-align: center; margin-bottom: 28px;
+    box-shadow: 0 12px 32px rgba(16,185,129,0.2);
+  }
+  .success-banner .checkmark {
+    width: 64px; height: 64px; background: white;
+    border-radius: 50%; margin: 0 auto 16px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 32px; color: #10B981; font-weight: 800;
+  }
+  .success-banner h1 { font-size: 28px; margin-bottom: 8px; }
+
+  .card {
+    background: white; border: 1px solid #E5E7EB; border-radius: 16px;
+    padding: 32px; margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+  }
+  .card h2 {
+    font-size: 22px; color: #7C3AED;
+    margin-bottom: 12px; display: flex; align-items: center; gap: 10px;
+  }
+  .card p { color: #6B7280; margin-bottom: 16px; font-size: 15px; }
+
+  .timeline { list-style: none; padding: 0; }
+  .timeline li {
+    display: flex; gap: 16px; padding: 16px 0;
+    border-bottom: 1px solid #F3F4F6;
+  }
+  .timeline li:last-child { border: none; }
+  .timeline .num {
+    flex-shrink: 0; width: 36px; height: 36px;
+    background: #7C3AED; color: white; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800;
+  }
+  .timeline strong { display: block; margin-bottom: 4px; font-size: 15px; }
+  .timeline span { color: #6B7280; font-size: 14px; }
+
+  form { display: grid; gap: 16px; }
+  .form-group { display: grid; gap: 6px; }
+  label { font-weight: 600; font-size: 14px; color: #374151; }
+  label span.req { color: #EF4444; }
+  input, textarea, select {
+    padding: 12px 14px; border: 1px solid #D1D5DB; border-radius: 8px;
+    font-size: 14px; font-family: inherit; transition: border-color 0.15s;
+    background: #FAFAFA;
+  }
+  input:focus, textarea:focus, select:focus {
+    outline: none; border-color: #7C3AED;
+    box-shadow: 0 0 0 3px rgba(124,58,237,0.1);
+    background: white;
+  }
+  textarea { min-height: 100px; resize: vertical; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  .btn-submit {
+    background: #7C3AED; color: white;
+    padding: 16px 32px; border: none; border-radius: 12px;
+    font-size: 16px; font-weight: 700; cursor: pointer;
+    transition: transform 0.15s, background 0.15s;
+  }
+  .btn-submit:hover { background: #5B21B6; transform: translateY(-2px); }
+  .btn-submit:disabled { opacity: 0.6; cursor: wait; }
+
+  .help { font-size: 12px; color: #9CA3AF; margin-top: 4px; }
+
+  #form-success {
+    display: none; background: #ECFDF5; border: 1px solid #10B981;
+    border-radius: 12px; padding: 20px; text-align: center;
+  }
+  #form-success.show { display: block; }
+  #form-success h3 { color: #059669; margin-bottom: 8px; }
+
+  .contact-info {
+    text-align: center; padding: 20px; background: #F9FAFB;
+    border-radius: 12px; margin-top: 20px; font-size: 14px;
+    color: #6B7280;
+  }
+  .contact-info a { color: #7C3AED; font-weight: 600; }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="success-banner">
+    <div class="checkmark">✓</div>
+    <h1>Πληρωμή επιτυχής!</h1>
+    <p style="opacity: 0.95;">Ευχαριστούμε για την εμπιστοσύνη. Παρακάτω τα επόμενα βήματα.</p>
+  </div>
+
+  <!-- TIMELINE -->
+  <div class="card">
+    <h2>📅 Τι ακολουθεί</h2>
+    <ul class="timeline">
+      <li>
+        <div class="num">1</div>
+        <div>
+          <strong>Συμπληρώστε τη φόρμα κάτω (5 λεπτά)</strong>
+          <span>Δώστε μας τα στοιχεία της επιχείρησής σας ώστε να ξεκινήσουμε.</span>
+        </div>
+      </li>
+      <li>
+        <div class="num">2</div>
+        <div>
+          <strong>Setup εντός 24-48 ωρών</strong>
+          <span>Στήνουμε το AI σας με τη δική σας φωνή/branding/services.</span>
+        </div>
+      </li>
+      <li>
+        <div class="num">3</div>
+        <div>
+          <strong>Test μαζί</strong>
+          <span>Σας στέλνουμε link/νούμερο. Δοκιμάζετε. Tweak αν χρειαστεί.</span>
+        </div>
+      </li>
+      <li>
+        <div class="num">4</div>
+        <div>
+          <strong>Live</strong>
+          <span>Embed στο site σας / app τηλεφώνου / IG bio. Αρχίζει να κλείνει ραντεβού.</span>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- BUSINESS INFO FORM -->
+  <div class="card">
+    <h2>📝 Στοιχεία επιχείρησής σας</h2>
+    <p>Όλα τα πεδία με <span style="color:#EF4444;">*</span> είναι υποχρεωτικά. Όσο πιο πλήρη τα στοιχεία, τόσο πιο γρήγορο το setup.</p>
+
+    <form id="setup-form">
+      <div class="grid-2">
+        <div class="form-group">
+          <label>Επωνυμία επιχείρησης <span class="req">*</span></label>
+          <input type="text" name="business_name" required placeholder="π.χ. Δερματολογικό Κέντρο Παπαδόπουλος">
+        </div>
+        <div class="form-group">
+          <label>Τύπος επιχείρησης <span class="req">*</span></label>
+          <select name="business_type" required>
+            <option value="">— Διαλέξτε —</option>
+            <option>Ιατρείο</option>
+            <option>Οδοντιατρείο</option>
+            <option>Φυσιοθεραπεία</option>
+            <option>Αισθητική / Spa</option>
+            <option>Σαλόνι ομορφιάς</option>
+            <option>Κομμωτήριο</option>
+            <option>Κτηνιατρείο</option>
+            <option>Γυμναστήριο / Pilates / Yoga</option>
+            <option>Εστιατόριο</option>
+            <option>Ψυχολόγος</option>
+            <option>Άλλο</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="form-group">
+          <label>Όνομα ιδιοκτήτη <span class="req">*</span></label>
+          <input type="text" name="owner_name" required placeholder="π.χ. Δρ. Παπαδόπουλος">
+        </div>
+        <div class="form-group">
+          <label>Τηλέφωνο <span class="req">*</span></label>
+          <input type="tel" name="phone" required placeholder="6900000000">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Email επικοινωνίας <span class="req">*</span></label>
+        <input type="email" name="email" required placeholder="info@example.gr">
+      </div>
+
+      <div class="form-group">
+        <label>Διεύθυνση επιχείρησης</label>
+        <input type="text" name="address" placeholder="π.χ. Πανεπιστημίου 10, Αθήνα">
+      </div>
+
+      <div class="form-group">
+        <label>Υπηρεσίες + τιμές <span class="req">*</span></label>
+        <textarea name="services" required placeholder="Παράδειγμα:&#10;Καθαρισμός δοντιών — 60€ — 30 λεπτά&#10;Σφράγισμα — 50€ — 25 λεπτά&#10;Λεύκανση — 150€ — 60 λεπτά"></textarea>
+        <span class="help">Μία υπηρεσία ανά γραμμή. Format: Όνομα — Τιμή — Διάρκεια</span>
+      </div>
+
+      <div class="form-group">
+        <label>Ωράριο λειτουργίας <span class="req">*</span></label>
+        <textarea name="hours" required placeholder="Παράδειγμα:&#10;Δευτέρα-Παρασκευή: 09:00-13:00 και 17:00-20:00&#10;Σάββατο: 10:00-14:00&#10;Κυριακή: κλειστά"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Σε επείγον τι κάνει το AI;</label>
+        <select name="emergency_handling">
+          <option>Λέει "Καλέστε ξανά αύριο" / αφήνει μήνυμα</option>
+          <option>Με καλεί απευθείας στο τηλέφωνό μου</option>
+          <option>Στέλνει SMS σε εμένα + κρατάει μήνυμα πελάτη</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Ειδικές οδηγίες / στοιχεία (optional)</label>
+        <textarea name="special_notes" placeholder="π.χ. Δεχόμαστε ΕΟΠΥΥ, πληρωμή με κάρτα, παρκινγκ διαθέσιμο, κτλ."></textarea>
+      </div>
+
+      <button type="submit" class="btn-submit" id="submit-btn">
+        Στείλε στοιχεία για setup →
+      </button>
+    </form>
+
+    <div id="form-success">
+      <h3>✓ Στοιχεία ελήφθησαν!</h3>
+      <p style="color:#374151;">Ξεκινάμε το setup σας τώρα. Θα λάβετε email εντός 24-48 ωρών με το link του bot σας ή/και το test phone number.</p>
+    </div>
+  </div>
+
+  <div class="contact-info">
+    Έχετε ερωτήσεις; Επικοινωνήστε:<br>
+    <a href="mailto:ntinosgkiou@gmail.com">ntinosgkiou@gmail.com</a> ·
+    <a href="tel:+306987747434">📞 6987 747 434</a> ·
+    <a href="https://cal.com/randevu-konstantinois/15min" target="_blank">Κλείστε 15-min call</a>
+  </div>
+
+</div>
+
+<script>
+document.getElementById('setup-form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  var btn = document.getElementById('submit-btn');
+  btn.disabled = true;
+  btn.textContent = 'Στέλνω...';
+
+  var data = {};
+  new FormData(e.target).forEach(function(v, k) { data[k] = v; });
+
+  try {
+    var res = await fetch('/api/onboarding/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    if (res.ok) {
+      e.target.style.display = 'none';
+      document.getElementById('form-success').classList.add('show');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      btn.disabled = false;
+      btn.textContent = 'Δοκιμάστε ξανά →';
+      alert('Κάτι πήγε στραβά. Δοκιμάστε ξανά ή στείλτε email στο ntinosgkiou@gmail.com');
+    }
+  } catch(err) {
+    btn.disabled = false;
+    btn.textContent = 'Δοκιμάστε ξανά →';
+    alert('Πρόβλημα δικτύου. Δοκιμάστε ξανά.');
+  }
+});
+</script>
+
+</body>
+</html>

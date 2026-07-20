@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Νέα Επιχείρηση</title>
+<style>
+  :root {
+    --primary: #7C3AED;
+    --primary-light: #EDE9FE;
+    --danger: #EF4444;
+    --success: #10B981;
+    --bg: #F3F4F6;
+    --border: #E5E7EB;
+    --text: #111827;
+    --text-muted: #6B7280;
+    --shadow: 0 4px 24px rgba(0,0,0,.08);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+
+  .card { background: white; border-radius: 20px; padding: 36px; width: 100%; max-width: 560px; box-shadow: var(--shadow); }
+
+  /* Progress */
+  .progress { display: flex; align-items: center; gap: 0; margin-bottom: 32px; }
+  .step-dot { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; transition: all .2s; }
+  .step-dot.done  { background: var(--success); color: white; }
+  .step-dot.active{ background: var(--primary); color: white; }
+  .step-dot.idle  { background: var(--border); color: var(--text-muted); }
+  .step-line { flex: 1; height: 2px; background: var(--border); }
+  .step-line.done { background: var(--success); }
+
+  h2 { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+  .subtitle { font-size: 14px; color: var(--text-muted); margin-bottom: 24px; }
+
+  /* Form */
+  .field { margin-bottom: 16px; }
+  .field label { display: block; font-size: 13px; font-weight: 500; color: var(--text-muted); margin-bottom: 6px; }
+  .field input, .field select { width: 100%; border: 1.5px solid var(--border); border-radius: 10px; padding: 11px 14px; font-size: 14px; outline: none; font-family: inherit; transition: border-color .15s; }
+  .field input:focus, .field select:focus { border-color: var(--primary); }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  /* Services table */
+  .svc-table { width: 100%; border-collapse: collapse; margin-bottom: 12px; }
+  .svc-table th { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; padding: 6px 8px; text-align: left; border-bottom: 1px solid var(--border); }
+  .svc-table td { padding: 6px 4px; }
+  .svc-table td input { border: 1.5px solid var(--border); border-radius: 8px; padding: 8px 10px; font-size: 13px; width: 100%; outline: none; font-family: inherit; }
+  .svc-table td input:focus { border-color: var(--primary); }
+  .svc-table td.del { width: 32px; text-align: center; }
+  .del-btn { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 16px; padding: 4px; }
+  .del-btn:hover { color: var(--danger); }
+  .add-svc { background: var(--primary-light); color: var(--primary); border: none; border-radius: 8px; padding: 9px 16px; font-size: 13px; font-weight: 600; cursor: pointer; width: 100%; margin-bottom: 4px; }
+  .add-svc:hover { background: var(--primary); color: white; }
+
+  /* Hours */
+  .hours-grid { display: flex; flex-direction: column; gap: 8px; }
+  .hours-row { display: grid; grid-template-columns: 90px 32px 1fr; align-items: center; gap: 8px; }
+  .hours-row .day-name { font-size: 14px; font-weight: 500; }
+  .hours-row input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; accent-color: var(--primary); }
+  .hours-times { display: flex; align-items: center; gap: 6px; }
+  .hours-times input[type="time"] { border: 1.5px solid var(--border); border-radius: 8px; padding: 7px 10px; font-size: 13px; outline: none; }
+  .hours-times input[type="time"]:focus { border-color: var(--primary); }
+  .hours-times span { font-size: 13px; color: var(--text-muted); }
+  .closed-label { font-size: 13px; color: var(--text-muted); }
+
+  /* Buttons */
+  .btn-row { display: flex; gap: 10px; margin-top: 24px; }
+  .btn-back { flex: 1; background: none; border: 1.5px solid var(--border); border-radius: 10px; padding: 12px; font-size: 14px; font-weight: 600; cursor: pointer; color: var(--text); }
+  .btn-next { flex: 2; background: var(--primary); color: white; border: none; border-radius: 10px; padding: 12px; font-size: 14px; font-weight: 700; cursor: pointer; transition: background .15s; }
+  .btn-next:hover { background: #6D28D9; }
+  .btn-next:disabled { background: #C4B5FD; cursor: not-allowed; }
+  .err { color: var(--danger); font-size: 13px; margin-top: 10px; text-align: center; }
+
+  /* Result */
+  .result-box { background: #F0FDF4; border: 1.5px solid #86EFAC; border-radius: 14px; padding: 20px; margin-bottom: 16px; }
+  .result-box .label { font-size: 11px; font-weight: 700; color: #16A34A; text-transform: uppercase; margin-bottom: 6px; }
+  .result-box .value { font-family: monospace; font-size: 13px; color: var(--text); word-break: break-all; display: flex; align-items: center; gap: 8px; }
+  .copy-btn { background: white; border: 1.5px solid #86EFAC; border-radius: 6px; padding: 4px 10px; font-size: 12px; cursor: pointer; color: #16A34A; font-weight: 600; white-space: nowrap; flex-shrink: 0; }
+  .copy-btn:hover { background: #16A34A; color: white; }
+  .token-box { background: #FFF7ED; border: 1.5px solid #FCD34D; border-radius: 14px; padding: 20px; margin-bottom: 16px; }
+  .token-box .label { font-size: 11px; font-weight: 700; color: #D97706; text-transform: uppercase; margin-bottom: 6px; }
+  .token-box .value { font-family: monospace; font-size: 13px; color: var(--text); word-break: break-all; display: flex; align-items: center; gap: 8px; }
+  .embed-box { background: #F8F7FF; border: 1.5px solid var(--primary-light); border-radius: 14px; padding: 20px; }
+  .embed-box .label { font-size: 11px; font-weight: 700; color: var(--primary); text-transform: uppercase; margin-bottom: 8px; }
+  .embed-code { background: #1F2937; color: #A5F3FC; border-radius: 8px; padding: 12px; font-family: monospace; font-size: 12px; overflow-x: auto; margin-bottom: 8px; white-space: pre; }
+  .btn-new { width: 100%; background: var(--primary); color: white; border: none; border-radius: 10px; padding: 12px; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 8px; }
+
+  /* Auth */
+  #auth-screen { text-align: center; }
+  #auth-screen .icon { font-size: 48px; margin-bottom: 16px; }
+  #auth-screen h1 { font-size: 22px; margin-bottom: 6px; }
+  #auth-screen p { color: var(--text-muted); font-size: 14px; margin-bottom: 24px; }
+  #auth-screen input { width: 100%; border: 1.5px solid var(--border); border-radius: 10px; padding: 12px 16px; font-size: 15px; outline: none; margin-bottom: 12px; }
+  #auth-screen input:focus { border-color: var(--primary); }
+
+  @media (max-width: 500px) { .two { grid-template-columns: 1fr; } .card { padding: 24px; } }
+</style>
+</head>
+<body>
+<div class="card" id="root">
+
+  <!-- AUTH -->
+  <div id="auth-screen">
+    <div class="icon">🚀</div>
+    <h1>Νέα Επιχείρηση</h1>
+    <p>Βάλε το master token για να συνεχίσεις</p>
+    <input type="password" id="token-input" placeholder="Master Token" autocomplete="off">
+    <button class="btn-next" style="width:100%" onclick="doLogin()">Είσοδος</button>
+    <div class="err" id="auth-err"></div>
+  </div>
+
+  <!-- WIZARD -->
+  <div id="wizard" style="display:none">
+
+    <!-- Progress bar -->
+    <div class="progress">
+      <div class="step-dot active" id="dot1">1</div>
+      <div class="step-line" id="line1"></div>
+      <div class="step-dot idle"  id="dot2">2</div>
+      <div class="step-line" id="line2"></div>
+      <div class="step-dot idle"  id="dot3">3</div>
+    </div>
+
+    <!-- Step 1: Βασικά στοιχεία -->
+    <div id="step1">
+      <h2>Βασικά στοιχεία</h2>
+      <p class="subtitle">Συμπλήρωσε τα στοιχεία της επιχείρησης</p>
+      <div class="field">
+        <label>Όνομα επιχείρησης *</label>
+        <input id="f-name" type="text" placeholder="π.χ. Nails by Maria">
+      </div>
+      <div class="two">
+        <div class="field">
+          <label>Τηλέφωνο *</label>
+          <input id="f-phone" type="tel" placeholder="6912345678">
+        </div>
+        <div class="field">
+          <label>Τύπος</label>
+          <select id="f-type">
+            <option value="nail studio">Nail Studio</option>
+            <option value="beauty">Beauty / Αισθητική</option>
+            <option value="hair">Κομμωτήριο</option>
+            <option value="spa">Spa / Wellness</option>
+            <option value="dental">Οδοντιατρείο</option>
+            <option value="ιατρείο">Ιατρείο</option>
+            <option value="φυσιοθεραπεία">Φυσιοθεραπεία</option>
+            <option value="ψυχολόγος">Ψυχολόγος</option>
+            <option value="fitness">Γυμναστήριο</option>
+            <option value="restaurant">Εστιατόριο</option>
+            <option value="κτηνιατρείο">Κτηνιατρείο</option>
+            <option value="other">Άλλο</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label>Διεύθυνση</label>
+        <input id="f-address" type="text" placeholder="π.χ. Ερμού 10, Αθήνα">
+      </div>
+      <div class="field">
+        <label>Email ιδιοκτήτη (για ειδοποιήσεις νέων ραντεβού)</label>
+        <input id="f-owner-email" type="email" placeholder="owner@email.com">
+      </div>
+      <div class="err" id="err1"></div>
+      <div class="btn-row">
+        <button class="btn-next" style="flex:1" onclick="goStep2()">Επόμενο →</button>
+      </div>
+    </div>
+
+    <!-- Step 2: Υπηρεσίες -->
+    <div id="step2" style="display:none">
+      <h2>Υπηρεσίες</h2>
+      <p class="subtitle">Πρόσθεσε τις υπηρεσίες — όνομα, διάρκεια & τιμή</p>
+      <table class="svc-table">
+        <thead>
+          <tr>
+            <th>Υπηρεσία</th>
+            <th style="width:80px">Λεπτά</th>
+            <th style="width:70px">€ Τιμή</th>
+            <th style="width:32px"></th>
+          </tr>
+        </thead>
+        <tbody id="svc-body"></tbody>
+      </table>
+      <button class="add-svc" onclick="addSvcRow()">+ Προσθήκη υπηρεσίας</button>
+      <div class="err" id="err2"></div>
+      <div class="btn-row">
+        <button class="btn-back" onclick="goStep(1)">← Πίσω</button>
+        <button class="btn-next" onclick="goStep3()">Επόμενο →</button>
+      </div>
+    </div>
+
+    <!-- Step 3: Ωράριο -->
+    <div id="step3" style="display:none">
+      <h2>Ωράριο</h2>
+      <p class="subtitle">Τσέκαρε τις μέρες που είστε ανοιχτά και βάλε ώρες</p>
+      <div class="hours-grid" id="hours-grid"></div>
+      <div class="err" id="err3"></div>
+      <div class="btn-row">
+        <button class="btn-back" onclick="goStep(2)">← Πίσω</button>
+        <button class="btn-next" id="submit-btn" onclick="submitBusiness()">✅ Δημιούργησε</button>
+      </div>
+    </div>
+
+    <!-- Step 4: Αποτέλεσμα -->
+    <div id="step4" style="display:none">
+      <h2>✅ Έτοιμο!</h2>
+      <p class="subtitle">Η επιχείρηση δημιουργήθηκε. Στείλε τα παρακάτω στον πελάτη σου.</p>
+
+      <div class="result-box">
+        <div class="label">💬 Chat Link (για bio / auto-reply)</div>
+        <div class="value"><span id="res-chat"></span><button class="copy-btn" onclick="cp('res-chat')">Αντιγραφή</button></div>
+      </div>
+
+      <div class="result-box">
+        <div class="label">📊 Admin Link</div>
+        <div class="value"><span id="res-admin"></span><button class="copy-btn" onclick="cp('res-admin')">Αντιγραφή</button></div>
+      </div>
+
+      <div class="token-box">
+        <div class="label">🔑 Admin Token (αποθήκευσέ το!)</div>
+        <div class="value"><span id="res-token"></span><button class="copy-btn" onclick="cp('res-token')">Αντιγραφή</button></div>
+      </div>
+
+      <div class="embed-box">
+        <div class="label">🌐 Embed για Website (iframe)</div>
+        <div class="embed-code" id="res-embed"></div>
+        <button class="copy-btn" style="width:100%;padding:8px" onclick="cpText(document.getElementById('res-embed').textContent)">📋 Αντιγραφή iframe</button>
+      </div>
+
+      <button class="btn-new" onclick="resetWizard()">+ Νέα Επιχείρηση</button>
+    </div>
+
+  </div><!-- /wizard -->
+</div><!-- /card -->
+
+<script>
+  var MASTER_TOKEN = localStorage.getItem('master_token') || '';
+  var BASE = window.location.origin;
+
+  // ── Auth ──────────────────────────────────────────────────────────────────
+  async function doLogin() {
+    var tok = document.getElementById('token-input').value.trim();
+    if (!tok) return;
+    var r = await fetch('/api/admin/businesses', { headers: { Authorization: 'Bearer ' + tok } });
+    if (r.ok) {
+      MASTER_TOKEN = tok;
+      localStorage.setItem('master_token', tok);
+      document.getElementById('auth-screen').style.display = 'none';
+      document.getElementById('wizard').style.display = 'block';
+      initHours();
+      addSvcRow(); addSvcRow(); addSvcRow();
+    } else {
+      document.getElementById('auth-err').textContent = 'Λάθος token';
+    }
+  }
+  document.getElementById('token-input').addEventListener('keydown', function(e){ if(e.key==='Enter') doLogin(); });
+
+  if (MASTER_TOKEN) {
+    fetch('/api/admin/businesses', { headers: { Authorization: 'Bearer ' + MASTER_TOKEN } })
+      .then(function(r) {
+        if (r.ok) {
+          document.getElementById('auth-screen').style.display = 'none';
+          document.getElementById('wizard').style.display = 'block';
+          initHours();
+          addSvcRow(); addSvcRow(); addSvcRow();
+        }
+      }).catch(function(){});
+  }
+
+  // ── Progress ──────────────────────────────────────────────────────────────
+  function setProgress(step) {
+    for (var i = 1; i <= 3; i++) {
+      var dot = document.getElementById('dot' + i);
+      dot.className = 'step-dot ' + (i < step ? 'done' : i === step ? 'active' : 'idle');
+      if (i < step) dot.textContent = '✓';
+      else dot.textContent = i;
+    }
+    for (var j = 1; j <= 2; j++) {
+      document.getElementById('line' + j).className = 'step-line' + (j < step ? ' done' : '');
+    }
+  }
+
+  function goStep(n) {
+    for (var i = 1; i <= 4; i++) {
+      var el = document.getElementById('step' + i);
+      if (el) el.style.display = i === n ? 'block' : 'none';
+    }
+    if (n <= 3) setProgress(n);
+  }
+
+  // ── Step 1 ────────────────────────────────────────────────────────────────
+  function goStep2() {
+    var name  = document.getElementById('f-name').value.trim();
+    var phone = document.getElementById('f-phone').value.trim();
+    if (!name || !phone) {
+      document.getElementById('err1').textContent = 'Συμπλήρωσε όνομα και τηλέφωνο.';
+      return;
+    }
+    document.getElementById('err1').textContent = '';
+    goStep(2);
+  }
+
+  // ── Services ──────────────────────────────────────────────────────────────
+  var svcId = 0;
+  function addSvcRow(name, dur, price) {
+    svcId++;
+    var id = svcId;
+    var tr = document.createElement('tr');
+    tr.id = 'svc-' + id;
+    tr.innerHTML =
+      '<td><input type="text" placeholder="π.χ. Μανικιούρ" value="' + (name||'') + '"></td>' +
+      '<td><input type="number" placeholder="60" min="5" max="240" value="' + (dur||'') + '"></td>' +
+      '<td><input type="number" placeholder="25" min="0" value="' + (price||'') + '"></td>' +
+      '<td class="del"><button class="del-btn" onclick="delRow(' + id + ')">✕</button></td>';
+    document.getElementById('svc-body').appendChild(tr);
+  }
+  function delRow(id) {
+    var el = document.getElementById('svc-' + id);
+    if (el) el.remove();
+  }
+  function getServices() {
+    var rows = document.querySelectorAll('#svc-body tr');
+    var svcs = [];
+    rows.forEach(function(tr) {
+      var inputs = tr.querySelectorAll('input');
+      var n = inputs[0].value.trim();
+      var d = parseInt(inputs[1].value) || 60;
+      var p = parseInt(inputs[2].value) || 0;
+      if (n) svcs.push({ name: n, duration: d, price: p });
+    });
+    return svcs;
+  }
+
+  function goStep3() {
+    var svcs = getServices();
+    if (!svcs.length) {
+      document.getElementById('err2').textContent = 'Πρόσθεσε τουλάχιστον μία υπηρεσία.';
+      return;
+    }
+    document.getElementById('err2').textContent = '';
+    goStep(3);
+  }
+
+  // ── Hours ─────────────────────────────────────────────────────────────────
+  var DAYS = ['Δευτέρα','Τρίτη','Τετάρτη','Πέμπτη','Παρασκευή','Σάββατο','Κυριακή'];
+  var DEF_OPEN  = [true,true,true,true,true,true,false];
+  var DEF_START = ['10:00','10:00','10:00','10:00','10:00','10:00','10:00'];
+  var DEF_END   = ['20:00','20:00','20:00','20:00','20:00','17:00','17:00'];
+
+  function initHours() {
+    var grid = document.getElementById('hours-grid');
+    grid.innerHTML = '';
+    DAYS.forEach(function(day, i) {
+      var row = document.createElement('div');
+      row.className = 'hours-row';
+      var chk = DEF_OPEN[i] ? 'checked' : '';
+      row.innerHTML =
+        '<span class="day-name">' + day + '</span>' +
+        '<input type="checkbox" id="chk-' + i + '" ' + chk + ' onchange="toggleDay(' + i + ')">' +
+        '<div class="hours-times" id="times-' + i + '">' +
+          '<input type="time" id="start-' + i + '" value="' + DEF_START[i] + '">' +
+          '<span>–</span>' +
+          '<input type="time" id="end-' + i + '" value="' + DEF_END[i] + '">' +
+        '</div>';
+      if (!DEF_OPEN[i]) {
+        row.querySelector('.hours-times').innerHTML = '<span class="closed-label">Κλειστά</span>';
+      }
+      grid.appendChild(row);
+    });
+  }
+
+  function toggleDay(i) {
+    var chk   = document.getElementById('chk-' + i);
+    var times = document.getElementById('times-' + i);
+    if (chk.checked) {
+      times.innerHTML =
+        '<input type="time" id="start-' + i + '" value="' + DEF_START[i] + '">' +
+        '<span>–</span>' +
+        '<input type="time" id="end-' + i + '" value="' + DEF_END[i] + '">';
+    } else {
+      times.innerHTML = '<span class="closed-label">Κλειστά</span>';
+    }
+  }
+
+  function getHours() {
+    var hours = {};
+    DAYS.forEach(function(day, i) {
+      var chk = document.getElementById('chk-' + i);
+      if (!chk.checked) {
+        hours[day] = 'Κλειστά';
+      } else {
+        var s = document.getElementById('start-' + i);
+        var e = document.getElementById('end-' + i);
+        hours[day] = (s ? s.value : '10:00') + ' - ' + (e ? e.value : '20:00');
+      }
+    });
+    return hours;
+  }
+
+  // ── Submit ────────────────────────────────────────────────────────────────
+  function slugify(s) {
+    return s.toLowerCase()
+      .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+      .replace(/[^a-z0-9]+/g,'-')
+      .replace(/^-+|-+$/g,'');
+  }
+
+  async function submitBusiness() {
+    var btn = document.getElementById('submit-btn');
+    btn.textContent = '⏳ Δημιουργία...'; btn.disabled = true;
+
+    var name  = document.getElementById('f-name').value.trim();
+    var phone = document.getElementById('f-phone').value.trim();
+    var type  = document.getElementById('f-type').value;
+    var addr  = document.getElementById('f-address').value.trim();
+    var omail = document.getElementById('f-owner-email').value.trim();
+    var svcs  = getServices();
+    var hours = getHours();
+
+    // Auto slug από name + timestamp για uniqueness
+    var slug = slugify(name) + '-' + Date.now().toString(36).slice(-4);
+
+    var payload = {
+      slug: slug, name: name, phone: phone, type: type,
+      address: addr, owner_email: omail, owner_name: name,
+      services: svcs, hours: hours,
+      day_start: '10:00', day_end: '20:00', slot_minutes: 30
+    };
+
+    try {
+      var r = await fetch('/api/admin/businesses', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + MASTER_TOKEN },
+        body: JSON.stringify(payload)
+      });
+      var data = await r.json();
+      if (!r.ok) {
+        document.getElementById('err3').textContent = data.error || 'Σφάλμα δημιουργίας';
+        btn.textContent = '✅ Δημιούργησε'; btn.disabled = false;
+        return;
+      }
+
+      var chatUrl  = BASE + '/' + slug;
+      var adminUrl = BASE + '/admin/' + slug;
+      var token    = data.admin_token;
+      var embed    = '<iframe src="' + chatUrl + '" width="100%" height="600" frameborder="0" style="border-radius:16px;box-shadow:0 4px 24px rgba(0,0,0,.1)"></iframe>';
+
+      document.getElementById('res-chat').textContent  = chatUrl;
+      document.getElementById('res-admin').textContent = adminUrl;
+      document.getElementById('res-token').textContent = token;
+      document.getElementById('res-embed').textContent = embed;
+
+      goStep(4);
+      setProgress(4);
+    } catch(e) {
+      document.getElementById('err3').textContent = 'Σφάλμα σύνδεσης';
+      btn.textContent = '✅ Δημιούργησε'; btn.disabled = false;
+    }
+  }
+
+  // ── Copy ──────────────────────────────────────────────────────────────────
+  function cp(elId) {
+    cpText(document.getElementById(elId).textContent);
+  }
+  function cpText(text) {
+    navigator.clipboard.writeText(text).then(function() {
+      // brief flash — nothing needed
+    });
+  }
+
+  // ── Reset ─────────────────────────────────────────────────────────────────
+  function resetWizard() {
+    document.getElementById('f-name').value = '';
+    document.getElementById('f-phone').value = '';
+    document.getElementById('f-address').value = '';
+    document.getElementById('f-owner-email').value = '';
+    document.getElementById('svc-body').innerHTML = '';
+    svcId = 0;
+    initHours();
+    addSvcRow(); addSvcRow(); addSvcRow();
+    goStep(1);
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,126 @@
+{
+  "name": "Ran-Tevu — AI Γραμματεία 24/7",
+  "short_name": "Ran-Tevu",
+  "description": "AI που κλείνει ραντεβού 24/7 στα ελληνικά. Voice + chat receptionist για επιχειρήσεις. Θυμάται κάθε πελάτη. EU AI Act compliant.",
+  "id": "/?source=pwa",
+  "start_url": "/?source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui", "browser"],
+  "orientation": "portrait",
+  "theme_color": "#6E56CF",
+  "background_color": "#FAFAFB",
+  "lang": "el",
+  "dir": "ltr",
+  "categories": ["business", "productivity", "utilities"],
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "/icons/icon-48.png",
+      "sizes": "48x48",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-192-maskable.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icons/icon-256.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-384.png",
+      "sizes": "384x384",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/og-image.png",
+      "sizes": "1200x630",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Ran-Tevu homepage — Greek"
+    },
+    {
+      "src": "/og-image-en.png",
+      "sizes": "1200x630",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Ran-Tevu homepage — English"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Νέο ραντεβού",
+      "short_name": "Ραντεβού",
+      "description": "Δες σημερινά ραντεβού",
+      "url": "/admin?source=pwa_shortcut",
+      "icons": [{ "src": "/icons/icon-96.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Live demo",
+      "short_name": "Demo",
+      "description": "Δοκίμασε το AI",
+      "url": "/beauty-demo?source=pwa_shortcut",
+      "icons": [{ "src": "/icons/icon-96.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Στήσε AI",
+      "short_name": "Onboarding",
+      "description": "Setup σε 3 λεπτά",
+      "url": "/onboarding/voice?source=pwa_shortcut",
+      "icons": [{ "src": "/icons/icon-96.png", "sizes": "96x96" }]
+    }
+  ],
+  "related_applications": [],
+  "share_target": {
+    "action": "/",
+    "method": "GET",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  },
+  "protocol_handlers": [
+    {
+      "protocol": "web+rantevu",
+      "url": "/?from=%s"
+    }
+  ],
+  "edge_side_panel": {
+    "preferred_width": 480
+  }
+}
