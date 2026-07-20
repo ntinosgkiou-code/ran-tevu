@@ -1,0 +1,165 @@
+{
+  "manifest_version": "1.0",
+  "workflow": "medical_notes_billing_compliance",
+  "_annotation": "Structured clinical & billing constraints for the OmniOS compliance state machine. Every rule is machine-checkable; severity 'reject' rules hard-stop the pipeline and route to HUMAN_OVERRIDE.",
+
+  "provenance": {
+    "sources": [
+      "ICD-10-CM code structure (category letter+digits, optional 1-4 char extension after the dot)",
+      "AMA CPT 2021+ office/outpatient E/M guidelines (99202-99205 new, 99212-99215 established; total-time bands)",
+      "Medical-necessity linkage principle: every billed procedure must be justified by at least one documented diagnosis",
+      "GDPR Art.9/25/32 + HIPAA minimum-necessary: claims carry pseudonymized tokens only"
+    ],
+    "honest_note": "No client documents were attached at generation time; constraints derive from the official coding structures above. When a clinic uploads its payer contracts, rules are ADDED here — the engine does not change."
+  },
+
+  "entities": {
+    "_annotation": "Required data fields for automated ICD-10 / CPT mapping. PII fields are ALWAYS tokenized at the edge before any orchestration.",
+    "patient": {
+      "token": "string — pseudonym issued by the local EdgeAnonymizer vault (e.g. [REDACTED_NAME_1]); raw identity NEVER enters the pipeline",
+      "consent": "boolean — GDPR Art.9 lawful basis; absence blocks any outbound communication"
+    },
+    "encounter": {
+      "patient_type": "enum: new | established — selects the E/M code family",
+      "total_minutes": "number|null — total time on the date of the encounter; drives time-based E/M selection",
+      "date": "ISO date string",
+      "place_of_service": "string (default: office)"
+    },
+    "note": {
+      "text_redacted": "string — the clinical narrative AFTER local PII tokenization",
+      "language": "el|en"
+    },
+    "diagnosis": {
+      "icd10_code": "string matching ^[A-TV-Z][0-9][0-9AB](\\.[0-9A-TV-Z]{1,4})?$",
+      "evidence_term": "string — the exact narrative span that supports the code",
+      "evidence_score": "float 0..1 — 0.99 exact lexicon hit, 0.90 stem hit; anything weaker routes to a human"
+    },
+    "procedure": {
+      "cpt_code": "string matching ^\\d{4}[0-9A-Z]$",
+      "linked_icd10": "list — the diagnoses that establish medical necessity (must be non-empty unless justified_by contains '*')"
+    },
+    "claim": {
+      "diagnoses": "list[diagnosis] — at least one required",
+      "procedures": "list[procedure]",
+      "em": "object|null — {code, band_minutes}",
+      "confidence": "float — evidence-weighted; gate at guardrails.confidence_floor",
+      "integrity": "audit_seq + tamper-evident chain status",
+      "actor": "who approved: system(auto) above the gate, clinician_id below it"
+    }
+  },
+
+  "icd10_lexicon": {
+    "_annotation": "Exact Greek narrative terms → ICD-10-CM. Exact hits score 0.99. Deliberately high-precision: the engine codes only what it can defend; everything else goes to the clinician.",
+    "αρτηριακή υπέρταση": {"code": "I10", "label": "Essential (primary) hypertension"},
+    "υπέρταση": {"code": "I10", "label": "Essential (primary) hypertension"},
+    "σακχαρώδης διαβήτης": {"code": "E11.9", "label": "Type 2 diabetes mellitus without complications"},
+    "οσφυαλγία": {"code": "M54.5", "label": "Low back pain"},
+    "κεφαλαλγία": {"code": "R51.9", "label": "Headache, unspecified"},
+    "πυρετός": {"code": "R50.9", "label": "Fever, unspecified"},
+    "φαρυγγίτιδα": {"code": "J02.9", "label": "Acute pharyngitis, unspecified"},
+    "γαστρίτιδα": {"code": "K29.70", "label": "Gastritis, unspecified, without bleeding"},
+    "ζάλη": {"code": "R42", "label": "Dizziness and giddiness"},
+    "θωρακικό άλγος": {"code": "R07.9", "label": "Chest pain, unspecified"},
+    "δύσπνοια": {"code": "R06.00", "label": "Dyspnea, unspecified"},
+    "αϋπνία": {"code": "G47.00", "label": "Insomnia, unspecified"}
+  },
+
+  "icd10_stems": {
+    "_annotation": "Inflection-tolerant stems (Greek morphology) → ICD-10. Stem hits score 0.90 — BELOW the 0.96 gate by design, so stem-only extraction always freezes for human review. High precision beats silent guessing in claims.",
+    "υπέρτασ": "I10",
+    "υπερτασ": "I10",
+    "διαβήτ": "E11.9",
+    "διαβητ": "E11.9",
+    "πυρετ": "R50.9",
+    "οσφυαλγ": "M54.5",
+    "κεφαλαλγ": "R51.9",
+    "φαρυγγίτιδ": "J02.9",
+    "ζαλάδ": "R42"
+  },
+
+  "cpt_rules": {
+    "_annotation": "Narrative terms → CPT procedures with the medical-necessity linkage (justified_by = ICD-10 prefixes that justify the procedure; '*' = any documented diagnosis).",
+    "ηκγ": {"code": "93000", "label": "Electrocardiogram, complete", "justified_by": ["I", "R07", "R06", "E11"]},
+    "ηλεκτροκαρδιογράφημα": {"code": "93000", "label": "Electrocardiogram, complete", "justified_by": ["I", "R07", "R06", "E11"]},
+    "γενική αίματος": {"code": "85025", "label": "Complete blood count, automated", "justified_by": ["*"]},
+    "σπιρομέτρηση": {"code": "94010", "label": "Spirometry", "justified_by": ["J", "R05", "R06"]}
+  },
+
+  "em_table": {
+    "_annotation": "AMA CPT 2021+ total-time bands (minutes) for office/outpatient E/M. Selection by encounter.total_minutes; a stated-time hit scores 0.98.",
+    "new": [["99202", 15, 29], ["99203", 30, 44], ["99204", 45, 59], ["99205", 60, 74]],
+    "established": [["99212", 10, 19], ["99213", 20, 29], ["99214", 30, 39], ["99215", 40, 54]]
+  },
+
+  "coding_rules": [
+    {"id": "ICD10-FORMAT", "type": "format", "target": "diagnosis.icd10_code",
+     "pattern": "^[A-TV-Z][0-9][0-9AB](\\.[0-9A-TV-Z]{1,4})?$", "severity": "reject",
+     "rationale": "ICD-10-CM structural validity — malformed codes are auto-denied by payers."},
+    {"id": "CPT-FORMAT", "type": "format", "target": "procedure.cpt_code",
+     "pattern": "^\\d{4}[0-9A-Z]$", "severity": "reject",
+     "rationale": "CPT codes are 5 characters (4 digits + digit/letter)."},
+    {"id": "MEDICAL-NECESSITY", "type": "linkage", "severity": "reject",
+     "rationale": "Every CPT must be justified by ≥1 documented ICD-10 whose prefix appears in the procedure's justified_by list. Unjustified procedures are the #1 audit/clawback trigger."},
+    {"id": "DX-REQUIRED", "type": "presence", "severity": "reject",
+     "rationale": "A claim with zero documented diagnoses is not billable."},
+    {"id": "EM-TIME-CONSISTENCY", "type": "consistency", "severity": "reject",
+     "rationale": "The selected E/M level must match the documented total time band for the patient type (CPT 2021 time-based selection)."},
+    {"id": "UNLISTED-CODE-REVIEW", "type": "risk", "severity": "high_risk",
+     "rationale": "Codes ending in '99' (unlisted) always require human review before submission."},
+    {"id": "CONTROLLED-SUBSTANCE-REVIEW", "type": "risk", "severity": "high_risk",
+     "terms": ["οπιοειδ", "μορφίν", "μορφιν", "φαιντανύλ", "φεντανυλ", "κωδεΐν", "κωδεϊν", "τραμαδόλ", "τραμαδολ", "οξυκωδόν", "οξυκωδον", "βενζοδιαζεπίν", "βενζοδιαζεπιν", "αλπραζολάμ", "αλπραζολαμ", "διαζεπάμ", "διαζεπαμ", "μεθαδόν", "μεθαδον", "opioid", "morphine", "fentanyl", "codeine", "tramadol", "oxycodone", "benzodiazepine", "alprazolam", "diazepam", "methadone", "controlled substance", "ελεγχόμενη ουσία", "ναρκωτικ"],
+     "rationale": "Any mention of a controlled/scheduled substance in the narrative always requires human review before submission (prescribing-liability + regulatory)."},
+    {"id": "PII-EGRESS-ZERO", "type": "privacy", "severity": "reject",
+     "rationale": "The outbound claim payload must contain ZERO detectable PII — only vault tokens (GDPR Art.25/32, HIPAA minimum-necessary)."},
+    {"id": "CAUSAL-PATH-CHECK", "type": "causal", "severity": "warn",
+     "rationale": "Each billed procedure should be reachable from a documented diagnosis through the clinical causal graph (symptom → pathophysiological vector → clinical decision). Missing paths are flagged for review, never silently passed — but the authoritative gate remains the justified_by linkage (the graph's coverage is finite and honest about it)."}
+  ],
+
+  "causal_seeds": {
+    "_annotation": "Clinical causal DAG edges: [cause, effect, mechanism]. Hierarchy: diagnosis → pathophysiological vector → clinical decision (procedure). Interventions use Pearl-style graph surgery (do(X) removes X's incoming edges).",
+    "edges": [
+      ["I10", "cardiovascular_strain", "sustained hypertension loads the cardiovascular system"],
+      ["cardiovascular_strain", "93000", "ECG monitors hypertensive cardiac effects"],
+      ["R07.9", "cardiac_risk", "chest pain raises acute cardiac concern"],
+      ["cardiac_risk", "93000", "ECG is first-line for chest-pain triage"],
+      ["R06.00", "respiratory_compromise", "dyspnea indicates possible airway/lung compromise"],
+      ["respiratory_compromise", "94010", "spirometry quantifies airflow limitation"],
+      ["E11.9", "metabolic_dysregulation", "type-2 diabetes dysregulates metabolism"],
+      ["metabolic_dysregulation", "85025", "CBC/labs monitor systemic metabolic effects"],
+      ["J02.9", "infection_inflammation", "acute pharyngitis marks active infection"],
+      ["infection_inflammation", "85025", "CBC assesses infection severity"]
+    ]
+  },
+
+  "causal_links": [
+    {"from": "note.narrative_term", "to": "diagnosis.icd10_code", "via": "lexicon/stem extraction", "evidence": "matched span + score"},
+    {"from": "diagnosis.icd10_code", "to": "procedure.billable", "via": "MEDICAL-NECESSITY justified_by prefixes"},
+    {"from": "encounter.total_minutes + encounter.patient_type", "to": "em.code", "via": "em_table time bands"},
+    {"from": "auditor.refutation", "to": "state.frozen", "via": "reject-severity rule failure"},
+    {"from": "state.confidence < guardrails.confidence_floor", "to": "HUMAN_OVERRIDE", "via": "hard gate"},
+    {"from": "clinician.approve", "to": "claim.ready", "via": "override desk (who/when audited)"},
+    {"from": "claim.ready", "to": "value_tracker.entry", "via": "measured time saved × coder rate"}
+  ],
+
+  "guardrails": {
+    "confidence_floor": 0.96,
+    "tiers": {"claims": 0.96, "clinical_docs": 0.978},
+    "_annotation": "Risk-tiered gating: platform-wide floor 0.95 · financial/claims 0.96 · regulated clinical documentation 0.978 (the strictest tier — physician-facing autogenerated documentation). One number per risk class, each defensible.",
+    "high_risk_triggers": ["unlisted_code", "controlled_substance_mention"],
+    "_triggers_note": "Each trigger here is ENFORCED in _audit_node → high_risk failure → FREEZE. A monetary claim-total threshold is intentionally NOT listed: this coding pipeline emits ICD-10/CPT codes, not reimbursement amounts, so the manifest asserts only what the code actually enforces.",
+    "on_breach": "FREEZE state → HUMAN_OVERRIDE node → clinician approve/reject → audit(who/why/evidence)",
+    "rehydration": "If the state would freeze for missing information (DX-REQUIRED or sub-floor confidence) and the context had been compressed, the FULL raw context is re-hydrated and the reasoning cycle re-runs once before freezing."
+  },
+
+  "billing": {
+    "_annotation": "Value-based SaaS: fee = 10% of MEASURED savings. Baselines are stated so a finance reviewer can trace every €.",
+    "manual_baseline_minutes_per_note": 15,
+    "baseline_rationale": "Overhage & McCallie, Annals of Internal Medicine 2020 (Cerner, 2191 orgs): 16 min 14 s of EHR time PER ENCOUNTER. Our 15-min baseline sits BELOW the published figure — savings math is conservative by construction. See CLINICAL-VALUE.md.",
+    "coder_hourly_eur": 18.0,
+    "physician_hourly_eur": 70.0,
+    "physician_rationale": "When the PHYSICIAN does their own documentation/coding (typical in Greek private practices), the opportunity cost is physician time, not coder time.",
+    "llm_price_eur_per_1k_tokens_in": 0.003,
+    "llm_price_eur_per_1k_tokens_out": 0.015,
+    "fee_share": 0.10
+  }
+}

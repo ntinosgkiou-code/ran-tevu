@@ -1,3 +1,10 @@
+# Ran-Tevu + OmniOS
+
+Two products, one operator: a shipped, revenue-facing SaaS (**Ran-Tevu**) and the deeper agentic
+research platform it's growing into (**OmniOS**, see [`omnios/`](./omnios)).
+
+---
+
 # Ran-Tevu
 
 AI booking and back-office platform for Greek doctors and clinics — live at **[ran-tevu.gr](https://www.ran-tevu.gr)**.
@@ -57,3 +64,14 @@ tests/                  Test suite (concurrency, e2e booking flow, security, age
 Live in production, onboarding real Greek clinics. Built and directed by a solo, AI-native
 operator — architecture, security review, and shipping decisions are mine; implementation is
 done through AI-assisted engineering.
+
+---
+
+# OmniOS
+
+The next layer up — see **[`omnios/README.md`](./omnios/README.md)** for the full write-up.
+Short version: a privacy-first, verifiable agentic operating layer for clinics — an autopilot that
+proposes (never silently executes) no-show recovery and billing actions, a clinical Q&A engine
+that refuses to answer below a confidence threshold rather than guess, and a tamper-evident,
+Merkle-anchored audit log any clinic can publish externally to prove nothing was altered. Deployed
+as a live, password-gated, multi-tenant pilot.

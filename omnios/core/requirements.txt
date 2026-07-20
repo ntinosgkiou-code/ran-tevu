@@ -1,0 +1,12 @@
+fastapi>=0.110
+uvicorn[standard]>=0.27
+pydantic>=2.6
+httpx>=0.27
+hypothesis>=6.0
+python-multipart>=0.0.9   # required by Request.form() — the /gate password-page POST handler
+tiktoken>=0.7          # exact token accounting for value-based billing (falls back to heuristic)
+tenacity>=8.3          # retry/backoff for channels.py (Twilio/Resend) — imported unguarded, top-level
+cryptography>=42.0     # encryption at rest for PII (GDPR Art.32) — KVStore Fernet layer, fail-closed in prod
+pypdf>=4.0             # PDF lab-result intake (core/lab_analyzer.py) — text-only intake works without it
+# anthropic>=0.40   # OPTIONAL — set ANTHROPIC_API_KEY to enable the live LLM
+#                     NLU/planner paths; runs fully offline & deterministic without it.

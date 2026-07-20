@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="el" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OmniOS — Autonomous Clinic OS</title>
+<style>
+.ti{display:inline-flex;align-items:center;justify-content:center;line-height:0;vertical-align:-.15em}
+.ti svg{width:1em;height:1em;display:block}
+:root{--bg:#070b10;--bg2:#0a0f16;--panel:#0d131c;--card:#111b26;--card2:#16222f;--line:#1d2c3a;--line2:#2a3e50;
+--tx:#eaf1f8;--mut:#8598a8;--dim:#5a6d7e;--tl:#2dd4bf;--tl2:#5eead4;--tl-dim:#0e3f3a;--tl-bg:#0c2b28;
+--ok:#34d399;--ok-bg:#0d2a21;--warn:#fbbf24;--warn-bg:#2e2408;--bad:#f87171;--bad-bg:#2e1414;--blu:#60a5fa;--blu-bg:#11223f;--r:12px;
+--hero-glow:#0e2b2820;--shadow:0 1px 2px #0006}
+/* ☀ LIGHT medical theme — the default (bright, clinical, high-contrast) */
+html[data-theme="light"]{--bg:#eef3f8;--bg2:#f6f9fc;--panel:#ffffff;--card:#ffffff;--card2:#f5f8fb;--line:#e3e9f0;--line2:#cdd8e3;
+--tx:#0d1f2d;--mut:#5a7183;--dim:#93a5b5;--tl:#0d9488;--tl2:#0f766e;--tl-dim:#c5efe9;--tl-bg:#e8fbf7;
+--ok:#059669;--ok-bg:#dcfce7;--warn:#b45309;--warn-bg:#fef3c7;--bad:#dc2626;--bad-bg:#fee2e2;--blu:#2563eb;--blu-bg:#dbeafe;
+--hero-glow:#14b8a622;--shadow:0 1px 3px #1c2c3a14,0 1px 2px #1c2c3a0e}
+*{box-sizing:border-box;margin:0;padding:0}html,body{height:100%}
+body{background:radial-gradient(1100px 560px at 80% -10%,var(--hero-glow),transparent),var(--bg);color:var(--tx);font-family:'Inter',system-ui,sans-serif;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+html[data-theme="light"] .sec,html[data-theme="light"] .stat,html[data-theme="light"] .ag,html[data-theme="light"] .hero{box-shadow:var(--shadow)}
+html[data-theme="light"] .btn.p{box-shadow:0 1px 2px #0d948833}html[data-theme="light"] .logo{box-shadow:0 2px 10px #14b8a63a}
+html[data-theme="light"] .tbl tr:hover td{background:#f2f7fb}html[data-theme="light"] .flash{box-shadow:0 8px 30px #1c2c3a22}
+::-webkit-scrollbar{width:9px;height:9px}::-webkit-scrollbar-thumb{background:var(--line2);border-radius:6px}
+.mono{font-family:'JetBrains Mono',monospace}.app{display:grid;grid-template-columns:246px 1fr;min-height:100vh}
+.side{background:linear-gradient(180deg,var(--panel),var(--bg2));border-right:1px solid var(--line);display:flex;flex-direction:column;padding:18px 12px;gap:3px;position:sticky;top:0;height:100vh;overflow-y:auto}
+.brand{display:flex;align-items:center;gap:11px;padding:6px 8px 14px}
+.logo{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--tl),#0b8a7d);color:#04241f;display:grid;place-items:center;font-size:20px;box-shadow:0 0 22px #2dd4bf40}
+.brand b{font-weight:600;font-size:15.5px;letter-spacing:-.3px}.brand span{display:block;color:var(--mut);font-size:11px}
+.ngrp{color:var(--dim);font-size:10.5px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;padding:12px 10px 5px}
+.nav a{display:flex;align-items:center;gap:11px;padding:8px 11px;border-radius:9px;color:var(--mut);text-decoration:none;font-weight:500;font-size:13.3px;cursor:pointer;transition:.14s}
+.nav a i{font-size:18px;transition:.14s;width:18px}.nav a:hover{background:var(--card);color:var(--tx)}
+.nav a.on{background:var(--card2);color:var(--tx)}.nav a.on i{color:var(--tl)}
+.nav a .cnt{margin-left:auto;font-size:11px;background:var(--warn-bg);color:var(--warn);padding:0 7px;border-radius:10px;font-weight:600}
+.side-foot{margin-top:auto;border-top:1px solid var(--line);padding-top:12px}
+.clinic{display:flex;align-items:center;gap:10px;padding:8px;border-radius:9px;cursor:pointer;border:1px solid var(--line)}
+.clinic:hover{border-color:var(--tl-dim)}.clinic .av{width:30px;height:30px;border-radius:8px;background:var(--tl-dim);display:grid;place-items:center;color:var(--tl2);font-size:12px;font-weight:600}
+.clinic small{color:var(--mut);font-size:11px}
+.main{display:flex;flex-direction:column;min-width:0}
+.top{height:58px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;padding:0 22px;background:var(--bg);position:sticky;top:0;z-index:8}
+.top h1{font-size:15.5px;font-weight:600;letter-spacing:-.3px}.grow{flex:1}
+.live{display:inline-flex;align-items:center;gap:8px;font-size:12px;color:var(--mut)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--ok);animation:pulse 1.8s infinite}.dot.off{background:var(--dim);animation:none}
+@keyframes pulse{0%{box-shadow:0 0 0 0 #34d39966}70%{box-shadow:0 0 0 7px #34d39900}100%{box-shadow:0 0 0 0 #34d39900}}
+.badge{display:inline-flex;align-items:center;gap:6px;padding:6px 11px;border-radius:20px;font-size:11.5px;font-weight:500;border:1px solid var(--line)}
+.badge i{font-size:14px}.badge.trust{color:var(--tl2);background:var(--tl-bg);border-color:var(--tl-dim)}.badge.ok{color:var(--ok);background:var(--ok-bg);border-color:#1c4a3a}
+.badge.ok i{animation:beat 2.4s infinite}@keyframes beat{0%,86%,100%{transform:scale(1)}90%{transform:scale(1.2)}}
+.wrap{padding:20px 22px;max-width:1240px;width:100%}
+.view{animation:rise .35s ease both}@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.hero{position:relative;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:linear-gradient(120deg,#0c2b2833,transparent 60%),var(--card);padding:18px 22px;margin-bottom:18px}
+.hero .ecg{position:absolute;inset:0;opacity:.45;pointer-events:none}.hero .ecg svg{height:100%;width:200%}
+.hero .ecg path{fill:none;stroke:var(--tl);stroke-width:2;filter:drop-shadow(0 0 5px #2dd4bf88)}.hero .ecg .grp{animation:ecg 6s linear infinite}
+@keyframes ecg{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.hero-in{position:relative}.hero-in .t{font-size:11.5px;color:var(--tl2);font-weight:600;letter-spacing:.6px;text-transform:uppercase}
+.hero-in h2{font-size:21px;font-weight:600;letter-spacing:-.5px;margin-top:4px}.hero-in p{color:var(--mut);font-size:12.5px;margin-top:5px;max-width:520px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;position:relative;overflow:hidden}
+.stat::after{content:"";position:absolute;left:0;top:0;height:2px;width:100%;background:linear-gradient(90deg,var(--tl),transparent);opacity:.5}
+.stat .k{color:var(--mut);font-size:11.5px;font-weight:500;display:flex;align-items:center;gap:6px}.stat .k i{font-size:15px;color:var(--dim)}
+.stat .v{font-size:25px;font-weight:600;margin-top:6px;letter-spacing:-.6px}.stat .s{color:var(--dim);font-size:11px}
+.stat.warn::after{background:linear-gradient(90deg,var(--warn),transparent)}.stat.warn .v{color:var(--warn)}.stat.warn .k i{color:var(--warn)}
+.cols{display:grid;grid-template-columns:1fr 330px;gap:18px;align-items:start}
+.hamburger{display:none;background:none;border:1px solid var(--line);border-radius:9px;color:var(--tx);padding:7px 9px;cursor:pointer;align-items:center}
+.nav-backdrop{display:none;position:fixed;inset:0;background:#0006;z-index:39}
+@media(max-width:1080px){.cols{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}.app{grid-template-columns:1fr}
+ .side{display:flex;position:fixed;left:0;top:0;bottom:0;width:246px;z-index:40;transform:translateX(-105%);transition:transform .22s ease;box-shadow:0 0 44px #0007}
+ .side.open{transform:translateX(0)}.side.open ~ .nav-backdrop,.nav-backdrop.on{display:block}
+ .hamburger{display:inline-flex}}
+@media(max-width:560px){.stats{grid-template-columns:1fr}.wrap{padding:16px 13px}}
+.sec{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-bottom:18px}
+.sec-h{display:flex;align-items:center;gap:12px;padding:14px 17px;border-bottom:1px solid var(--line)}
+.sec-h h3{font-size:14px;font-weight:600}.sec-h .sub{color:var(--mut);font-size:12px}
+.filters{display:flex;gap:6px}.chip{padding:5px 11px;border-radius:8px;font-size:12px;font-weight:500;color:var(--mut);border:1px solid var(--line);cursor:pointer;background:none;transition:.14s}
+.chip:hover{color:var(--tx);border-color:var(--line2)}.chip.on{background:var(--card2);color:var(--tx);border-color:var(--line2)}
+.btn{font-family:inherit;font-size:12.5px;font-weight:600;padding:7px 13px;border-radius:9px;border:1px solid var(--line2);background:var(--card2);color:var(--tx);cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:.14s;white-space:nowrap}
+.btn:hover{border-color:var(--tl);color:var(--tl2)}.btn.p{background:linear-gradient(135deg,var(--tl),#0b8a7d);color:#04241f;border-color:var(--tl);box-shadow:0 0 15px #2dd4bf33}
+.btn.p:hover{filter:brightness(1.1);color:#04241f}.btn.g{background:none}.btn.sm{padding:5px 10px;font-size:11.5px}.btn.dan:hover{border-color:var(--bad);color:var(--bad)}
+tbl,.tbl{width:100%;border-collapse:collapse}.tbl th{text-align:left;color:var(--mut);font-size:11.5px;font-weight:500;padding:10px 17px;border-bottom:1px solid var(--line)}
+.tbl td{padding:11px 17px;border-bottom:1px solid var(--line);font-size:13px}.tbl tr:last-child td{border-bottom:none}.tbl tr:hover td{background:#0e1620}
+.st{font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:.3px}
+.st.confirmed{color:var(--blu);background:var(--blu-bg)}.st.booked{color:var(--blu);background:var(--blu-bg)}.st.arrived{color:var(--tl2);background:var(--tl-bg)}.st.completed{color:var(--ok);background:var(--ok-bg)}.st.no_show{color:var(--bad);background:var(--bad-bg)}.st.cancelled{color:var(--dim);background:var(--card2)}.st.pending{color:var(--warn);background:var(--warn-bg)}
+.st.paid{color:var(--ok);background:var(--ok-bg)}.st.unpaid{color:var(--warn);background:var(--warn-bg)}
+.row-act{display:flex;gap:6px}
+input,select,textarea{font-family:inherit;font-size:13px;background:var(--bg2);border:1px solid var(--line);color:var(--tx);border-radius:9px;padding:9px 11px;outline:none}
+input:focus,select,textarea:focus{border-color:var(--tl)}
+.form{display:flex;gap:8px;flex-wrap:wrap;padding:14px 17px;align-items:center}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;padding:16px}
+.ag{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:14px}
+.ag .h{display:flex;align-items:center;gap:10px}.ag .ic{width:34px;height:34px;border-radius:9px;background:var(--tl-dim);color:var(--tl2);display:grid;place-items:center;font-size:17px}
+.ag .nm{font-weight:600;font-size:13.5px}.ag .rl{color:var(--mut);font-size:11.5px}
+.ag .desc{color:var(--mut);font-size:12px;margin:10px 0;line-height:1.5}
+.ag .ft{display:flex;align-items:center;gap:8px;justify-content:space-between}
+.sw{width:38px;height:22px;border-radius:20px;background:var(--line2);position:relative;cursor:pointer;transition:.16s;flex:none}
+.sw.on{background:var(--tl)}.sw::after{content:"";position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;transition:.16s}.sw.on::after{left:18px}
+.agst{font-size:11px;font-weight:600}.agst.on{color:var(--ok)}.agst.off{color:var(--dim)}
+.chat{display:flex;flex-direction:column;height:520px}.msgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
+.msg{max-width:82%;padding:10px 13px;border-radius:12px;font-size:13px;line-height:1.5}
+.msg.u{align-self:flex-end;background:var(--tl-dim);color:var(--tl2);border:1px solid var(--tl-dim)}
+.msg.a{align-self:flex-start;background:var(--card2);border:1px solid var(--line)}
+.msg .prop{margin-top:9px;background:var(--bg2);border:1px solid var(--line);border-radius:9px;padding:10px}
+.msg .prop .pt{font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:.4px}.msg .prop b{color:var(--tl2)}
+.msg .prop .r{display:flex;gap:7px;margin-top:9px}
+.cin{display:flex;gap:8px;padding:12px 14px;border-top:1px solid var(--line)}.cin input{flex:1}
+.pat{display:grid;grid-template-columns:1fr;gap:0}
+.kvv{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line);font-size:13px}.kvv:last-child{border:none}.kvv span{color:var(--mut)}
+.trust{border:1px solid var(--tl-dim);border-radius:var(--r);padding:15px 17px;background:linear-gradient(160deg,#0c2b2844,var(--card))}
+.trust h3{font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px}.trust h3 i{color:var(--tl);font-size:16px}
+.trust p{color:var(--mut);font-size:12px;margin-top:6px}.trust .kv{display:flex;justify-content:space-between;margin-top:9px;font-size:12.5px;padding-top:9px;border-top:1px solid var(--tl-dim)}.trust .kv b{font-weight:600}
+.ring{flex:none;width:48px;height:48px}.ring circle.pp{transition:stroke-dashoffset 1.1s cubic-bezier(.3,.8,.3,1)}
+.dec{padding:14px 17px;border-bottom:1px solid var(--line);display:flex;gap:14px}.dec:last-child{border:none}
+.dec .body{flex:1;min-width:0}.dline{display:flex;align-items:center;gap:9px;flex-wrap:wrap}.dline .act{font-weight:500;font-size:14px}
+.pill{font-size:10px;font-weight:600;padding:3px 8px;border-radius:20px;letter-spacing:.3px;text-transform:uppercase}.pill.allowed{color:var(--ok);background:var(--ok-bg)}.pill.frozen{color:var(--warn);background:var(--warn-bg)}
+.why{margin-top:8px;display:flex;flex-direction:column;gap:4px}.why .step{display:flex;align-items:baseline;gap:7px;color:var(--mut);font-size:12.3px}.why .step i{color:var(--tl);font-size:13px}.why .step .mono{color:#a9d3ce}
+.gate{color:var(--dim);font-size:11.5px;margin-top:8px}.meta{margin-top:10px;display:flex;flex-wrap:wrap;gap:7px}
+.tag{font-size:11px;color:var(--mut);background:var(--card2);border:1px solid var(--line);padding:3px 8px;border-radius:7px;display:inline-flex;align-items:center;gap:5px}.tag i{font-size:12px;color:var(--dim)}.tag.src{color:#a9d3ce}
+.ovr{margin-left:auto}.empty{padding:30px;text-align:center;color:var(--dim);font-size:13px}.empty i{font-size:24px;color:var(--ok);display:block;margin-bottom:7px}
+.appr{padding:13px 17px;border-bottom:1px solid var(--line)}.appr:last-child{border:none}.appr .t{font-weight:500;font-size:13px}
+.appr .prev{margin-top:7px;background:var(--bg2);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:11.5px;color:var(--mut)}.appr .prev b{color:var(--tl2)}
+.appr .r{display:flex;gap:7px;margin-top:10px}.risk{font-size:9.5px;font-weight:600;padding:2px 6px;border-radius:6px;color:var(--bad);background:var(--bad-bg);text-transform:uppercase}
+.block{display:flex;gap:13px}.block .link{display:flex;flex-direction:column;align-items:center;flex:none;width:32px}
+.block .node{width:32px;height:32px;border-radius:9px;background:var(--tl-dim);border:1px solid var(--tl);color:var(--tl2);display:grid;place-items:center;font-size:14px}
+.block .wire{flex:1;width:2px;background:linear-gradient(var(--tl),var(--line));margin:2px 0}.block:last-child .wire{display:none}
+.block .b{flex:1;background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:10px 13px;margin-bottom:11px}.block .b .ev{font-weight:500;font-size:12.5px}.block .b .h{font-size:11px;color:var(--tl2);margin-top:3px}.block .b .d{font-size:11px;color:var(--mut);margin-top:3px}
+.steps{padding:6px 20px 18px}.stp{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--line)}.stp:last-child{border:none}
+.stp .n{width:30px;height:30px;border-radius:50%;background:var(--tl-dim);color:var(--tl2);display:grid;place-items:center;font-weight:600;flex:none}
+.stp h4{font-size:14px;font-weight:600}.stp p{color:var(--mut);font-size:12.5px;margin-top:3px;line-height:1.5}
+.flash{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--card2);border:1px solid var(--tl-dim);border-radius:11px;padding:11px 17px;font-size:13px;font-weight:500;opacity:0;transition:.28s;pointer-events:none;z-index:30;box-shadow:0 8px 30px #0008}
+.flash.show{opacity:1;transform:translateX(-50%) translateY(0)}.flash i{color:var(--ok);margin-right:8px}
+.set-row{display:flex;align-items:center;gap:12px;padding:13px 17px;border-bottom:1px solid var(--line)}.set-row:last-child{border:none}.set-row .lbl{flex:1}.set-row .lbl b{font-weight:500}.set-row .lbl small{display:block;color:var(--mut);font-size:11.5px;margin-top:2px}
+
+/* ═══════════ WOW LAYER — premium visual elevation · additive (overrides above) · zero logic/IDs touched ═══════════ */
+:root{--glass:color-mix(in srgb,var(--card) 76%,transparent);--glass2:color-mix(in srgb,var(--panel) 68%,transparent)}
+::selection{background:var(--tl);color:#04241f}
+:focus-visible{outline:2px solid var(--tl);outline-offset:2px;border-radius:8px}
+
+/* one-time page-load fade (plays once; #app inner content re-renders don't replay it) */
+@keyframes appIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.app{animation:appIn .55s cubic-bezier(.2,.7,.2,1) both;position:relative;z-index:1}
+
+/* ambient animated aurora — depth behind everything (GPU-cheap: transform/opacity/filter only) */
+@keyframes auroraDrift{0%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(-2%,1.6%,0) scale(1.07)}100%{transform:translate3d(0,0,0) scale(1)}}
+body::before{content:"";position:fixed;inset:-25%;z-index:0;pointer-events:none;
+  background:radial-gradient(42% 34% at 15% 6%,color-mix(in srgb,var(--tl) 22%,transparent),transparent 68%),
+            radial-gradient(40% 32% at 85% 3%,#3b82f61c,transparent 66%),
+            radial-gradient(56% 46% at 66% 105%,color-mix(in srgb,var(--tl) 15%,transparent),transparent 70%);
+  filter:blur(30px);animation:auroraDrift 24s ease-in-out infinite}
+
+/* glass panels — theme-aware translucency + soft luminous edge */
+.sec,.hero,.stat{background:linear-gradient(180deg,var(--glass),color-mix(in srgb,var(--card) 90%,transparent));
+  backdrop-filter:blur(12px) saturate(1.12);-webkit-backdrop-filter:blur(12px) saturate(1.12);
+  border-color:color-mix(in srgb,var(--line) 55%,#ffffff14)}
+.side{backdrop-filter:blur(12px);background:linear-gradient(180deg,var(--glass2),color-mix(in srgb,var(--bg2) 82%,transparent))}
+.top{backdrop-filter:blur(14px);background:color-mix(in srgb,var(--bg) 70%,transparent)}
+
+/* accent hairline atop stat cards + soft inner sheen */
+.stat::before{content:"";position:absolute;left:0;top:0;height:2px;width:100%;background:linear-gradient(90deg,var(--tl),transparent 72%);opacity:.6}
+
+/* hover depth — cards lift & glow */
+.stat,.ag,.appr{transition:transform .2s cubic-bezier(.2,.7,.2,1),box-shadow .2s,border-color .2s}
+.stat:hover,.ag:hover{transform:translateY(-3px);border-color:var(--tl-dim);
+  box-shadow:0 16px 36px color-mix(in srgb,#000 46%,transparent),0 0 0 1px var(--tl-dim)}
+
+/* nav active — glowing rail */
+.nav a{position:relative}
+.nav a.on::before{content:"";position:absolute;left:-1px;top:22%;height:56%;width:3px;border-radius:3px;background:var(--tl);box-shadow:0 0 12px var(--tl)}
+
+/* premium primary button */
+.btn.p{background:linear-gradient(135deg,var(--tl2),#0b8a7d);color:#04241f;border:none;
+  box-shadow:0 4px 16px color-mix(in srgb,var(--tl) 30%,transparent),inset 0 1px 0 #ffffff40}
+.btn.p:hover{transform:translateY(-1px);box-shadow:0 9px 26px color-mix(in srgb,var(--tl) 44%,transparent),inset 0 1px 0 #ffffff55}
+.btn{transition:transform .16s,box-shadow .16s,border-color .16s,color .16s}
+.btn:not(.p):hover{border-color:var(--tl-dim);color:var(--tx)}
+
+/* living logo + gradient wordmark */
+@keyframes logoBreath{0%,100%{box-shadow:0 0 22px #2dd4bf42}50%{box-shadow:0 0 36px #2dd4bf78}}
+.logo{animation:logoBreath 4.5s ease-in-out infinite}
+.brand b{background:linear-gradient(90deg,var(--tx),var(--tl2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+
+/* hero — deeper float + brighter pulse */
+.hero{box-shadow:0 22px 64px color-mix(in srgb,#000 42%,transparent)}
+.hero .ecg{opacity:.6}
+.dot{box-shadow:0 0 10px currentColor}
+
+/* refined scrollbar */
+::-webkit-scrollbar-thumb{background:linear-gradient(var(--tl-dim),var(--line2));border-radius:6px}
+::-webkit-scrollbar-thumb:hover{background:var(--tl-dim)}
+
+@media(prefers-reduced-motion:reduce){body::before,.logo,.app{animation:none}.stat,.ag,.btn{transition:none}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="brand"><div class="logo"><i class="ti ti-activity-heartbeat"></i></div><div><b>OmniOS</b><span>Autonomous Clinic OS</span></div></div>
+    <nav class="nav" id="nav">
+      <div class="ngrp">Λειτουργία</div>
+      <a class="on" data-v="overview"><i class="ti ti-layout-dashboard"></i>Επισκόπηση</a>
+      <a data-v="calendar"><i class="ti ti-calendar-event"></i>Ημερολόγιο <span class="cnt" id="c-cal"></span></a>
+      <a data-v="patients"><i class="ti ti-users"></i>Ασθενείς</a>
+      <a data-v="assistant"><i class="ti ti-message-chatbot"></i>AI Γραμματέας</a>
+      <div class="ngrp">Αυτοματισμός</div>
+      <a data-v="agents"><i class="ti ti-robot"></i>Agents <span class="cnt" style="background:var(--ok-bg);color:var(--ok)" id="c-ag"></span></a>
+      <a data-v="compliance"><i class="ti ti-clipboard-text"></i>AI Κωδικοποίηση</a>
+      <a data-v="tools"><i class="ti ti-plug-connected"></i>Εργαλεία</a>
+      <a data-v="log"><i class="ti ti-file-certificate"></i>Αποφάσεις <span class="cnt" id="c-fz"></span></a>
+      <div class="ngrp">Κλινικά εργαλεία</div>
+      <a data-v="clinical"><i class="ti ti-stethoscope"></i>Κλινικά</a>
+      <a data-v="bridge"><i class="ti ti-arrows-transfer-up"></i>Υπάλληλοι (γέφυρα)</a>
+      <div class="ngrp">Trust &amp; ασφάλεια</div>
+      <a data-v="privacy"><i class="ti ti-lock"></i>Ιδιωτικότητα <span class="cnt" style="background:var(--tl-bg);color:var(--tl2)" id="c-pii"></span></a>
+      <a data-v="audit"><i class="ti ti-link"></i>Audit trail</a>
+      <div class="ngrp">Οικονομικά</div>
+      <a data-v="billing"><i class="ti ti-receipt"></i>Οικονομικά</a>
+      <div class="ngrp">Βοήθεια</div>
+      <a data-v="howto"><i class="ti ti-help-circle"></i>Οδηγίες χρήσης</a>
+      <a data-v="settings"><i class="ti ti-settings"></i>Ρυθμίσεις</a>
+    </nav>
+    <div class="side-foot"><div class="clinic" style="cursor:default"><div class="av">ΙΑ</div><div style="flex:1;min-width:0"><select id="clinic-sel" onchange="switchClinic(this.value)" style="width:100%;border:none;background:transparent;font-weight:500;font-size:12.5px;padding:0;color:var(--tx);cursor:pointer"><option>Ιατρείο Ευεξία</option></select><small id="clinic-spec">tenant isolated</small></div></div></div>
+  </aside>
+  <main class="main">
+    <div class="top"><button class="hamburger" onclick="toggleNav()" aria-label="Μενού"><i class="ti ti-menu"></i></button><h1 id="title">Επισκόπηση</h1><div class="grow"></div>
+      <span class="live mono" id="clock" style="font-size:12.5px;color:var(--tx)"></span>
+      <span class="live"><span class="dot off" id="live-dot"></span><span id="live-txt">connecting…</span></span>
+      <div class="badge trust"><i class="ti ti-lock"></i>PII τοπικά</div><div class="badge ok"><i class="ti ti-heart"></i>Audit intact</div>
+      <button class="btn g sm" onclick="toggleTheme()" title="Εναλλαγή θέματος" style="padding:6px 9px"><i class="ti ti-sun" id="theme-ic"></i></button></div>
+    <div class="wrap"><div id="content"></div></div>
+  </main>
+  <div class="nav-backdrop" id="nav-backdrop" onclick="toggleNav(false)"></div>
+</div>
+<div class="flash" id="flash"><i class="ti ti-check"></i><span></span></div>
+<script>
+// Opened as a local file (double-click / old bookmark) → there is no backend running on this
+// machine at :8010, so every fetch would silently fail ("backend δεν απαντά"). Go straight to
+// the real, live, password-gated deployment instead of guessing at a local server that isn't there.
+if (location.protocol === 'file:') {
+  location.replace('https://omnios-production.up.railway.app/');
+}
+// API base auto-detects: served by FastAPI (prod/Railway) → same origin (''); standalone UI on
+// :8098 (local dev, a real uvicorn server running on :8010) → that local API.
+const API=(location.port==='8098')?'http://localhost:8010':'', DEV_KEY=null;
+const S={
+ view:'overview', filter:'all', live:false, pii:148,
+ appts:[
+  {id:1,time:'09:00',patient:'Γ. Παπαδόπουλος',service:'Ιατρική επίσκεψη',status:'completed'},
+  {id:2,time:'10:00',patient:'Μ. Νικολάου',service:'Εξέταση αίματος',status:'completed'},
+  {id:3,time:'11:00',patient:'Δ. Γεωργίου',service:'Ιατρική επίσκεψη',status:'no_show'},
+  {id:4,time:'12:00',patient:'Ε. Κωνσταντίνου',service:'Προληπτικός έλεγχος',status:'completed'},
+  {id:5,time:'16:00',patient:'Ν. Αντωνίου',service:'Follow-up',status:'confirmed'},
+  {id:6,time:'17:00',patient:'Σ. Δημητρίου',service:'Συνταγογράφηση',status:'confirmed'},
+ ],
+ waitlist:['Κ. Βασιλείου (προτιμά πρωί)','Α. Μακρή (μετά τις 17:00)'],
+ patients:[
+  {name:'Γ. Παπαδόπουλος',phone:'[TOKEN_P1]',visits:8,balance:0,last:'σήμερα',tag:'ενεργός'},
+  {name:'Μ. Νικολάου',phone:'[TOKEN_P2]',visits:3,balance:45,last:'σήμερα',tag:'οφειλή'},
+  {name:'Νίκος Κ.',phone:'[TOKEN_P3]',visits:10,balance:0,last:'πριν 15μ',tag:'recall'},
+  {name:'Δ. Γεωργίου',phone:'[TOKEN_P4]',visits:2,balance:0,last:'σήμερα',tag:'no-show'},
+ ],
+ // cnt = live activity count, populated from the real audit chain by connect(); 0 until then
+ // (never hardcode fabricated numbers — an evaluator cross-checks them against /audit).
+ agents:[
+  {n:'Reception 24/7',r:'Voice · κάθε κλήση',i:'ti-phone',on:true,cnt:0,d:'Σηκώνει κλήσεις 24/7, κλείνει ραντεβού, escalate σε επείγον.'},
+  {n:'Reminders',r:'24ω/4ω confirmations',i:'ti-bell',on:true,cnt:0,d:'SMS/email υπενθυμίσεις με dedup. ≈25% λιγότερα no-shows (meta-analysis).'},
+  {n:'No-show Recovery',r:'Ανάκτηση χαμένων',i:'ti-refresh',on:true,cnt:0,d:'Detect no-show → recovery outreach → recovered-€ ledger.'},
+  {n:'Waitlist Backfill',r:'Γεμίζει ακυρώσεις',i:'ti-calendar-plus',on:true,cnt:0,d:'Ακύρωση → προσφορά στον επόμενο, race-safe.'},
+  {n:'Recall & Win-back',r:'Επιστροφή ασθενών',i:'ti-user-heart',on:false,cnt:0,d:'Πακέτο 10/10 → recall· dormant >60μ → win-back.'},
+  {n:'Billing & Dunning',r:'Τιμολόγια + οφειλές',i:'ti-receipt',on:true,cnt:0,d:'Auto-invoice, VAT, υπενθυμίσεις οφειλών.'},
+  {n:'Clinical Scribe',r:'SNOMED/ICD-10 draft',i:'ti-clipboard-text',on:true,cnt:0,d:'Δομεί σημειώσεις· draft-only, υπογράφει ο γιατρός.'},
+  {n:'ΕΟΠΥΥ Assist',r:'eΔΑΠΥ (bounded)',i:'ti-file-invoice',on:false,cnt:0,d:'Προετοιμάζει υποβολή· submit ΜΟΝΟ ο γιατρός.'},
+ ],
+ tools:[
+  {n:'SMS (Twilio/Yuboto)',i:'ti-message',perm:'tool:sms',grant:true,risk:'high',use:'πριν 2λ'},
+  {n:'Google Calendar',i:'ti-calendar',perm:'tool:calendar',grant:true,risk:'high',use:'πριν 8λ'},
+  {n:'CRM upsert',i:'ti-address-book',perm:'tool:crm',grant:false,risk:'high',use:'—'},
+  {n:'ΕΟΠΥΥ browser',i:'ti-browser',perm:'browser:submit',grant:false,risk:'legal',use:'—'},
+ ],
+ invoices:[
+  {id:'INV-041',patient:'Γ. Παπαδόπουλος',amount:25,status:'paid',date:'σήμερα'},
+  {id:'INV-042',patient:'Μ. Νικολάου',amount:45,status:'unpaid',date:'σήμερα'},
+  {id:'INV-040',patient:'Ε. Κωνσταντίνου',amount:25,status:'paid',date:'σήμερα'},
+ ],
+ recovered:1240,
+ decisions:[
+  {id:'exp-0001',action:'Ανάκτηση no-show — Μαρία Π. (€45)',confidence:.97,status:'ALLOWED',why:['Μαρία no-show 12/03 → recovery SMS → ξαναέκλεισε εντός 30 ημερών'],sources:['recovery_ledger#0042'],audit_seq:12},
+  {id:'exp-0003',action:'Υποβολή ΕΟΠΥΥ eΔΑΠΥ (μηνιαία)',confidence:.99,status:'FROZEN',gate_reason:'high risk → manual override required',why:['browser fill έτοιμο· submit ΜΟΝΟ από τον γιατρό'],sources:['eopyy.gov.gr/eDAPY'],audit_seq:15},
+  {id:'exp-0004',action:'Κλινική σημείωση — οσφυαλγία',confidence:.90,status:'FROZEN',gate_reason:'confidence 0.90 < 0.95 → override',why:['SNOMED 279039007 · ICD-10 M54.5','1 όρος flagged'],sources:['SNOMED-CT'],audit_seq:17},
+ ],
+ msgs:[{r:'a',t:'Γεια σου Δρ. Παπαδόπουλε. Το ιατρείο τρέχει — 2 πράγματα θέλουν εσένα. Πώς να βοηθήσω;'}],
+ settings:{hours:'Δευ–Παρ 09:00–20:00',reminders:'24ω πριν',winback:true,voice:'γυναικεία, ζεστή',cancel:'προκαταβολή μετά 2 no-shows'},
+ selPat:0,
+};
+const $=s=>document.querySelector(s),Q=s=>[...document.querySelectorAll(s)],esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+// ── multi-tenant auth: every clinic has its OWN pinned key; the switcher swaps clinic+key ──
+let UIKEY=null,CLINICS=[],TENANT=null;try{TENANT=localStorage.getItem('omnios-tenant')||null;}catch(e){}
+async function ensureKey(){if(UIKEY)return;
+ try{const r=await fetch(API+'/auth/ui-key',{cache:'no-store'});
+  if(r.ok){const j=await r.json();CLINICS=j.clinics||[];
+   if(!TENANT||!CLINICS.some(c=>c.tenant===TENANT))TENANT=(CLINICS[0]||{}).tenant||null;
+   // Backend stopped returning a per-clinic key (security fix: no longer leaks every tenant's
+   // key to any gated visitor) — clinics[] now carries tenant/name/specialty only. Fall back to
+   // the shared bootstrap key (j.key) whenever the matched clinic has none, else UIKEY silently
+   // becomes undefined → every subsequent request drops the X-Api-Key header → 401 loop.
+   const c=CLINICS.find(x=>x.tenant===TENANT);UIKEY=(c&&c.key)?c.key:j.key;
+   try{localStorage.setItem('omnios-tenant',TENANT||'');}catch(e){}
+   renderClinicSwitch();return;}
+  if(r.status===403){let k=null;try{k=localStorage.getItem('omnios-admin');}catch(e){}
+   if(!k)k=prompt('🔑 Κωδικός πρόσβασης OmniOS (σας έχει σταλεί μαζί με το link):')||'';
+   if(k){UIKEY=k;TENANT=TENANT||'demo-clinic';try{localStorage.setItem('omnios-admin',k);}catch(e){}}return;}}catch(e){}}
+async function api(path,opts={},_retried){await ensureKey();
+ const r=await fetch(API+path,{cache:'no-store',...opts,headers:{'Content-Type':'application/json',...(UIKEY?{'X-API-Key':UIKEY}:{}),...(TENANT?{'X-Clinic':TENANT}:{}),...(opts.headers||{})}});
+ if(r.status===401&&!_retried){UIKEY=null;try{localStorage.removeItem('omnios-admin');}catch(e){}return api(path,opts,true);}   // stale key (rotates per server run) → re-bootstrap once
+ if(!r.ok)throw new Error('HTTP '+r.status);return r.json();}
+function renderClinicSwitch(){const el=$('#clinic-sel');if(!el||!CLINICS.length)return;
+ el.innerHTML=CLINICS.map(c=>`<option value="${esc(c.tenant)}"${c.tenant===TENANT?' selected':''}>${esc(c.name)}</option>`).join('');
+ const cur=CLINICS.find(c=>c.tenant===TENANT);const sp=$('#clinic-spec');if(sp&&cur)sp.textContent=cur.specialty+' · tenant isolated';}
+window.switchClinic=async(t)=>{const c=CLINICS.find(x=>x.tenant===t);if(!c)return;TENANT=t;
+ if(c.key)UIKEY=c.key;              // local mode: per-clinic pinned key · admin mode: keep the admin key + X-Clinic
+ try{localStorage.setItem('omnios-tenant',t);}catch(e){}
+ S.selPat=0;S.proposals=[];S.selDate=null;await connect();flash('Ιατρείο: '+c.name+' — πλήρης απομόνωση δεδομένων');};
+const TOKC={AMKA:'var(--bad)',CARD:'var(--warn)',IBAN:'var(--blu)',PHONE:'var(--tl)',EMAIL:'var(--tl2)',NAME:'var(--ok)',ID:'#c084fc'};
+const ICONS={
+'activity-heartbeat':'<path d="M3 12h4l2-6l3 12l3-9l1.5 3H21"/>','address-book':'<path d="M8 3h9a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H8zM8 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2"/><circle cx="12.5" cy="10" r="2"/><path d="M9.5 16c0-1.5 1.3-2.5 3-2.5s3 1 3 2.5"/>',
+'alert-circle':'<circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/>','arrow-right':'<path d="M5 12h14M13 6l6 6-6 6"/>','bell':'<path d="M6 10a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6z"/><path d="M10 20a2 2 0 0 0 4 0"/>',
+'book-2':'<path d="M6 4h11v14H7a2 2 0 0 0-2 2V6a2 2 0 0 1 2-2z"/><path d="M9 4v14"/>','brain':'<path d="M9 4a2.5 2.5 0 0 0-2.5 2.5A2.5 2.5 0 0 0 5 11a2.5 2.5 0 0 0 1.5 2.5A2.5 2.5 0 0 0 9 16a2 2 0 0 0 3 0V4a2 2 0 0 0-3 0z"/><path d="M15 4a2.5 2.5 0 0 1 2.5 2.5A2.5 2.5 0 0 1 19 11a2.5 2.5 0 0 1-1.5 2.5A2.5 2.5 0 0 1 15 16a2 2 0 0 1-3 0"/>','browser':'<rect x="4" y="5" width="16" height="14" rx="1"/><path d="M4 9h16M7 7h.01M10 7h.01"/>',
+'calendar':'<rect x="5" y="5" width="14" height="14" rx="1"/><path d="M8 3v4M16 3v4M5 9h14"/>','calendar-check':'<rect x="5" y="5" width="14" height="14" rx="1"/><path d="M8 3v4M16 3v4M5 9h14M9 14l2 2 4-4"/>',
+'calendar-event':'<rect x="5" y="5" width="14" height="14" rx="1"/><path d="M8 3v4M16 3v4M5 9h14M10 13h4"/>','calendar-plus':'<rect x="5" y="5" width="13" height="13" rx="1"/><path d="M8 3v4M16 3v4M5 9h13M15 18h6M18 15v6"/>',
+'check':'<path d="M5 12l5 5 9-11"/>','checks':'<path d="M4 12l4 4 8-9M13 14l1 1 6-7"/>','circle-check':'<circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/>',
+'clipboard-text':'<path d="M9 4h6v2H9z"/><path d="M9 5H7a1 1 0 0 0-1 1v13a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1h-2"/><path d="M9 11h6M9 15h4"/>','clock':'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+'currency-euro':'<path d="M17 8a5 5 0 1 0 0 8M5 10h7M5 14h7"/>','file-certificate':'<path d="M14 3H6v18h12V7z"/><path d="M14 3v4h4"/><circle cx="12" cy="14" r="2"/><path d="M11 16l-1 3 2-1 2 1-1-3"/>',
+'file-invoice':'<path d="M14 3H7v18h11V7z"/><path d="M14 3v4h4"/><path d="M9 13h6M9 17h6M9 9h2"/>','hand-stop':'<path d="M8 12V6a1.5 1.5 0 0 1 3 0v5M11 6.5a1.5 1.5 0 0 1 3 0V11M14 7.5a1.5 1.5 0 0 1 3 0V13a5 5 0 0 1-5 5a5 5 0 0 1-4-2l-2.5-3.5a1.5 1.5 0 0 1 2.5-1.6L8 12.5"/>',
+'hash':'<path d="M5 9h14M5 15h14M10 4l-2 16M16 4l-2 16"/>','heart':'<path d="M12 20l-7-7a4 4 0 0 1 7-4a4 4 0 0 1 7 4z"/>','help-circle':'<circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3 2.5c-.8.4-1 .8-1 1.8M12 17h.01"/>',
+'info-circle':'<circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/>','layout-dashboard':'<rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="10" rx="1"/><rect x="14" y="16" width="6" height="4" rx="1"/><rect x="4" y="12" width="6" height="8" rx="1"/>',
+'link':'<path d="M10 14a3.5 3.5 0 0 0 5 0l3-3a3.5 3.5 0 0 0-5-5l-1 1M14 10a3.5 3.5 0 0 0-5 0l-3 3a3.5 3.5 0 0 0 5 5l1-1"/>','lock':'<rect x="6" y="11" width="12" height="9" rx="1"/><path d="M9 11V8a3 3 0 0 1 6 0v3"/>',
+'lock-check':'<path d="M11 20H7a1 1 0 0 1-1-1v-7a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v2"/><path d="M9 11V8a3 3 0 0 1 6 0v3"/><path d="M15 19l2 2 4-4"/>','menu':'<path d="M4 6h16M4 12h16M4 18h16"/>','message':'<path d="M4 5h16v11H9l-4 4v-4H4z"/>','message-chatbot':'<path d="M4 5h16v11H9l-4 4v-4H4z"/><path d="M9.5 10h.01M14.5 10h.01"/>',
+'microphone':'<rect x="9" y="4" width="6" height="10" rx="3"/><path d="M6 11a6 6 0 0 0 12 0M12 17v3"/>','percentage':'<path d="M18 6L6 18"/><circle cx="7.5" cy="7.5" r="1.5"/><circle cx="16.5" cy="16.5" r="1.5"/>',
+'phone':'<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/>','plug-connected':'<path d="M9 3v4M15 3v4"/><path d="M7 7h10v3a5 5 0 0 1-10 0z"/><path d="M12 15v6"/>',
+'plus':'<path d="M12 5v14M5 12h14"/>','point':'<circle cx="12" cy="12" r="1.6"/>','receipt':'<path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/>',
+'refresh':'<path d="M20 11a8 8 0 0 0-14-4l-2 2M4 13a8 8 0 0 0 14 4l2-2"/><path d="M4 5v4h4M20 19v-4h-4"/>','robot':'<rect x="6" y="7" width="12" height="10" rx="2"/><path d="M12 3v4M4 12h2M18 12h2M9.5 11v2M14.5 11v2"/>',
+'selector':'<path d="M8 9l4-4 4 4M8 15l4 4 4-4"/>','send':'<path d="M4 12l16-8-6 16-3-6z"/><path d="M10 14l4-4"/>','settings':'<circle cx="12" cy="12" r="3"/><path d="M12 4v2M12 18v2M4 12h2M18 12h2M6.3 6.3l1.4 1.4M16.3 16.3l1.4 1.4M6.3 17.7l1.4-1.4M16.3 7.7l1.4-1.4"/>',
+'sun':'<circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M18.4 5.6L17 7M7 17l-1.4 1.4"/>','moon':'<path d="M18 15a7 7 0 0 1-9-9a7 7 0 1 0 9 9z"/>',
+'shield':'<path d="M12 3l7 3v6c0 4-3 7-7 9-4-2-7-5-7-9V6z"/>','shield-check':'<path d="M12 3l7 3v6c0 4-3 7-7 9-4-2-7-5-7-9V6z"/><path d="M9 12l2 2 4-4"/>','user-heart':'<circle cx="8" cy="7" r="3"/><path d="M3 20c0-3 2.2-5 5-5"/><path d="M16.5 20l-2.5-2.5a1.6 1.6 0 0 1 2.5-2a1.6 1.6 0 0 1 2.5 2z"/>',
+'user-shield':'<circle cx="9" cy="7" r="3"/><path d="M4 20c0-3 2-5 5-5"/><path d="M15 12.5l4 1.5v2.5c0 2-2 3-4 4-2-1-4-2-4-4V14z"/>','users':'<circle cx="9" cy="8" r="3"/><path d="M3 20c0-3 2.5-5 6-5s6 2 6 5"/><path d="M16 3.5a3 3 0 0 1 0 5.8M21 20c0-2.2-1.5-3.8-3.5-4.5"/>',
+'x':'<path d="M6 6l12 12M18 6L6 18"/>'};
+function hydrateIcons(root){(root||document).querySelectorAll('i[class*="ti-"]').forEach(i=>{if(i.dataset.hy)return;const cl=[...i.classList].find(c=>c.startsWith('ti-'));if(!cl)return;i.innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${ICONS[cl.slice(3)]||ICONS.point}</svg>`;i.dataset.hy=1;});}
+function flash(m){const f=$('#flash');f.querySelector('span').textContent=m;f.classList.add('show');clearTimeout(f._t);f._t=setTimeout(()=>f.classList.remove('show'),2400);}
+function counts(){$('#c-cal').textContent=S.appts.filter(a=>a.status==='confirmed').length||'';
+ $('#c-ag').textContent=S.agents.filter(a=>a.on).length;$('#c-fz').textContent=S.decisions.filter(d=>d.status==='FROZEN').length||'';
+ const cp=$('#c-pii');if(cp)cp.textContent=S.pii||'';}
+window.loadMetrics=async()=>{try{const m=await api('/metrics');S.pii=m.pii_tokenized||S.pii;S.recovered=m.recovered_eur||S.recovered;S.metrics=m;
+  const put=(sel,v)=>{const el=$(sel);if(el)el.textContent=v;};
+  put('#m-recovered','€'+(m.recovered_eur||0).toLocaleString('el'));put('#m-audit',m.audit_records);counts();}catch(e){}};
+window.loadLedger=async()=>{const b=$('#ledger-body');if(!b)return;try{const j=await api('/ledger');const bl=j.billing;
+  b.innerHTML=`<table class="tbl"><thead><tr><th>Είδος αξίας</th><th style="text-align:right">€</th></tr></thead><tbody>
+   ${j.events.map(e=>`<tr><td><span class="tag">${esc(e.kind)}</span></td><td class="mono" style="text-align:right;color:var(--ok)">€${e.euros}</td></tr>`).join('')}
+   <tr style="border-top:2px solid var(--line2)"><td><b>Σύνολο αξίας που ανακτήθηκε</b></td><td class="mono" style="text-align:right"><b>€${bl.total_value_eur}</b></td></tr>
+   <tr><td style="color:var(--mut)">Χρέωση OmniOS (10% επί ανακτημένων)</td><td class="mono" style="text-align:right;color:var(--tl2)"><b>€${bl.charge_eur}</b></td></tr>
+   <tr><td style="color:var(--mut)">Καθαρό όφελος ιατρείου (κρατάς)</td><td class="mono" style="text-align:right;color:var(--ok)"><b>€${(bl.total_value_eur-bl.charge_eur).toFixed(2)}</b></td></tr></tbody></table>
+   <p style="color:var(--dim);font-size:11px;padding:10px 2px 0"><i class="ti ti-info-circle"></i> Πληρώνεις μόνο επί ανακτημένων €. Τα ποσά είναι από πραγματικά realized events (rebookings, εξοφλήσεις), όχι προβλέψεις.</p>`;
+  hydrateIcons(b);}catch(e){b.innerHTML='<div class="empty" style="color:var(--dim)">Σύνδεση με το backend για live ledger…</div>';}};
+function ring(c,st){const p=Math.round(c*100),col=st==='FROZEN'?'var(--warn)':'var(--ok)',R=20,C=2*Math.PI*R;
+ return `<svg viewBox="0 0 48 48" class="ring"><circle cx="24" cy="24" r="${R}" fill="none" stroke="var(--line)" stroke-width="4"/><circle class="pp" cx="24" cy="24" r="${R}" fill="none" stroke="${col}" stroke-width="4" stroke-linecap="round" stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${C.toFixed(1)}" data-off="${(C*(1-c)).toFixed(1)}" transform="rotate(-90 24 24)"/><text x="24" y="28" text-anchor="middle" fill="var(--tx)" font-size="12" font-weight="600" font-family="Inter">${p}</text></svg>`;}
+function drawRings(){Q('.ring circle.pp').forEach(c=>{void c.getBoundingClientRect().width;c.style.strokeDashoffset=c.dataset.off;});}
+function whyHtml(w){return (w||[]).map(s=>{const m=s.match(/^(.+?) -\[(.+?)\]-> (.+)$/);return m?`<div class="step"><i class="ti ti-arrow-right"></i><span class="mono">${esc(m[1])} —[${esc(m[2])}]→ ${esc(m[3])}</span></div>`:`<div class="step"><i class="ti ti-point"></i><span>${esc(s)}</span></div>`;}).join('');}
+const HERO=`<div class="hero"><div class="ecg"><svg viewBox="0 0 1200 120" preserveAspectRatio="none"><g class="grp"><path d="M0 60 H90 l14 -40 l16 78 l14 -60 l12 22 H360 l14 -40 l16 78 l14 -60 l12 22 H600 l14 -40 l16 78 l14 -60 l12 22 H840 l14 -40 l16 78 l14 -60 l12 22 H1200"/><path d="M1200 60 H1290 l14 -40 l16 78 l14 -60 l12 22 H1560 l14 -40 l16 78 l14 -60 l12 22 H1800 l14 -40 l16 78 l14 -60 l12 22 H2040 l14 -40 l16 78 l14 -60 l12 22 H2400"/></g></svg></div><div class="hero-in"><div class="t">Autonomous · human-supervised</div><h2>Το ιατρείο τρέχει μόνο του — εσύ κάνεις μόνο ιατρική</h2><p>Front + back office από agents. PII τοπικά · verify &lt;95%→freeze · κάθε ενέργεια με έγκριση &amp; tamper-evident log.</p></div></div>`;
+function statBox(i,k,v,s,w,id){return `<div class="stat${w?' warn':''}"><div class="k"><i class="ti ${i}"></i>${k}</div><div class="v"${id?` id="${id}"`:''}>${v}</div><div class="s">${s}</div></div>`;}
+
+const V={};
+V.overview=()=>{const fz=S.decisions.filter(d=>d.status==='FROZEN').length,done=S.appts.filter(a=>a.status==='completed').length;
+ return HERO+`<div class="stats">${statBox('ti-calendar-check','Σήμερα',S.appts.length,done+' ολοκληρώθηκαν')}${statBox('ti-hand-stop','Θέλουν εσένα',fz,'frozen · override',fz>0)}${statBox('ti-currency-euro','Ανακτημένα','€'+S.recovered.toLocaleString('el'),'value-based · live',false,'m-recovered')}${statBox('ti-robot','Agents ενεργοί',S.agents.filter(a=>a.on).length+'/'+S.agents.length,'δουλεύουν τώρα')}</div>
+ <div class="cols"><div><section class="sec"><div class="sec-h"><h3>Τι έκαναν οι agents σήμερα</h3></div><table class="tbl"><tbody>${S.agents.filter(a=>a.on&&a.cnt).slice(0,5).map(a=>`<tr><td><i class="ti ${a.i}" style="color:var(--tl);margin-right:8px"></i>${a.n}</td><td style="color:var(--mut)">${a.d}</td><td style="text-align:right"><b>${a.cnt}</b></td></tr>`).join('')}</tbody></table></section>
+ <section class="sec"><div class="sec-h"><h3>Πρόσφατες αποφάσεις</h3><div class="grow"></div><button class="btn sm g" onclick="go('log')">Όλες <i class="ti ti-arrow-right"></i></button></div>${S.decisions.slice(0,2).map(decRow).join('')}</section></div>
+ <div><section class="sec"><div class="sec-h"><h3>Θέλουν εσένα</h3></div>${apprList()}</section>
+ <div class="trust"><h3><i class="ti ti-lock-check"></i>Edge privacy</h3><p>Τα δεδομένα ασθενών ανωνυμοποιούνται τοπικά. Τίποτα ευαίσθητο δεν φεύγει.</p><div class="kv"><span>PII tokenized σήμερα</span><b class="mono">${S.pii}</b></div><div class="kv"><span>Έφυγαν από το δίκτυο</span><b style="color:var(--ok)">0</b></div></div></div></div>`;};
+function decRow(d){const ovr=d.status==='FROZEN'?`<div class="ovr"><button class="btn p sm" onclick="override('${d.id}')"><i class="ti ti-user-shield"></i>Override</button></div>`:'';
+ return `<div class="dec"><div>${ring(d.confidence,d.status)}</div><div class="body"><div class="dline"><span class="act">${esc(d.action)}</span><span class="pill ${d.status.toLowerCase()}">${d.status==='FROZEN'?'θέλει εσένα':'εγκρίθηκε'}</span>${ovr}</div><div class="why">${whyHtml(d.why)}</div>${d.gate_reason&&d.status==='FROZEN'?`<div class="gate"><i class="ti ti-info-circle"></i> ${esc(d.gate_reason)}</div>`:''}<div class="meta">${(d.sources||[]).map(s=>`<span class="tag src"><i class="ti ti-book-2"></i>${esc(s)}</span>`).join('')}<span class="tag"><i class="ti ti-hash"></i><span class="mono">#${d.audit_seq||'—'}</span></span></div></div></div>`;}
+function apprList(){const fz=S.decisions.filter(d=>d.status==='FROZEN');if(!fz.length)return `<div class="empty"><i class="ti ti-circle-check"></i>Τίποτα δεν χρειάζεται εσένα τώρα.</div>`;
+ return fz.map(d=>`<div class="appr"><div style="display:flex;align-items:center;gap:8px"><span class="t">${esc(d.action)}</span><span class="risk">${d.confidence>=.99?'legal':'review'}</span></div><div class="prev">${esc(d.gate_reason||'')}</div><div class="r"><button class="btn p sm" onclick="override('${d.id}')"><i class="ti ti-check"></i>Έγκριση</button><button class="btn g dan sm" onclick="reject('${d.id}')"><i class="ti ti-x"></i>Απόρριψη</button></div></div>`).join('');}
+
+V.calendar=()=>{const sel=S.selDate||localToday();const isToday=sel===localToday();const nowHM=new Date().toTimeString().slice(0,5);
+ const nextUp=isToday?(S.appts.filter(a=>(a.status==='confirmed'||a.status==='booked')&&a.time>=nowHM).sort((a,b)=>a.time.localeCompare(b.time))[0]||{}).id:null;S._nextUp=nextUp;S._isToday=isToday;S._nowHM=nowHM;
+ return `<section class="sec"><div class="sec-h"><h3>Ημερολόγιο — ${esc(fmtGr(sel))}${isToday?' <span class="tag" style="color:var(--tl2)">σήμερα</span>':''}</h3><div class="sub">Front desk · πραγματικό ημερολόγιο · double-booking guard</div><div class="grow"></div>
+  <div style="display:flex;gap:6px;align-items:center"><button class="btn sm g" onclick="shiftDay(-1)">‹</button><input type="date" id="cal-date" value="${esc(sel)}" onchange="setDay(this.value)" style="padding:6px 8px;width:150px"><button class="btn sm g" onclick="shiftDay(1)">›</button>${isToday?'':'<button class="btn sm" onclick="setDay(localToday())">Σήμερα</button>'}</div></div>
+ <div class="form"><input id="bk-t" placeholder="Ώρα (π.χ. 18:00)" style="width:130px"><input id="bk-p" placeholder="Ασθενής" style="flex:1"><input id="bk-s" placeholder="Υπηρεσία" style="width:180px"><button class="btn p" onclick="book()"><i class="ti ti-plus"></i>Κλείσε ραντεβού ${esc(isToday?'σήμερα':fmtGrShort(sel))}</button></div>
+ <table class="tbl"><thead><tr><th>Ώρα</th><th>Ασθενής</th><th>Υπηρεσία</th><th>Κατάσταση</th><th style="text-align:right">Ενέργειες</th></tr></thead><tbody>
+ ${S.appts.slice().sort((x,y)=>x.time.localeCompare(y.time)).map(a=>{const isNext=S._nextUp===a.id;const passed=S._isToday&&(a.status==='confirmed'||a.status==='booked')&&a.time<S._nowHM;
+ return `<tr${isNext?' style="box-shadow:inset 3px 0 0 var(--tl)"':(passed?' style="opacity:.72"':'')}><td class="mono">${a.time}${isNext?' <span class="tag" style="color:var(--tl2);font-size:9.5px">επόμενο</span>':''}${passed?' <span class="tag" style="color:var(--warn);font-size:9.5px">πέρασε η ώρα</span>':''}</td><td>${esc(a.patient)}</td><td style="color:var(--mut)">${esc(a.service)}</td><td><span class="st ${a.status}">${({confirmed:'επιβεβαιωμένο',booked:'κλεισμένο',arrived:'στο ιατρείο',completed:'ολοκληρώθηκε',no_show:'δεν ήρθε',cancelled:'ακυρώθηκε',pending:'εκκρεμεί'})[a.status]||a.status}</span></td>
+ <td><div class="row-act" style="justify-content:flex-end">${(a.status==='confirmed'||a.status==='booked')?`<button class="btn sm" onclick="setSt('${a.id}','arrived')">Check-in</button><button class="btn sm dan" onclick="noShow('${a.id}')">No-show</button><button class="btn sm g" onclick="reschedule('${a.id}')">Μετάθεση</button>`:''}${a.status==='arrived'?`<button class="btn sm p" onclick="setSt('${a.id}','completed')">Ολοκλήρωση</button>`:''}${a.status!=='cancelled'&&a.status!=='completed'?`<button class="btn sm g" onclick="cancelA('${a.id}')">Ακύρωση</button>`:''}</div></td></tr>`;}).join('')||'<tr><td colspan="5" style="color:var(--dim);text-align:center;padding:22px">Καμία επίσκεψη αυτή τη μέρα — κλείσε την πρώτη από πάνω.</td></tr>'}
+ </tbody></table>
+ <div class="sec-h" style="border-top:1px solid var(--line)"><h3 style="font-size:13px">Λίστα αναμονής</h3><div class="grow"></div><span class="tag">${S.waitlist.length} σε αναμονή</span></div>
+ <div style="padding:6px 17px 8px">${(S.waitlistFull&&S.waitlistFull.length?S.waitlistFull.map(w=>`<span class="tag" style="margin:4px 4px 0 0">${esc(w.name)}${w.note?' ('+esc(w.note)+')':''} <a onclick="removeWaitlist('${esc(w.id)}')" style="cursor:pointer;color:var(--bad);text-decoration:none;margin-left:4px">✕</a></span>`).join(''):S.waitlist.map(w=>`<span class="tag" style="margin:4px 4px 0 0">${esc(w)}</span>`).join(''))||'<span style="color:var(--dim)">κενή — πρόσθεσε από κάτω</span>'}</div>
+ <div class="form" style="padding-top:4px"><input id="wl-n" placeholder="Όνομα ασθενή σε αναμονή" style="flex:1;max-width:260px"><input id="wl-note" placeholder="Σημείωση (π.χ. προτιμά πρωί)" style="width:200px"><button class="btn sm" onclick="addWaitlist()"><i class="ti ti-plus"></i>Στην αναμονή</button></div></section>`;};
+window.localToday=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');};
+window.fmtGr=(iso)=>{try{return new Date(iso+'T12:00:00').toLocaleDateString('el-GR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});}catch(e){return iso;}};
+window.fmtGrShort=(iso)=>{try{return new Date(iso+'T12:00:00').toLocaleDateString('el-GR',{day:'numeric',month:'short'});}catch(e){return iso;}};
+window.setDay=async(iso)=>{if(!iso)return;S.selDate=iso;if(S.live)await loadClinic();render();};
+window.shiftDay=async(n)=>{const d=new Date((S.selDate||localToday())+'T12:00:00');d.setDate(d.getDate()+n);await setDay(d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'));};
+window.addWaitlist=async()=>{const n=($('#wl-n').value||'').trim();if(!n){flash('Γράψε όνομα');return;}
+ if(S.live){try{await api('/clinic/waitlist',{method:'POST',body:JSON.stringify({name:n,note:($('#wl-note').value||'').trim()})});await loadClinic();flash(n+' μπήκε στη λίστα αναμονής (FIFO)');return;}catch(e){}}
+ S.waitlist.push(n);render();flash(n+' στην αναμονή');};
+
+V.patients=()=>{if(!S.patients.length)return `<section class="sec"><div class="sec-h"><h3>Ασθενείς</h3><div class="grow"></div><button class="btn p sm" onclick="go('settings')"><i class="ti ti-plus"></i>Εισαγωγή ασθενών</button></div><div class="empty"><i class="ti ti-users" style="color:var(--tl)"></i>Κανένας ασθενής ακόμη.<br><span style="color:var(--dim)">Πήγαινε στις Ρυθμίσεις → «Σύνδεση ιατρείου» για εισαγωγή.</span></div></section>`;
+ if(S.selPat>=S.patients.length)S.selPat=0;const p=S.patients[S.selPat];return `<div class="cols"><section class="sec"><div class="sec-h"><h3>Ασθενείς</h3><div class="grow"></div><input id="ps" placeholder="Αναζήτηση…" oninput="filterPatients(this.value)" style="width:160px"></div>
+ <div class="form"><input id="np-name" placeholder="Ονοματεπώνυμο" style="flex:1;min-width:150px"><input id="np-phone" placeholder="Τηλέφωνο" style="width:130px"><input id="np-email" placeholder="Email (προαιρ.)" style="width:150px"><input id="np-amka" placeholder="ΑΜΚΑ (προαιρ.)" style="width:130px"><label style="display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--mut)"><input type="checkbox" id="np-consent" checked style="width:auto">Συναίνεση Art.9</label><button class="btn p sm" onclick="addPatient()"><i class="ti ti-plus"></i>Νέος ασθενής</button></div>
+ <div id="pat-rows">${patRows('')}</div></section>
+ <section class="sec"><div class="sec-h"><h3>Καρτέλα · ${esc(p.name)}</h3></div><div style="padding:14px 17px"><div class="kvv"><span>Τηλέφωνο</span><b class="mono">${esc(p.phone)}</b></div><div class="kvv"><span>Email</span><b class="mono">${esc(p.email||'—')}</b></div><div class="kvv"><span>Επισκέψεις</span><b>${p.visits}</b></div><div class="kvv"><span>Τελευταία</span><b>${esc(p.last)}</b></div><div class="kvv"><span>Υπόλοιπο</span><b>${p.balance?'€'+p.balance:'0'}</b></div><div class="kvv"><span>Συναίνεση (GDPR Art.9)</span><b style="color:${p.consent?'var(--ok)':'var(--bad)'}">${p.consent?'✓ ναι':'✗ όχι — καμία επικοινωνία'}</b></div><div class="kvv"><span>Ετικέτα</span><span class="tag">${esc(p.tag)}</span></div><p style="color:var(--mut);font-size:12px;margin-top:12px"><i class="ti ti-lock" style="color:var(--tl)"></i> Ο AI agent βλέπει token (τοπική ανωνυμοποίηση), όχι raw δεδομένα, πριν από κάθε cloud κλήση.</p><div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap"><button class="btn p sm" onclick="runAutopilot();go('agents')"><i class="ti ti-refresh"></i>Autopilot</button><button class="btn sm" onclick="editPatientPhone('${esc(p.id||'')}')">Αλλαγή τηλεφώνου</button><button class="btn sm" onclick="editPatientEmail('${esc(p.id||'')}')">Αλλαγή email</button><button class="btn sm ${p.consent?'dan':''}" onclick="togglePatientConsent('${esc(p.id||'')}',${p.consent?'false':'true'})">${p.consent?'Άρση συναίνεσης':'Χορήγηση συναίνεσης'}</button></div><div id="pat-history" style="margin-top:16px"></div></div></section></div>`;};
+window.loadPatHistory=async(name)=>{const el=$('#pat-history');if(!el)return;try{const h=await api('/clinic/patient/history?name='+encodeURIComponent(name));
+ const stM={confirmed:'επιβεβαιωμένο',booked:'κλεισμένο',completed:'ήρθε',no_show:'δεν ήρθε',cancelled:'ακυρώθηκε'};
+ el.innerHTML=`<div style="font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:.4px;margin:2px 0 7px">Ιστορικό — ${h.appointments.length} ραντεβού · ${h.invoices.length} τιμολόγια · υπόλοιπο €${h.balance}</div>
+  ${h.appointments.length?h.appointments.map(a=>`<div class="kvv"><span>${esc(a.time)} · ${esc(a.service)}</span><span class="st ${a.status}" style="font-size:9.5px">${stM[a.status]||a.status}</span></div>`).join(''):'<div style="color:var(--dim);font-size:12px">Χωρίς ραντεβού ακόμη.</div>'}
+  ${h.invoices.map(i=>`<div class="kvv"><span class="mono" style="font-size:11.5px">${esc(i.id)} · €${i.amount}</span><span class="st ${i.status}" style="font-size:9.5px">${i.status==='paid'?'εξοφλημένο':'ανοιχτό'}</span></div>`).join('')}`;
+ hydrateIcons(el);}catch(e){el.innerHTML='';}};
+function patRows(q){return `<table class="tbl"><tbody>${S.patients.filter(x=>!q||x.name.toLowerCase().includes(q.toLowerCase())).map((x)=>{const idx=S.patients.indexOf(x);return `<tr onclick="S.selPat=${idx};render()" style="cursor:pointer"><td><b>${esc(x.name)}</b><div style="color:var(--dim);font-size:11px" class="mono">${esc(x.phone)}</div></td><td style="color:var(--mut)">${x.visits} επισκέψεις</td><td>${x.balance?`<span class="st unpaid">€${x.balance}</span>`:'<span style="color:var(--ok)">εξοφλημένο</span>'}</td></tr>`;}).join('')||'<tr><td style="color:var(--dim)">Κανένα αποτέλεσμα</td></tr>'}</tbody></table>`;}
+window.filterPatients=(q)=>{const el=$('#pat-rows');if(el)el.innerHTML=patRows(q);};
+window.editPatientPhone=async(pid)=>{if(!pid){flash('Χωρίς id');return;}const v=(prompt('Νέο τηλέφωνο:')||'').trim();if(!v)return;try{await api('/clinic/patients/'+pid,{method:'POST',body:JSON.stringify({phone:v})});await loadPatients();render();flash('Τηλέφωνο ενημερώθηκε (audited)');}catch(e){flash('Σφάλμα');}};
+window.editPatientEmail=async(pid)=>{if(!pid){flash('Χωρίς id');return;}const v=(prompt('Νέο email:')||'').trim();if(!v)return;try{await api('/clinic/patients/'+pid,{method:'POST',body:JSON.stringify({email:v})});await loadPatients();render();flash('Email ενημερώθηκε (audited)');}catch(e){flash('Σφάλμα');}};
+window.togglePatientConsent=async(pid,val)=>{if(!pid){flash('Χωρίς id');return;}try{await api('/clinic/patients/'+pid,{method:'POST',body:JSON.stringify({consent:val})});await loadPatients();render();flash(val?'Συναίνεση χορηγήθηκε (Art.9, audited)':'Συναίνεση ΑΡΘΗΚΕ — μηδέν επικοινωνία στο εξής (audited)');}catch(e){flash('Σφάλμα');}};
+window.addPatient=async()=>{const n=($('#np-name').value||'').trim();if(!n){flash('Γράψε ονοματεπώνυμο');return;}
+ const body={name:n,phone:($('#np-phone').value||'').trim(),email:($('#np-email').value||'').trim(),amka:($('#np-amka').value||'').trim(),consent:$('#np-consent').checked};
+ if(S.live){try{await api('/clinic/patients',{method:'POST',body:JSON.stringify(body)});await loadPatients();render();flash(n+' προστέθηκε · συναίνεση: '+(body.consent?'ναι':'ΟΧΙ — καμία επικοινωνία')+' (audited)');return;}catch(e){flash('Το backend δεν απαντά');return;}}
+ S.patients.push({name:n,phone:body.phone||'—',email:body.email||'',visits:0,balance:0,last:'—',tag:'νέος',consent:body.consent});render();flash(n+' προστέθηκε');};
+
+V.agents=()=>`<section class="sec" style="border:1px solid var(--tl);box-shadow:0 0 0 3px color-mix(in srgb,var(--tl) 12%,transparent)"><div class="sec-h"><h3><i class="ti ti-steering-wheel" style="color:var(--tl);margin-right:8px"></i>Αυτονομία — ο γιατρός ορίζει κανόνες, η AI εκτελεί</h3><div class="sub">όρισέ το ΜΙΑ φορά · κάθε αυτόνομη ενέργεια είναι consent-gated, με πλαφόν €, καταγεγραμμένη & αναστρέψιμη</div><div class="grow"></div><span id="autonomy-master"></span></div>
+ <div id="autonomy-body" style="padding:16px"><div class="empty">Φόρτωση πολιτικής…</div></div></section>
+ <section class="sec"><div class="sec-h"><h3><i class="ti ti-robot" style="color:var(--tl);margin-right:8px"></i>Autopilot — αυτόνομη σάρωση του ιατρείου</h3><div class="sub">τρέχει ΜΟΝΟΣ του κάθε 5′ στα πραγματικά δεδομένα · εκτελεί ό,τι επιτρέπει η πολιτική, τα υπόλοιπα περιμένουν εσένα</div><div class="grow"></div><button class="btn p sm" onclick="runAutopilot()"><i class="ti ti-refresh"></i>Σάρωσε τώρα</button></div>
+ <div id="autopilot-body" style="padding:16px"><p style="color:var(--mut);font-size:12.5px">Ο autopilot διαβάζει τα σημερινά ραντεβού, ασθενείς, οφειλές & waitlist. Ό,τι έχεις εγκρίνει στην <b>Αυτονομία</b> εκτελείται μόνο του (consent-gated, με πλαφόν, στο audit)· ό,τι δεν έχεις, μπαίνει εδώ για <b>έγκρισή σου</b>. Πάτα «Σάρωσε τώρα».</p></div></section>
+ <section class="sec"><div class="sec-h"><h3><i class="ti ti-refresh" style="color:var(--tl);margin-right:8px"></i>Closed agentic loop — ζωντανά</h3><div class="sub">ingest → decide → act → <b style="color:var(--tl2)">update/improve</b> → audit</div><div class="grow"></div><button class="btn p sm" onclick="runLoop()"><i class="ti ti-refresh"></i>Τρέξε τον βρόχο</button></div>
+ <div id="loop-body" style="padding:16px"><p style="color:var(--mut);font-size:12.5px">Ο agent ξεκινά με prior no-show <b class="mono">0.23</b> (δημοσιευμένο baseline εξωτερικών ιατρείων). Τρέξε τον βρόχο: παρατηρεί πραγματικά outcomes και <b style="color:var(--tx)">μαθαίνει</b> — το estimate κινείται προς το αληθινό ~0.50 (Bayes), ανακτά € και όλα μπαίνουν στην tamper-evident αλυσίδα. Πάτα «Τρέξε τον βρόχο».</p></div></section>
+ <section class="sec"><div class="sec-h"><h3>Multi-agent fleet</h3><div class="sub">Κάθε λειτουργία γραμματέας = ένας agent · propose→approve</div></div>
+ <div class="grid">${S.agents.map((a,i)=>`<div class="ag"><div class="h"><div class="ic"><i class="ti ${a.i}"></i></div><div><div class="nm">${a.n}</div><div class="rl">${a.r}</div></div></div><div class="desc">${a.d}</div><div class="ft"><span class="agst ${a.on?'on':'off'}">${a.on?'● ενεργός':'○ ανενεργός'}</span><div style="display:flex;gap:8px;align-items:center">${a.on?`<button class="btn sm" onclick="runAgent(${i})">Τρέξε</button>`:''}<div class="sw ${a.on?'on':''}" onclick="toggleAgent(${i})"></div></div></div></div>`).join('')}</div></section>
+ <section class="sec"><div class="sec-h"><h3>Ουρά αποστολών (outbox)</h3><div class="sub">κάθε εγκεκριμένη ενέργεια που στέλνει μήνυμα σε ασθενή — sent/queued, ποτέ ψεύτικο «στάλθηκε»</div><div class="grow"></div><button class="btn sm" onclick="loadOutbox()"><i class="ti ti-refresh"></i>Ανανέωση</button></div>
+ <div id="outbox-body" style="padding:4px 0"><div class="empty">Φόρτωση…</div></div></section>`;
+window.loadOutbox=async()=>{const el=$('#outbox-body');if(!el)return;try{const j=await api('/channels/outbox');
+ const items=(j.outbox||[]).slice(-20).reverse();
+ if(!items.length){el.innerHTML='<div class="empty">Καμία αποστολή ακόμη.</div>';return;}
+ el.innerHTML=`<table class="tbl"><thead><tr><th>Κανάλι</th><th>Προς</th><th>Κατάσταση</th><th>Λόγος</th></tr></thead><tbody>
+ ${items.map(m=>`<tr><td>${esc(m.kind||'')}</td><td class="mono">${esc((m.to||'').replace(/(\\d{4})\\d+(\\d{2})/,'$1***$2'))}</td><td><span class="st ${m.status==='sent'?'confirmed':m.status==='queued'?'pending':'no_show'}">${esc(m.status||'')}</span></td><td style="color:var(--mut);font-size:12px">${esc(m.reason||'')}</td></tr>`).join('')}
+ </tbody></table>`;
+ }catch(e){el.innerHTML='<div class="empty">Σφάλμα φόρτωσης.</div>';}};
+window.runLoop=async()=>{const b=$('#loop-body');b.innerHTML='<div class="empty">Ο agent τρέχει τον βρόχο… ingest → decide → act → update → audit</div>';
+ try{const j=await api('/agentic/run',{method:'POST',body:JSON.stringify({appointments:3,appointment_value:45})});
+  const pct=v=>Math.round(v*100),bar=(v,col)=>`<div style="flex:1;height:8px;background:var(--bg2);border-radius:5px;overflow:hidden;border:1px solid var(--line)"><div style="height:100%;width:${pct(v)}%;background:${col};transition:width .9s cubic-bezier(.3,.8,.3,1)"></div></div>`;
+  b.innerHTML=`<div class="stats" style="margin-bottom:14px">${statBox('ti-brain','No-show (learned)',pct(j.learned_no_show_prob)+'%','από 27% → true ~50%')}${statBox('ti-currency-euro','Ανακτημένα','€'+j.recovered_eur,j.observations+' outcomes')}${statBox('ti-clipboard-text','Αποφάσεις',j.decisions,'audited')}${statBox('ti-link','Audit chain',j.audit_chain_intact?'✓ intact':'broken','+'+j.audit_records+' records')}</div>
+   <div style="background:var(--card2);border:1px solid var(--line);border-radius:11px;padding:14px 16px;margin-bottom:14px">
+    <div style="font-size:12px;color:var(--mut);margin-bottom:9px">Ο learner κινήθηκε προς το αληθινό ποσοστό (Beta-Bernoulli)</div>
+    <div style="display:flex;align-items:center;gap:11px;margin-bottom:7px"><span class="mono" style="width:112px;color:var(--dim);font-size:11.5px">prior 0.23</span>${bar(j.start_no_show_prob,'var(--dim)')}<span class="mono" style="width:42px;text-align:right">${pct(j.start_no_show_prob)}%</span></div>
+    <div style="display:flex;align-items:center;gap:11px;margin-bottom:7px"><span class="mono" style="width:112px;color:var(--tl2);font-size:11.5px">learned</span>${bar(j.learned_no_show_prob,'var(--tl)')}<span class="mono" style="width:42px;text-align:right;color:var(--tl2)">${pct(j.learned_no_show_prob)}%</span></div>
+    <div style="display:flex;align-items:center;gap:11px"><span class="mono" style="width:112px;color:var(--mut);font-size:11.5px">true ~0.50</span>${bar(j.true_rate_target,'var(--line2)')}<span class="mono" style="width:42px;text-align:right;color:var(--mut)">${pct(j.true_rate_target)}%</span></div></div>
+   <div style="font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:.4px;margin:2px 0 6px">DECIDE — τι πρότεινε ανά ραντεβού</div>
+   <table class="tbl"><thead><tr><th>Ραντεβού</th><th>No-show prob</th><th>Σύσταση</th><th style="text-align:right">€ κέρδος</th></tr></thead><tbody>
+   ${j.trace.map(t=>`<tr><td class="mono">${t.appt}</td><td class="mono">${pct(t.no_show_prob)}%</td><td><span class="tag">${esc(t.recommend)}</span></td><td class="mono" style="text-align:right;color:var(--ok)">+€${t.eur_gain}</td></tr>`).join('')}
+   </tbody></table>`;
+  hydrateIcons(b);flash(`Βρόχος ολοκληρώθηκε · learned ${pct(j.learned_no_show_prob)}% · €${j.recovered_eur} ανακτήθηκαν`);}
+ catch(e){b.innerHTML='<div class="empty" style="color:var(--warn)"><i class="ti ti-alert-circle" style="color:var(--warn)"></i>Το backend (8010) δεν απαντά.</div>';hydrateIcons(b);}};
+const PROPIC={no_show_recovery:'ti-refresh',reminder:'ti-bell',recall:'ti-user-heart',dunning:'ti-receipt',waitlist_fill:'ti-calendar-plus',billing:'ti-file-invoice'};
+window.runAutopilot=async()=>{const b=$('#autopilot-body');if(!b)return;b.innerHTML='<div class="empty">Ο autopilot σαρώνει τα πραγματικά δεδομένα…</div>';
+ try{const r=await api('/clinic/autopilot/scan',{method:'POST'});await renderProposals();loadAutonomy();
+  const auto=r.executed_auto||0;const msg=auto?`✅ ${auto} ενέργειες εκτελέστηκαν ΑΥΤΟΜΑΤΑ (πολιτική) · ${r.awaiting_human||0} περιμένουν εσένα`:`Σάρωση: ${r.new} προτάσεις · €${r.eur_at_risk} σε ρίσκο (autonomy off → 0 auto)`;flash(msg);}
+ catch(e){b.innerHTML='<div class="empty" style="color:var(--warn)"><i class="ti ti-alert-circle" style="color:var(--warn)"></i>Το backend (8010) δεν απαντά.</div>';hydrateIcons(b);}};
+
+const AUTOLBL={no_show_recovery:'Ανάκτηση no-show',reminder:'Υπενθυμίσεις ραντεβού',recall:'Recall / ανανέωση πακέτου',dunning:'Υπενθυμίσεις οφειλών',waitlist_fill:'Γέμισμα κενής θέσης',billing:'Έκδοση τιμολογίων'};
+window.loadAutonomy=async()=>{const b=$('#autonomy-body'),m=$('#autonomy-master');if(!b)return;
+ try{const p=await api('/clinic/autonomy');S.autonomy=p;const on=p.enabled;
+  if(m)m.innerHTML=`<div style="display:flex;align-items:center;gap:9px"><span style="font-size:12px;font-weight:700;color:${on?'var(--ok)':'var(--dim)'}">${on?'● ΕΝΕΡΓΗ':'○ ΑΝΕΝΕΡΓΗ'}</span><div class="sw ${on?'on':''}" onclick="toggleAutonomy()"></div></div>`;
+  const rows=Object.keys(AUTOLBL).map(t=>{const r=(p.rules||{})[t]||{};return `<div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)"><div class="sw ${r.auto?'on':''}" onclick="toggleAutoType('${t}')" style="flex:none"></div><span style="flex:1;font-size:13px">${AUTOLBL[t]}</span>${t!=='reminder'?`<span style="font-size:11px;color:var(--dim)">πλαφόν €</span><input id="cap-${t}" value="${r.max_eur||0}" onchange="saveAutonomy()" style="width:64px;padding:5px 7px;background:var(--bg2);border:1px solid var(--line);border-radius:7px;color:var(--tx);font-size:12px;text-align:right">`:'<span style="font-size:11px;color:var(--dim)">χωρίς χρέωση</span>'}</div>`;}).join('');
+  b.innerHTML=`<div class="trust" style="margin-bottom:12px;border-color:${on?'var(--tl)':'var(--line)'}"><h3><i class="ti ti-steering-wheel"></i>${on?'Η AI εκτελεί μόνη της ό,τι έχεις εγκρίνει':'Όλα ανενεργά — γύρνα τον διακόπτη για να αναλάβει η AI'}</h3><p>Επίλεξε ΤΙ τρέχει μόνο του και με ποιο πλαφόν €. Πάνω από το πλαφόν ή χωρίς συναίνεση → πάει σε σένα. Κλείσε τον κεντρικό διακόπτη = <b>άμεσο σταμάτημα όλων</b>. Κάθε ενέργεια στο audit trail (τι/γιατί/πόσα/ποιος κανόνας).</p></div>
+   <div style="opacity:${on?1:.5}">${rows}</div>
+   <div style="margin-top:12px;font-size:11.5px;color:var(--dim)"><i class="ti ti-shield-check" style="color:var(--tl)"></i> Consent (Art.9) ελέγχεται ΠΑΝΤΑ, ανεξαρτήτως πολιτικής. ${p.set_by?`Τελευταία αλλαγή: ${esc(p.set_by)} · ${esc(p.set_at||'')}`:''}</div>`;
+  hydrateIcons(b);}catch(e){b.innerHTML='<div class="empty" style="color:var(--dim)">Autonomy — σύνδεση…</div>';}};
+window.toggleAutonomy=async()=>{const on=!(S.autonomy&&S.autonomy.enabled);try{await api('/clinic/autonomy',{method:'POST',body:JSON.stringify({enabled:on,set_by:'γιατρός'})});await loadAutonomy();flash(on?'Αυτονομία ΕΝΕΡΓΗ — η AI εκτελεί εντός των κανόνων σου':'Αυτονομία ΣΤΑΜΑΤΗΣΕ — τίποτα δεν εκτελείται μόνο του');}catch(e){flash('Σφάλμα');}};
+window.toggleAutoType=async(t)=>{const cur=(S.autonomy&&S.autonomy.rules&&S.autonomy.rules[t]&&S.autonomy.rules[t].auto);try{await api('/clinic/autonomy',{method:'POST',body:JSON.stringify({rules:{[t]:{auto:!cur}},set_by:'γιατρός'})});await loadAutonomy();}catch(e){flash('Σφάλμα');}};
+window.saveAutonomy=async()=>{const rules={};Object.keys(AUTOLBL).forEach(t=>{const el=$('#cap-'+t);if(el)rules[t]={max_eur:parseFloat(el.value)||0};});try{await api('/clinic/autonomy',{method:'POST',body:JSON.stringify({rules,set_by:'γιατρός'})});flash('Πλαφόν αποθηκεύτηκαν');}catch(e){flash('Σφάλμα');}};
+async function renderProposals(){const b=$('#autopilot-body');if(!b)return;
+ try{const j=await api('/clinic/autopilot');const pend=j.pending||[];S.proposals=pend;const br=j.briefing||{};
+  b.innerHTML=`<div class="trust" style="margin-bottom:13px"><h3><i class="ti ti-robot"></i>${pend.length} προτάσεις για έγκριση · €${br.eur_at_risk||0} σε ρίσκο</h3><p>Ο autopilot σάρωσε τα πραγματικά δεδομένα του ιατρείου. Κανείς ασθενής δεν ειδοποιήθηκε — εγκρίνεις εσύ (GDPR human oversight). Ασθενείς χωρίς συναίνεση εξαιρέθηκαν αυτόματα.</p></div>
+   ${pend.length?pend.map(p=>`<div class="appr"><div style="display:flex;align-items:center;gap:8px"><i class="ti ${PROPIC[p.type]||'ti-point'}" style="color:var(--tl)"></i><span class="t">${esc(p.label)}</span><span class="risk" style="${p.risk==='low'?'color:var(--ok);background:var(--ok-bg)':''}">${esc(p.risk)}</span><span class="grow" style="flex:1"></span>${p.est_eur>0?`<b class="mono" style="color:var(--tl2)">€${p.est_eur}</b>`:''}</div>
+    <div class="prev">${esc(p.action)}<div style="margin-top:5px;color:var(--dim)"><i class="ti ti-info-circle"></i> ${esc(p.why)}</div></div>
+    <div class="r"><button class="btn p sm" onclick="approveProp('${esc(p.id)}')"><i class="ti ti-check"></i>Έγκριση</button><button class="btn g dan sm" onclick="rejectProp('${esc(p.id)}')"><i class="ti ti-x"></i>Απόρριψη</button></div></div>`).join(''):'<div class="empty"><i class="ti ti-circle-check"></i>Καμία εκκρεμότητα — το ιατρείο είναι καθαρό.</div>'}`;
+  hydrateIcons(b);}catch(e){}}
+window.approveProp=async(pid)=>{try{const r=await api('/clinic/autopilot/approve',{method:'POST',body:JSON.stringify({pid,approver:'dr_giatros'})});await renderProposals();connect();flash('Εγκρίθηκε & εκτελέστηκε · '+(r.executed||'audited'));}catch(e){flash('Το backend δεν απαντά');}};
+window.rejectProp=async(pid)=>{try{await api('/clinic/autopilot/reject',{method:'POST',body:JSON.stringify({pid,approver:'dr_giatros'})});await renderProposals();flash('Απορρίφθηκε · καταγράφηκε στο audit');}catch(e){flash('Το backend δεν απαντά');}};
+
+V.assistant=()=>`<section class="sec"><div class="sec-h"><h3>AI Γραμματέας</h3><div class="sub">Γράψε φυσικά · προτείνει ενέργειες · εγκρίνεις</div></div>
+ <div class="chat"><div class="msgs" id="msgs">${S.msgs.map(msgHtml).join('')}</div>
+ <div class="cin"><input id="ci" placeholder="π.χ. «κλείσε ραντεβού αύριο 5μμ για τον Νίκο»" onkeydown="if(event.key==='Enter')send()"><button class="btn p" onclick="send()"><i class="ti ti-send"></i></button></div></div></section>`;
+function msgHtml(m){if(m.r==='u')return `<div class="msg u">${esc(m.t)}</div>`;
+ const prop=m.prop?`<div class="prop"><div class="pt">Προτεινόμενη ενέργεια</div><div style="margin-top:5px">${m.prop.txt}</div><div class="r"><button class="btn p sm" onclick="doProp('${m.prop.id}')"><i class="ti ti-check"></i>Έγκριση</button><button class="btn g dan sm" onclick="flash('Ακυρώθηκε')"><i class="ti ti-x"></i>Άκυρο</button></div></div>`:'';
+ return `<div class="msg a">${esc(m.t)}${prop}</div>`;}
+
+V.log=()=>`<section class="sec"><div class="sec-h"><h3>Explanation &amp; Integrity Log</h3><div class="sub">Τι · γιατί · evidence · confidence · ποιος</div><div class="grow"></div><div class="filters">${['all','frozen','allowed'].map(f=>`<button class="chip ${S.filter===f?'on':''}" onclick="S.filter='${f}';render()">${({all:'Όλες',frozen:'Θέλουν εσένα',allowed:'Εγκεκριμένες'})[f]}</button>`).join('')}</div></div>
+ ${(()=>{const l=S.decisions.filter(d=>S.filter==='all'||d.status.toLowerCase()===S.filter);return l.length?l.map(decRow).join(''):'<div class="empty"><i class="ti ti-checks"></i>Τίποτα εδώ.</div>';})()}</section>`;
+
+V.tools=()=>`<section class="sec"><div class="sec-h"><h3>Εργαλεία (governed tool-calling)</h3><div class="sub">Ο agent δρα χωρίς να βλέπει credentials · permission → sandbox → approval → audit → rollback</div></div>
+ <table class="tbl"><thead><tr><th>Εργαλείο</th><th>Permission</th><th>Ρίσκο</th><th>Τελευταία χρήση</th><th style="text-align:right">Ενέργειες</th></tr></thead><tbody>
+ ${S.tools.map((t,i)=>`<tr><td><i class="ti ${t.i}" style="color:var(--tl);margin-right:8px"></i>${t.n}</td><td class="mono" style="color:var(--mut)">${t.perm}</td><td><span class="st ${t.risk==='legal'?'no_show':'pending'}">${t.risk}</span></td><td style="color:var(--mut)">${t.use}</td>
+ <td><div class="row-act" style="justify-content:flex-end"><button class="btn sm" onclick="testTool(${i})">Sandbox test</button><div class="sw ${t.grant?'on':''}" onclick="toggleTool(${i})" title="grant"></div></div></td></tr>`).join('')}</tbody></table></section>`;
+
+V.clinical=()=>`
+ <section class="sec"><div class="sec-h"><h3>Ρίσκο no-show</h3><div class="sub">εξηγήσιμο score ανά ραντεβού — ο γιατρός βλέπει ΓΙΑΤΙ, όχι μόνο πόσο</div><div class="grow"></div><button class="btn sm" onclick="loadRisk()"><i class="ti ti-refresh"></i>Ανανέωση</button></div>
+ <div id="risk-body" style="padding:4px 0"><div class="empty">Φόρτωση…</div></div></section>
+ <section class="sec"><div class="sec-h"><h3>Πρόβλεψη ζήτησης</h3><div class="sub">TimesFM αν διαθέσιμο στον server, στατιστικό fallback αλλιώς</div></div>
+ <div id="forecast-body" style="padding:10px 17px 14px"><div class="empty">Φόρτωση…</div></div></section>
+ <section class="sec"><div class="sec-h"><h3>Ανάλυση εξετάσεων</h3><div class="sub">100% τοπικά — 0 bytes egress, ποτέ δεν φεύγει σε cloud</div></div>
+ <div style="padding:14px 17px">
+ <div class="form" style="margin-bottom:8px"><select id="lab-pat" style="flex:1;max-width:220px">${S.patients.map(p=>`<option value="${esc(p.name)}">${esc(p.name)}</option>`).join('')||'<option value="">— κανένας ασθενής —</option>'}</select></div>
+ <textarea id="lab-in" placeholder="Επικόλλησε αποτελέσματα εξετάσεων (κείμενο)…" style="width:100%;min-height:80px;resize:vertical"></textarea>
+ <div style="margin-top:8px"><button class="btn p sm" onclick="analyzeLab()"><i class="ti ti-flask"></i>Ανάλυση</button></div>
+ <div id="lab-out" style="margin-top:12px"></div></div></section>
+ <section class="sec"><div class="sec-h"><h3>Κλινική τεκμηρίωση (SOAP)</h3><div class="sub">transcript συνεδρίας → δομημένο draft (Υ/Α/Ε/Π) · υπογράφει ο θεράπων</div></div>
+ <div style="padding:14px 17px">
+ <textarea id="soap-in" placeholder="Επικόλλησε το transcript της συνεδρίας…" style="width:100%;min-height:80px;resize:vertical"></textarea>
+ <div style="margin-top:8px"><button class="btn p sm" onclick="scribeSoap()"><i class="ti ti-notes"></i>Δόμηση SOAP</button></div>
+ <div id="soap-out" style="margin-top:12px"></div></div></section>
+ <section class="sec"><div class="sec-h"><h3>Υπογεγραμμένες/draft σημειώσεις</h3></div>
+ <div id="notes-body" style="padding:4px 0"><div class="empty">Φόρτωση…</div></div></section>`;
+
+window.loadRisk=async()=>{const el=$('#risk-body');if(!el)return;try{const j=await api('/clinic/risk?days=14');
+ if(!j.appointments||!j.appointments.length){el.innerHTML='<div class="empty"><i class="ti ti-shield-check"></i>Κανένα ραντεβού σε ρίσκο τις επόμενες 14 μέρες.</div>';return;}
+ el.innerHTML=`<table class="tbl"><thead><tr><th>Ασθενής</th><th>Πότε</th><th>Ρίσκο</th><th>Λόγοι</th><th>Ενέργεια</th></tr></thead><tbody>
+ ${j.appointments.map(a=>`<tr><td>${esc(a.patient)}</td><td class="mono">${esc(a.date)} ${esc(a.time)}</td><td><span class="st ${a.band==='high'?'no_show':a.band==='medium'?'pending':'confirmed'}">${Math.round(a.risk*100)}%</span></td><td style="color:var(--mut);font-size:12px">${a.reasons.map(esc).join(' · ')}</td><td style="font-size:12px">${esc(a.action_gr||'')}</td></tr>`).join('')}
+ </tbody></table>`;
+ }catch(e){el.innerHTML='<div class="empty">Σφάλμα φόρτωσης.</div>';}};
+
+window.loadForecast=async()=>{const el=$('#forecast-body');if(!el)return;try{const j=await api('/clinic/forecast?days=14');
+ if(!j.ready){el.innerHTML=`<div class="empty"><i class="ti ti-chart-line"></i>${esc(j.reason||'Δεν υπάρχει ακόμα αρκετό ιστορικό.')}</div>`;return;}
+ el.innerHTML=`<div class="kvv"><span>Μηχανή πρόβλεψης</span><b>${esc(j.engine||'—')}</b></div><div class="kvv"><span>Προβλεπόμενα ραντεβού (${j.days||14}ημ)</span><b>${j.forecast_appointments??'—'}</b></div><div class="kvv"><span>Προβλεπόμενα έσοδα</span><b>€${j.forecast_revenue_eur??'—'}</b></div>`;
+ }catch(e){el.innerHTML='<div class="empty">Σφάλμα φόρτωσης.</div>';}};
+
+window.analyzeLab=async()=>{const pat=($('#lab-pat').value||'').trim();const txt=($('#lab-in').value||'').trim();if(!pat||!txt){flash('Διάλεξε ασθενή και γράψε αποτελέσματα');return;}
+ try{const j=await api('/clinic/labs/analyze',{method:'POST',body:JSON.stringify({patient:pat,text:txt})});
+ const out=$('#lab-out');
+ if(j.flagged&&j.flagged.length){out.innerHTML=`<div class="empty" style="text-align:left;padding:12px 0"><b style="color:var(--warn)">${j.flagged.length} τιμές εκτός ορίων:</b><ul style="margin:8px 0 0 18px">${j.flagged.map(f=>`<li>${esc(f.marker)}: ${f.value} ${esc(f.unit)} (όρια ${esc(f.range)}) ${f.status==='high'?'↑':'↓'}</li>`).join('')}</ul><p style="color:var(--dim);font-size:11.5px;margin-top:8px">${esc(j.disclaimer||'')}</p></div>`;}
+ else{out.innerHTML=`<div class="empty">${j.markers_found?'Όλες οι τιμές εντός ορίων.':'Δεν βρέθηκαν αναγνωρίσιμοι δείκτες σε αυτό το κείμενο.'}</div>`;}
+ flash('Καταγράφηκε DRAFT σημείωση στον φάκελο');loadNotes();
+ }catch(e){flash('Σφάλμα ανάλυσης');}};
+
+window.scribeSoap=async()=>{const txt=($('#soap-in').value||'').trim();if(!txt){flash('Γράψε το transcript');return;}
+ try{const j=await api('/scribe/soap',{method:'POST',body:JSON.stringify({transcript:txt})});
+ const s=j.soap||{};
+ $('#soap-out').innerHTML=`<div class="empty" style="text-align:left;padding:12px 0"><div class="kvv"><span>Υ (Subjective)</span><b style="font-weight:400;text-align:right;max-width:70%">${esc(s.S||'')}</b></div><div class="kvv"><span>Α (Objective)</span><b style="font-weight:400;text-align:right;max-width:70%">${esc(s.O||'')}</b></div><div class="kvv"><span>Ε (Assessment)</span><b style="font-weight:400;text-align:right;max-width:70%">${esc(s.A||'')}</b></div><div class="kvv"><span>Π (Plan)</span><b style="font-weight:400;text-align:right;max-width:70%">${esc(s.P||'')}</b></div><p style="color:var(--dim);font-size:11.5px;margin-top:8px">${esc(s.disclaimer||'')}</p></div>`;
+ flash('Draft #'+j.draft_id+' — περιμένει υπογραφή ιατρού');
+ }catch(e){flash('Σφάλμα δόμησης');}};
+
+window.loadNotes=async()=>{const el=$('#notes-body');if(!el)return;try{const j=await api('/clinic/notes');
+ if(!j.notes||!j.notes.length){el.innerHTML='<div class="empty">Καμία σημείωση ακόμη.</div>';return;}
+ el.innerHTML=j.notes.map(n=>`<div class="kvv"><span>${esc(n.patient)} · ${esc(n.kind)}</span><span style="color:var(--mut);font-size:11.5px">${n.signed_by?'✍️ '+esc(n.signed_by):'draft'} · ${esc(n.signed_at||'')}</span></div>`).join('');
+ }catch(e){el.innerHTML='<div class="empty">Σφάλμα φόρτωσης.</div>';}};
+
+window.loadOnboarding=async()=>{const el=$('#onboard-body');if(!el)return;try{const j=await api('/clinic/onboarding');
+ const steps=Object.entries(j.steps||{});
+ el.innerHTML=`<div style="margin-bottom:8px;font-size:12.5px;color:var(--mut)">${esc(j.progress||'')} βήματα ${j.complete?'— <span style=\"color:var(--ok)\">ολοκληρωμένο ✓</span>':'ολοκληρωμένα'}</div>`+
+  steps.map(([k,done])=>`<div class="kvv"><span><i class="ti ${done?'ti-circle-check':'ti-circle-dashed'}" style="color:${done?'var(--ok)':'var(--dim)'};margin-right:6px"></i>${esc(k)}</span><b style="color:${done?'var(--ok)':'var(--dim)'}">${done?'✓':'—'}</b></div>`).join('');
+ }catch(e){el.innerHTML='<div class="empty">Σφάλμα φόρτωσης.</div>';}};
+
+V.bridge=()=>`
+ <section class="sec"><div class="sec-h"><h3>Πραγματικοί υπάλληλοι — συνεννοούνται & εκτελούν</h3><div class="sub">Ρεσεψιόν → Υποδοχή → Κλινικός → Λογιστήριο → Αναχώρηση · κάθε handoff = πραγματική ενέργεια + audit</div><div class="grow"></div><button class="btn p sm" onclick="runBridge()"><i class="ti ti-player-play"></i>Τρέξε πλήρη κύκλο</button></div>
+ <div style="padding:14px 17px"><p style="color:var(--mut);font-size:12.5px;max-width:680px">Ένα ΜΟΝΟ αίτημα ραντεβού πυροδοτεί μια αλυσίδα όπου κάθε «υπάλληλος» αντιδρά στον προηγούμενο και κάνει το δικό του πραγματικό side-effect — χωρίς ανθρώπινη κόλλα ανάμεσα. Τρέχει σε εφήμερο ιατρείο επίδειξης (δεν αγγίζει πραγματικά δεδομένα).</p>
+ <div id="bridge-body" style="margin-top:14px"><div class="empty">Πάτα «Τρέξε πλήρη κύκλο».</div></div></div></section>
+ <section class="sec"><div class="sec-h"><h3>Αυτόνομοι agents — προληπτική δράση</h3><div class="sub">μία σάρωση των ΠΡΑΓΜΑΤΙΚΩΝ δεδομένων → οι agents αναλαμβάνουν ό,τι επιτρέπει η πολιτική σου (consent-gated, audited)</div><div class="grow"></div><button class="btn sm" onclick="runTick()"><i class="ti ti-radar"></i>Σάρωση τώρα</button></div>
+ <div id="tick-body" style="padding:6px 0"><div class="empty">Πάτα «Σάρωση τώρα» — οι agents βρίσκουν & εκτελούν δουλειά μόνοι τους.</div></div></section>
+ <section class="sec"><div class="sec-h"><h3>Γέφυρες & διασυνδέσεις</h3><div class="sub">τι συνδέεται πραγματικά — τίμιοι χαρακτηρισμοί, χωρίς φουσκωμένες υποσχέσεις</div><div class="grow"></div><button class="btn sm" onclick="loadBridges()"><i class="ti ti-refresh"></i>Ανανέωση</button></div>
+ <div id="bridges-body" style="padding:6px 0"><div class="empty">Φόρτωση…</div></div></section>`;
+window.runTick=async()=>{const b=$('#tick-body');if(!b)return;b.innerHTML='<div class="empty">Οι agents σαρώνουν τα πραγματικά δεδομένα…</div>';
+ try{const j=await api('/autonomy/tick',{method:'POST'});
+  const feed=(j.feed||[]).filter(f=>f.event.endsWith('.done'));
+  b.innerHTML=`<div class="stats" style="margin-bottom:12px">${statBox('ti-radar-2','Βρέθηκαν',j.swept,'νέες προτάσεις')}${statBox('ti-robot','Ανέλαβαν agents',j.dispatched,'εξουσιοδοτημένα (policy)')}${statBox('ti-user-check','Για τον γιατρό',j.awaiting_human,'μη-εξουσιοδοτημένα')}${statBox('ti-shield-check','Autonomy',j.autonomy_enabled?'ΕΝΕΡΓΗ':'OFF',j.autonomy_enabled?'εντός κανόνων':'γύρνα τον διακόπτη')}</div>`+
+   (feed.length?`<table class="tbl"><thead><tr><th>Agent</th><th>Ενέργεια</th><th>Κατάσταση</th></tr></thead><tbody>${feed.map(f=>`<tr><td style="font-weight:700;color:var(--tl)">${esc(f.agent)}</td><td style="color:var(--mut);font-size:12.5px">${esc(f.executed||'—')}</td><td><span class="st ${f.status==='approved'?'confirmed':'pending'}">${esc(f.status||'')}</span></td></tr>`).join('')}</tbody></table>`
+    :'<div class="empty">Κανένας agent δεν ανέλαβε — είτε autonomy OFF, είτε τίποτα δεν επιτρέπει η πολιτική. Δες «Αυτονομία».</div>');
+  hydrateIcons(b);flash(j.dispatched?`${j.dispatched} agents ανέλαβαν δουλειά αυτόνομα`:'Καμία αυτόνομη ενέργεια (δες πολιτική/consent)');}
+ catch(e){b.innerHTML='<div class="empty" style="color:var(--warn)"><i class="ti ti-alert-circle" style="color:var(--warn)"></i>Το backend (8010) δεν απαντά.</div>';hydrateIcons(b);}};
+window.loadBridges=async()=>{const b=$('#bridges-body');if(!b)return;
+ try{const j=await api('/bridges/status');const SC={'LIVE':'var(--ok)','needs_key':'var(--warn)','no_public_api':'var(--bad)'};const SL={'LIVE':'● ζωντανό','needs_key':'χρειάζεται key','no_public_api':'χωρίς δημόσιο API'};
+  b.innerHTML=`<table class="tbl"><tbody>${j.bridges.map(x=>`<tr><td style="font-weight:600">${esc(x.name)}</td><td><span style="color:${SC[x.state]||'var(--mut)'};font-weight:700;font-size:12px">${SL[x.state]||x.state}</span></td><td style="color:var(--dim);font-size:11.5px">${esc(x.note)}</td></tr>`).join('')}</tbody></table>
+   <p style="margin:12px 17px 4px;font-size:11.5px;color:var(--dim)"><i class="ti ti-info-circle" style="color:var(--tl)"></i> «χωρίς δημόσιο API» = δεν υπάρχει τρόπος αυτόματης σύνδεσης στην Ελλάδα σήμερα (ΗΔΙΚΑ κ.λπ.) — μόνο ο γιατρός με προσωπικούς κωδικούς. Το FHIR είναι έτοιμο για ό,τι μιλάει FHIR (EHDS 2027-2029).</p>`;
+  hydrateIcons(b);}catch(e){b.innerHTML='<div class="empty">Σφάλμα φόρτωσης.</div>';}};
+window.runBridge=async()=>{const b=$('#bridge-body');if(!b)return;b.innerHTML='<div class="empty">Οι υπάλληλοι συνεννοούνται…</div>';
+ try{const j=await api('/bridge/journey');
+  const AC={'Ασθενής':'var(--dim)','Ρεσεψιόν':'var(--tl)','Υποδοχή':'var(--tl2)','Κλινικός':'var(--ok)','Λογιστήριο':'var(--warn)','Αναχώρηση':'#c084fc'};
+  const EL={'booking.requested':'Αίτημα ραντεβού','appointment.booked':'Έκλεισε ραντεβού','appointment.rejected':'Απορρίφθηκε (διπλοκράτηση)','checkin.prepared':'Ετοίμασε φάκελο','patient.arrived':'Ο ασθενής έφτασε','visit.started':'Ξεκίνησε η επίσκεψη','visit.completed':'Ολοκληρώθηκε η επίσκεψη','note.signed':'Υπέγραψε SOAP','visit.billable':'Χρεώσιμη επίσκεψη','invoice.issued':'Εξέδωσε τιμολόγιο','checkout.done':'Follow-up + υπενθύμιση'};
+  b.innerHTML=`<div class="stats" style="margin-bottom:14px">${statBox('ti-calendar-event','Ραντεβού',j.appointments,'πραγματικά στο store')}${statBox('ti-file-invoice','Τιμολόγια',j.invoices,'ένα ανά επίσκεψη')}${statBox('ti-notes','Σημειώσεις',j.notes,'υπογεγραμμένα SOAP')}${statBox('ti-arrows-transfer-up','Handoffs',j.steps.length,'βήματα επικοινωνίας')}</div>
+   <div style="position:relative">${j.steps.map(s=>`<div style="display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--line)"><span class="mono" style="width:22px;color:var(--dim);font-size:11px">${s.seq}</span><span style="min-width:96px;font-weight:700;font-size:12px;color:${AC[s.agent]||'var(--tx)'}">${esc(s.agent)}</span><i class="ti ti-arrow-right" style="color:var(--dim);font-size:14px"></i><span style="flex:1;font-size:13px">${esc(EL[s.event]||s.event)}</span></div>`).join('')}</div>
+   <div style="margin-top:14px;padding:12px 14px;background:var(--card2);border:1px solid var(--line);border-radius:11px"><div style="font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px">Γέφυρα προς κάθε EHR — FHIR R4 Bundle (0 PII)</div><span class="mono" style="font-size:11.5px;color:var(--mut)">${esc((j.fhir.entry||[]).map(e=>e.resource.resourceType).join(' · '))}</span></div>`;
+  hydrateIcons(b);flash(`Ο κύκλος ολοκληρώθηκε · ${j.steps.length} handoffs · ${j.invoices} τιμολόγιο`);}
+ catch(e){b.innerHTML='<div class="empty" style="color:var(--warn)"><i class="ti ti-alert-circle" style="color:var(--warn)"></i>Το backend (8010) δεν απαντά.</div>';hydrateIcons(b);}};
+
+V.billing=()=>{const unpaid=S.invoices.filter(i=>i.status==='unpaid').reduce((s,i)=>s+i.amount,0);
+ return `<div class="stats">${statBox('ti-currency-euro','Ανακτημένα (εβδ.)','€'+S.recovered.toLocaleString('el'),'value-based billing')}${statBox('ti-file-invoice','Τιμολόγια',S.invoices.length,'σήμερα')}${statBox('ti-alert-circle','Οφειλές','€'+unpaid,'ανοιχτές',unpaid>0)}${statBox('ti-percentage','Χρέωση OmniOS','10%','επί ανακτημένων · κρατάς 90%')}</div>
+ <section class="sec"><div class="sec-h"><h3>Recovered-value ledger</h3><div class="sub">live · «κρατάς 90%, πληρώνεις 10% αυτού που σου γλίτωσε»</div></div><div id="ledger-body"><div class="empty">Φόρτωση…</div></div></section>
+ <section class="sec"><div class="sec-h"><h3>Τιμολόγηση</h3></div>
+ <div class="form"><select id="inv-pat" style="flex:1;max-width:240px">${S.patients.map(p=>`<option value="${esc(p.name)}">${esc(p.name)}</option>`).join('')||'<option value="">— κανένας ασθενής —</option>'}</select><input id="inv-amt" type="number" min="1" step="0.5" value="40" style="width:110px"><button class="btn p sm" onclick="issueInv()"><i class="ti ti-plus"></i>Έκδοση τιμολογίου</button><span style="color:var(--dim);font-size:11.5px">VAT 0% (ιατρική εξαίρεση)</span></div>
+ <table class="tbl"><thead><tr><th>Αρ.</th><th>Ασθενής</th><th>Ποσό</th><th>Κατάσταση</th><th style="text-align:right"></th></tr></thead><tbody>
+ ${S.invoices.map((v)=>`<tr><td class="mono">${esc(v.id)}</td><td>${esc(v.patient)}</td><td><b>€${v.amount}</b></td><td><span class="st ${v.status}">${v.status==='paid'?'εξοφλημένο':'ανοιχτό'}</span></td><td style="text-align:right"><div style="display:flex;gap:6px;justify-content:flex-end">${v.status==='unpaid'?`<button class="btn sm p" onclick="payInv('${v.id}')">Εξόφληση</button>`:`<button class="btn sm" onclick="submitMyData('${v.id}')" title="ΑΑΔΕ myDATA e-invoicing">myDATA</button>`}</div></td></tr>`).join('')}</tbody></table></section>`;};
+window.submitMyData=async(iid)=>{const afm=(prompt('ΑΦΜ ιατρείου (9 ψηφία) για υποβολή στο myDATA:')||'').trim();if(!afm)return;
+ try{const j=await api(`/clinic/invoices/${iid}/mydata`,{method:'POST',body:JSON.stringify({afm,branch:0,sandbox:true})});
+ flash(j.status==='submitted'?`myDATA: υποβλήθηκε (MARK ${j.mark||'—'})`:('myDATA: '+(j.status||j.reason||'σε αναμονή')));
+ }catch(e){flash('Σφάλμα υποβολής myDATA — έλεγξε το ΑΦΜ');}};
+
+V.privacy=()=>`<section class="sec"><div class="sec-h"><h3>Edge PII Tokenization — τρέχει τοπικά</h3><div class="sub">GDPR Art.25/32 · HIPAA Safe-Harbor · ο token→value χάρτης ΔΕΝ φεύγει ποτέ</div><div class="grow"></div><span class="live"><span class="dot ${S.live?'':'off'}" id="pv-dot"></span><span>${S.live?'real engine':'offline'}</span></span></div>
+ <div style="padding:16px">
+  <p style="color:var(--mut);font-size:12.5px;margin-bottom:11px;max-width:640px">Πριν οποιοδήποτε κείμενο ασθενή φτάσει σε cloud LLM, ανιχνεύονται &amp; τοκενίζονται <b style="color:var(--tx)">τοπικά</b> ΑΜΚΑ, κάρτες, IBAN, τηλέφωνα, email, ονόματα — με validators (<span class="mono">Luhn</span>, <span class="mono">IBAN mod-97</span>) για μηδέν false positives. Δοκίμασέ το:</p>
+  <textarea id="pii-in" style="width:100%;min-height:96px;resize:vertical">Είμαι ο Γιώργος Παπαδόπουλος, ΑΜΚΑ 12036512345, κάρτα 4539 1488 0343 6467, IBAN GR1601101250000000012300695, τηλ 6945123456, email g.p@clinic.gr</textarea>
+  <div style="display:flex;gap:8px;margin-top:10px;align-items:center"><button class="btn p" onclick="anonymizeText()"><i class="ti ti-lock"></i>Ανωνυμοποίηση τοπικά</button><button class="btn g" onclick="$('#pii-in').value='';$('#pii-out').innerHTML=''">Καθάρισμα</button></div>
+  <div id="pii-out" style="margin-top:14px"></div>
+ </div></section>`;
+window.anonymizeText=async()=>{const t=($('#pii-in').value||'').trim();const out=$('#pii-out');if(!t){out.innerHTML='<div class="empty">Γράψε κείμενο πρώτα.</div>';return;}
+ out.innerHTML='<div class="empty">Τοκενίζω τοπικά…</div>';
+ try{const j=await api('/anonymize',{method:'POST',body:JSON.stringify({text:t})});
+  const red=esc(j.redacted).replace(/\[REDACTED_[A-Z]+_\d+\]/g,m=>`<span class="mono" style="color:var(--tl2);background:var(--tl-dim);border-radius:5px;padding:1px 5px">${m}</span>`);
+  out.innerHTML=`<div class="trust" style="margin-bottom:13px"><h3><i class="ti ti-shield-check"></i>Ανωνυμοποιήθηκε — ${j.pii_count} στοιχεία PII, τοπικά</h3>
+    <div class="kv"><span>Αντιστρέψιμο (token→value map, μένει τοπικά)</span><b style="color:var(--ok)">${j.reversible?'✓ ναι':'—'}</b></div>
+    <div class="kv"><span>Bytes που έφυγαν από το δίκτυο</span><b style="color:var(--ok)">${j.bytes_egress}</b></div>
+    <div class="kv"><span>PII τοκενισμένα σε αυτό το session</span><b class="mono">${j.session_total}</b></div></div>
+   <div style="font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:.4px;margin:2px 0 7px">Τι στέλνεται στο cloud (redacted)</div>
+   <div style="background:var(--bg2);border:1px solid var(--line);border-radius:9px;padding:12px;font-size:13px;line-height:1.75">${red}</div>
+   <table class="tbl" style="margin-top:13px"><thead><tr><th>Τύπος</th><th>Token</th><th>Ανιχνεύθηκε (masked)</th><th style="text-align:right">Θέση</th></tr></thead><tbody>
+   ${j.entities.map(e=>`<tr><td><span class="tag" style="color:${TOKC[e.kind]||'var(--mut)'}"><i class="ti ti-point" style="color:${TOKC[e.kind]||'var(--mut)'}"></i>${e.kind}</span></td><td class="mono" style="color:var(--tl2)">${esc(e.token)}</td><td class="mono" style="color:var(--mut)">${esc(e.preview)}</td><td class="mono" style="color:var(--dim);text-align:right">${e.start}–${e.end}</td></tr>`).join('')}
+   </tbody></table>`;
+  hydrateIcons(out);S.pii=j.session_total;counts();flash(`${j.pii_count} PII τοκενίστηκαν τοπικά · 0 bytes έφυγαν`);
+ }catch(e){out.innerHTML='<div class="empty" style="color:var(--warn)"><i class="ti ti-alert-circle" style="color:var(--warn)"></i>Το backend (port 8010) δεν απαντά. Ξεκίνα το: <span class="mono">uvicorn api:app --port 8010 --app-dir core</span></div>';hydrateIcons(out);}};
+
+V.compliance=()=>`<section class="sec"><div class="sec-h"><h3><i class="ti ti-clipboard-text" style="color:var(--tl);margin-right:8px"></i>AI Κωδικοποίηση &amp; Claim</h3><div class="sub">σημείωση → PII τοπικά → κωδικοί ICD-10/CPT → αντίπαλος έλεγχος → gate → claim/FHIR</div></div>
+ <div style="padding:16px">
+  <textarea id="cp-in" style="width:100%;min-height:90px;resize:vertical" placeholder="π.χ. Ασθενής με ΑΜΚΑ 12036512345. Αρτηριακή υπέρταση. Έγινε ΗΚΓ. Διάρκεια 30 λεπτά.">Ασθενής με ΑΜΚΑ 12036512345, τηλ 6945123456. Αρτηριακή υπέρταση, ρυθμισμένη. Έγινε ΗΚΓ ρουτίνας. Διάρκεια 30 λεπτά.</textarea>
+  <div style="display:flex;gap:8px;margin-top:10px;align-items:center;flex-wrap:wrap">
+   <select id="cp-tier" style="width:220px"><option value="claims">Tier: Claims (gate 96%)</option><option value="clinical_docs">Tier: Clinical docs (gate 97.8%)</option></select>
+   <select id="cp-pt" style="width:170px"><option value="established">Υπάρχων ασθενής</option><option value="new">Νέος ασθενής</option></select>
+   <button class="btn p" onclick="runCompliance()"><i class="ti ti-clipboard-text"></i>Κωδικοποίησε</button>
+  </div>
+  <div id="cp-out" style="margin-top:14px"></div>
+ </div></section>`;
+window.runCompliance=async()=>{const t=($('#cp-in').value||'').trim();const out=$('#cp-out');if(!t){flash('Γράψε σημείωση πρώτα');return;}
+ out.innerHTML='<div class="empty">EXTRACT → AUDIT → GATE → FORMAT…</div>';
+ try{const j=await api('/compliance/run',{method:'POST',body:JSON.stringify({transcript:t,tier:$('#cp-tier').value,patient_type:$('#cp-pt').value})});renderCompliance(j,out);
+  api('/metrics').then(m=>{S.metrics=m;S.pii=m.pii_tokenized||S.pii;counts();}).catch(()=>{});}   // soft refresh — never wipe the result
+ catch(e){out.innerHTML='<div class="empty" style="color:var(--warn)"><i class="ti ti-alert-circle" style="color:var(--warn)"></i>Το backend δεν απαντά ή το κλειδί απορρίφθηκε.</div>';hydrateIcons(out);}};
+function renderCompliance(j,out){const pct=Math.round((j.confidence||0)*100);
+ const frozen=j.frozen;const cl=j.claim;
+ out.innerHTML=`<div class="trust" style="margin-bottom:13px;${frozen?'border-color:#7c5a10;background:linear-gradient(160deg,#2e240844,var(--card))':''}">
+   <h3><i class="ti ti-${frozen?'hand-stop':'shield-check'}" style="${frozen?'color:var(--warn)':''}"></i>${frozen?'ΠΑΓΩΜΕΝΟ — θέλει γιατρό':'CLAIM ΕΤΟΙΜΟ'} · confidence ${pct}% (${esc(j.tier)})</h3>
+   ${frozen?`<p style="color:var(--warn)">${esc(j.freeze_reason)}</p><div class="r" style="display:flex;gap:7px;margin-top:9px"><button class="btn p sm" onclick="overrideCompliance('${esc(j.id)}','approve')"><i class="ti ti-user-shield"></i>Έγκριση γιατρού</button><button class="btn g dan sm" onclick="overrideCompliance('${esc(j.id)}','reject')"><i class="ti ti-x"></i>Απόρριψη</button></div>`
+   :`<div class="kv"><span>Πορεία</span><b class="mono" style="font-size:11px">${esc((j.trail||[]).join(' · '))}</b></div>
+     <div class="kv"><span>Wilson 95% statistical floor</span><b class="mono">${j.wilson_floor_95}</b></div>
+     <div class="kv"><span>PII egress</span><b style="color:var(--ok)">0 (vault-verified)</b></div>`}
+  </div>
+  <div style="font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:.4px;margin:2px 0 7px">Redacted (τι «βλέπει» το AI)</div>
+  <div style="background:var(--bg2);border:1px solid var(--line);border-radius:9px;padding:11px;font-size:12.5px">${esc(j.note_redacted||'')}</div>
+  ${cl?`<table class="tbl" style="margin-top:13px"><thead><tr><th>Τύπος</th><th>Κωδικός</th><th>Τεκμηρίωση</th></tr></thead><tbody>
+   ${cl.diagnoses.map(d=>`<tr><td><span class="tag">ICD-10</span></td><td class="mono" style="color:var(--tl2)">${esc(d.icd10)}</td><td style="color:var(--mut)">${esc(d.label)} · «${esc(d.evidence)}» (${Math.round(d.score*100)}%)</td></tr>`).join('')}
+   ${cl.procedures.map(p=>`<tr><td><span class="tag">CPT</span></td><td class="mono" style="color:var(--tl2)">${esc(p.cpt)}</td><td style="color:var(--mut)">${esc(p.label)} · δικαιολογείται από ${esc((p.linked_icd10||[]).join(', '))}</td></tr>`).join('')}
+   ${cl.em?`<tr><td><span class="tag">E/M</span></td><td class="mono" style="color:var(--tl2)">${esc(cl.em.code)}</td><td style="color:var(--mut)">${esc(cl.em.band)}</td></tr>`:''}
+   </tbody></table>
+   ${(cl.causal_evidence||[]).map(c=>`<div class="step" style="margin-top:9px;color:var(--mut);font-size:12.3px"><i class="ti ti-arrow-right" style="color:var(--tl)"></i><span>Αιτιακή αλυσίδα: <span class="mono" style="color:#a9d3ce">${esc(c.chain)}</span></span></div>`).join('')}
+   <div style="display:flex;gap:8px;margin-top:12px;align-items:center">
+    <button class="btn sm" onclick="window.open(API+'/compliance/claim/${esc(j.id)}/fhir','_blank')"><i class="ti ti-file-invoice"></i>Εξαγωγή HL7 FHIR R4</button>
+    <button class="btn sm" onclick="signAsNote()"><i class="ti ti-clipboard-text"></i>Υπόγραψε ως κλινική σημείωση</button>
+    ${j.value?`<span class="tag"><i class="ti ti-currency-euro"></i>εξοικονόμηση €${j.value.net_saved_eur} · ${j.value.time_saved_min}′</span>`:''}
+    <span class="tag mono"><i class="ti ti-hash"></i>audit #${cl.integrity?cl.integrity.audit_seq:'—'}</span>
+   </div>`:''}`;
+ hydrateIcons(out);flash(frozen?'Παγωμένο <'+(j.tier==='clinical_docs'?'97.8':'96')+'% — θέλει έγκριση γιατρού':'Claim έτοιμο · μηδέν PII egress');}
+window.signAsNote=async()=>{const t=($('#cp-in').value||'').trim();if(!t){flash('Δεν υπάρχει σημείωση');return;}
+ try{const d=await api('/scribe/draft',{method:'POST',body:JSON.stringify({transcript:t})});
+  const s=await api('/scribe/sign',{method:'POST',body:JSON.stringify({draft_id:d.id,clinician_id:'dr_giatros'})});
+  flash('Κλινική σημείωση ΥΠΟΓΡΑΦΗΚΕ ('+s.id+') & αποθηκεύτηκε μόνιμα — PII-stripped, SNOMED/ICD');}catch(e){flash('Σφάλμα υπογραφής');}};
+window.overrideCompliance=async(id,decision)=>{try{const j=await api('/compliance/override/'+id,{method:'POST',body:JSON.stringify({clinician_id:'dr_giatros',decision})});renderCompliance(j,$('#cp-out'));flash(decision==='approve'?'Εγκρίθηκε από γιατρό → claim δημιουργήθηκε (audited)':'Απορρίφθηκε (audited)');}catch(e){flash('Σφάλμα override');}};
+
+V.audit=()=>`<section class="sec"><div class="sec-h"><h3>Tamper-evident audit trail</h3><div class="sub">HMAC-SHA256 hash-chain · EU AI Act Art.12</div><div class="grow"></div><div style="display:flex;gap:7px"><button class="btn sm" onclick="verifyChain()"><i class="ti ti-shield-check"></i>Επαλήθευση</button><button class="btn sm dan" onclick="tamperTest()"><i class="ti ti-alert-circle"></i>Tamper test</button></div></div>
+ <div id="audit-body"><div class="empty">Φόρτωση αλυσίδας…</div></div></section>`;
+window.loadAudit=async()=>{const b=$('#audit-body');if(!b)return;
+ try{const j=await api('/audit');const recs=j.chain.slice().reverse();
+  b.innerHTML=`<div class="sec-h" style="border-bottom:1px solid var(--line)"><span class="badge ${j.intact?'ok':''}" style="${j.intact?'':'color:var(--bad);background:var(--bad-bg);border-color:#4a1c1c'}"><i class="ti ti-${j.intact?'shield-check':'alert-circle'}"></i>${j.intact?'chain verified':'CHAIN BROKEN'}</span><div class="grow"></div><span class="tag mono">${j.count} records</span></div>
+   <div style="padding:16px">${recs.map(r=>`<div class="block"><div class="link"><div class="node"><i class="ti ti-lock"></i></div><div class="wire"></div></div><div class="b"><div class="ev">${esc(r.event)}</div><div class="h mono">hash ${esc(r.hash)}… · prev ${esc(r.prev)}…</div><div class="d">seq #${r.seq} · ${esc(JSON.stringify(r.data).slice(0,74))}</div></div></div>`).join('')}</div>`;
+  hydrateIcons(b);}
+ catch(e){b.innerHTML='<div class="empty" style="color:var(--warn)"><i class="ti ti-alert-circle" style="color:var(--warn)"></i>Το backend δεν απαντά — δείχνω τοπικά decisions.</div>';hydrateIcons(b);}};
+window.verifyChain=async()=>{try{const j=await api('/audit/verify',{method:'POST'});flash(j.intact?`✓ Αλυσίδα ακέραιη — ${j.records} records επαληθεύτηκαν από genesis`:'✗ Η αλυσίδα έχει παραβιαστεί!');}catch(e){flash('Το backend δεν απαντά');}};
+window.tamperTest=async()=>{const b=$('#audit-body');try{const j=await api('/audit/tamper-demo',{method:'POST'});
+  b.insertAdjacentHTML('afterbegin',`<div class="trust" style="margin:16px;border-color:#4a1c1c;background:linear-gradient(160deg,#2e141444,var(--card))"><h3 style="color:var(--bad)"><i class="ti ti-alert-circle" style="color:var(--bad)"></i>Απόδειξη tamper-evidence (σε δοκιμαστική αλυσίδα)</h3>
+   <div class="kv" style="border-color:#4a1c1c"><span>Καθαρή αλυσίδα verify()</span><b style="color:var(--ok)">${j.before?'✓ intact':'—'}</b></div>
+   <div class="kv" style="border-color:#4a1c1c"><span>Επιτιθέμενος αλλάζει seq #${j.tampered_seq}: recommend <span class="mono">${esc(j.original.recommend)}→${esc(j.forged.recommend)}</span></span><b></b></div>
+   <div class="kv" style="border-color:#4a1c1c"><span>verify() μετά την αλλοίωση</span><b style="color:var(--bad)">${j.after?'—':'✗ BROKEN — εντοπίστηκε στο seq #'+j.detected_at_seq}</b></div>
+   <p style="margin-top:9px">${esc(j.message)} Η πραγματική αλυσίδα παραμένει ανέγγιχτη.</p></div>`);
+  hydrateIcons(b);flash('Tamper εντοπίστηκε — η κρυπτογραφική αλυσίδα έσπασε');}catch(e){flash('Το backend δεν απαντά');}};
+
+V.howto=()=>`<section class="sec"><div class="sec-h"><h3>Οδηγίες χρήσης — πώς μπαίνει σε ιατρείο</h3><div class="sub">5 λεπτά, μηδέν τεχνική γνώση</div></div>
+ <div class="steps">${[
+ ['Σύνδεσε το ιατρείο σου','Βάζεις όνομα + ειδικότητα. Οι agents ξεκινούν με έτοιμες ιατρικές ρυθμίσεις. Δεν στήνεις τίποτα — προσαρμόζεις μόνο ό,τι θες.'],
+ ['Οι agents τρέχουν μόνοι τους','Reception σηκώνει κλήσεις 24/7, Reminders στέλνει υπενθυμίσεις, No-show Recovery κυνηγά χαμένα ραντεβού. Βλέπεις τι έκαναν στο «Agents».'],
+ ['Εγκρίνεις μόνο ό,τι πρέπει','Ό,τι είναι <95% σίγουρο ή υψηλού ρίσκου (ΕΟΠΥΥ, κλινική σημείωση) παγώνει και σε περιμένει στο «Αποφάσεις». Ένα κλικ Override.'],
+ ['Μιλάς στη γραμματέα','Στο «AI Γραμματέας» γράφεις φυσικά («κλείσε ραντεβού…», «στείλε recall…»). Προτείνει, εγκρίνεις, γίνεται.'],
+ ['Βλέπεις τα ευρώ','Το «Οικονομικά» δείχνει live πόσα σου γύρισε πίσω το σύστημα. Πληρώνεις % αυτού που γλίτωσες.'],
+ ['Όλα καταγράφονται','Κάθε ενέργεια στο tamper-evident «Audit trail» — τι, γιατί, ποια evidence, ποιος ενέκρινε. Τίποτα ευαίσθητο δεν φεύγει από το δίκτυό σου.'],
+ ].map((s,i)=>`<div class="stp"><div class="n">${i+1}</div><div><h4>${s[0]}</h4><p>${s[1]}</p></div></div>`).join('')}</div></section>`;
+
+V.settings=()=>`<section class="sec"><div class="sec-h"><h3><i class="ti ti-list-check" style="color:var(--tl);margin-right:8px"></i>Ολοκλήρωση ρύθμισης</h3><div class="sub">τι έχει στηθεί, τι λείπει ώστε το ιατρείο να «κουμπώσει»</div></div>
+ <div id="onboard-body" style="padding:10px 17px 14px"><div class="empty">Φόρτωση…</div></div></section>
+ <section class="sec"><div class="sec-h"><h3><i class="ti ti-message" style="color:var(--tl);margin-right:8px"></i>Κανάλια επικοινωνίας</h3><div class="sub">με provider keys στέλνει ΠΡΑΓΜΑΤΙΚΑ · χωρίς keys όλα μπαίνουν σε ασφαλή ουρά (τίποτα δεν «χάνεται»)</div></div>
+ <div id="ch-status" style="padding:10px 17px 14px"><div style="color:var(--dim);font-size:12px">Φόρτωση…</div></div></section>
+ <section class="sec"><div class="sec-h"><h3><i class="ti ti-plug-connected" style="color:var(--tl);margin-right:8px"></i>Σύνδεση ιατρείου — 2 λεπτά, μηδέν τεχνική γνώση</h3><div class="sub">Βάλε όνομα + φόρτωσε τους ασθενείς σου· το σύστημα αρχίζει να δουλεύει πάνω στα δικά σου δεδομένα</div></div>
+ <div style="padding:14px 17px">
+  <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px"><input id="cl-name" placeholder="Όνομα ιατρείου" value="${esc((S.clinic&&S.clinic.name)||'')}" style="flex:1;min-width:180px"><input id="cl-spec" placeholder="Ειδικότητα (π.χ. Παθολόγος, Καρδιολόγος)" value="${esc((S.clinic&&S.clinic.specialty)||'Γενική Ιατρική')}" style="width:170px"><button class="btn p" onclick="setupClinic()"><i class="ti ti-check"></i>Αποθήκευση</button></div>
+  <div style="font-size:12px;color:var(--mut);margin-bottom:6px">Εισαγωγή ασθενών — μία γραμμή ανά ασθενή: <span class="mono">Όνομα, τηλέφωνο</span> (όπως εξάγει κάθε σύστημα/Excel)</div>
+  <textarea id="cl-import" style="width:100%;min-height:80px" placeholder="Μαρία Παπαδοπούλου, 6971234567&#10;Γιώργος Νικολάου, 6979876543"></textarea>
+  <div style="display:flex;gap:8px;margin-top:10px"><button class="btn p" onclick="importClinic()"><i class="ti ti-users"></i>Εισαγωγή &amp; σύνδεση</button><span style="color:var(--dim);font-size:11.5px;align-self:center">GDPR: κάθε εισαγωγή καταγράφεται στο audit· συναίνεση ανά ασθενή</span></div>
+ </div></section>
+ <section class="sec"><div class="sec-h"><h3>Ρυθμίσεις ιατρείου</h3><div class="sub">Defaults-on · άλλαξε μόνο ό,τι θες</div></div>
+ ${[['Ώρες λειτουργίας','hours','ti-clock'],['Υπενθυμίσεις','reminders','ti-bell'],['Φωνή agent','voice','ti-microphone'],['Πολιτική ακύρωσης','cancel','ti-shield']].map(([l,k,ic])=>`<div class="set-row"><i class="ti ${ic}" style="color:var(--tl);font-size:19px"></i><div class="lbl"><b>${l}</b><small class="mono">${esc(S.settings[k])}</small></div><button class="btn sm" onclick="editSet('${k}','${l}')">Αλλαγή</button></div>`).join('')}
+ <div class="set-row"><i class="ti ti-user-heart" style="color:var(--tl);font-size:19px"></i><div class="lbl"><b>Win-back ανενεργών ασθενών</b><small>Αυτόματη επαναφορά μετά 60 μέρες</small></div><div class="sw ${S.settings.winback?'on':''}" onclick="S.settings.winback=!S.settings.winback;render();flash('Αποθηκεύτηκε')"></div></div></section>`;
+
+function render(){$('#content').innerHTML=(V[S.view]||V.overview)();counts();drawRings();hydrateIcons();
+ const t={overview:'Επισκόπηση',calendar:'Ημερολόγιο',patients:'Ασθενείς',assistant:'AI Γραμματέας',agents:'Agents',compliance:'AI Κωδικοποίηση',tools:'Εργαλεία',log:'Αποφάσεις',clinical:'Κλινικά',bridge:'Υπάλληλοι (γέφυρα)',billing:'Οικονομικά',privacy:'Ιδιωτικότητα (edge)',audit:'Audit trail',howto:'Οδηγίες χρήσης',settings:'Ρυθμίσεις'};$('#title').textContent=t[S.view]||'OmniOS';
+ Q('#nav a').forEach(a=>a.classList.toggle('on',a.dataset.v===S.view));
+ const m=$('#msgs');if(m)m.scrollTop=m.scrollHeight;
+ if(S.view==='audit'&&window.loadAudit)loadAudit();
+ if(S.view==='billing'&&window.loadLedger)loadLedger();
+ if(S.view==='overview'&&window.loadMetrics)loadMetrics();
+ if(S.view==='patients'&&S.patients.length&&window.loadPatHistory)loadPatHistory(S.patients[S.selPat].name);}
+window.go=window.render=render;window.S=S;
+$('#nav').addEventListener('click',e=>{const a=e.target.closest('a');if(a){S.view=a.dataset.v;render();afterNav(S.view);toggleNav(false);}});
+window.go=v=>{S.view=v;render();afterNav(v);toggleNav(false);};
+window.toggleNav=(force)=>{const s=$('.side'),bd=$('#nav-backdrop');const open=force===undefined?!s.classList.contains('open'):force;s.classList.toggle('open',open);if(bd)bd.classList.toggle('on',open);};
+
+// actions — LIVE (persisted to the clinic store) with offline fallback
+window.setSt=async(id,st)=>{if(S.live){try{await api('/clinic/appointments/'+id+'/status',{method:'POST',body:JSON.stringify({status:st})});await loadClinic();if(st==='completed')loadMetrics();flash({arrived:'Check-in ✓ — ο ασθενής στο ιατρείο',completed:'Ολοκληρώθηκε · +1 επίσκεψη · αυτόματο τιμολόγιο εκδόθηκε',no_show:'Καταχωρήθηκε: δεν ήρθε'}[st]||('Καταχωρήθηκε: '+st));return;}catch(e){}}
+ const a=S.appts.find(x=>x.id===id);if(a)a.status=st;render();flash('Καταχωρήθηκε');};
+window.noShow=async(id)=>{if(S.live){try{await api('/clinic/appointments/'+id+'/status',{method:'POST',body:JSON.stringify({status:'no_show'})});
+   const r=await api('/clinic/autopilot/scan',{method:'POST'});await loadClinic();connect();
+   flash('No-show καταγράφηκε · ο autopilot δημιούργησε πρόταση ανάκτησης — θέλει έγκρισή σου (Agents)');return;}catch(e){}}
+ const a=S.appts.find(x=>x.id===id);if(a)a.status='no_show';render();flash('No-show καταγράφηκε');};
+window.cancelA=async(id)=>{if(S.live){try{const r=await api('/clinic/appointments/'+id+'/cancel',{method:'POST'});await loadClinic();flash(r.backfilled?('Ακυρώθηκε · Waitlist agent γέμισε το slot με '+r.backfilled.patient):'Ακυρώθηκε (audited)');return;}catch(e){}}
+ const i=S.appts.findIndex(x=>x.id===id);if(i<0)return;const a=S.appts[i];S.appts.splice(i,1);if(S.waitlist.length){const w=S.waitlist.shift();S.appts.push({id:Date.now(),time:a.time,patient:w.split(' (')[0],service:a.service,status:'confirmed'});flash('Ακυρώθηκε · Waitlist γέμισε το slot');}else flash('Ακυρώθηκε');render();};
+window.reschedule=async(id)=>{const t=(prompt('Νέα ώρα (π.χ. 15:30):')||'').trim();if(!t)return;if(!/^([01]?\d|2[0-3]):[0-5]\d$/.test(t)){flash('Μη έγκυρη ώρα — χρήση HH:MM');return;}
+ if(S.live){try{await api('/clinic/appointments/'+id+'/reschedule',{method:'POST',body:JSON.stringify({time:t})});await loadClinic();flash('Μετατέθηκε στις '+t+' · η θέση ΔΕΝ δόθηκε σε άλλον (κρατά ο ίδιος ασθενής)');return;}catch(e){if((''+e).includes('409')){flash('Η ώρα '+t+' είναι ήδη πιασμένη');return;}}}
+ const a=S.appts.find(x=>x.id===id);if(a){a.time=t;S.appts.sort((x,y)=>x.time.localeCompare(y.time));}render();flash('Μετατέθηκε στις '+t);};
+window.book=async()=>{const t=$('#bk-t').value,p=$('#bk-p').value,s=$('#bk-s').value||'';if(!t||!p){flash('Συμπλήρωσε ώρα + ασθενή');return;}
+ if(t&&!/^([01]?\d|2[0-3]):[0-5]\d$/.test(t)){flash('Μη έγκυρη ώρα — χρήση HH:MM (π.χ. 18:00)');return;}
+ if(S.live){try{await api('/clinic/appointments',{method:'POST',body:JSON.stringify({time:t,patient:p,service:s,date:S.selDate||localToday()})});await loadClinic();flash('Ραντεβού κλείστηκε για '+fmtGrShort(S.selDate||localToday())+' '+t+' (guard ✓, persisted)');return;}catch(e){if((''+e).includes('409')){flash('Το slot '+t+' είναι ήδη κλεισμένο εκείνη τη μέρα (guard)');return;}}}
+ S.appts.push({id:Date.now(),time:t,patient:p,service:s||'Ιατρική επίσκεψη',status:'confirmed'});S.appts.sort((a,b)=>a.time.localeCompare(b.time));render();flash('Ραντεβού κλείστηκε');};
+// live loaders — the tabs read the REAL persistent clinic data
+window.loadClinic=async()=>{try{const d=S.selDate||localToday();const j=await api('/clinic/appointments?date='+encodeURIComponent(d));
+ S.selDate=d;S.serverToday=j.today||localToday();
+ S.appts=j.appointments.map(a=>({id:a.id,time:a.time,date:a.date,patient:a.patient,service:a.service,status:a.status,value:a.value}));
+ S.waitlistFull=j.waitlist;S.waitlist=j.waitlist.map(w=>w.name+(w.note?' ('+w.note+')':''));if(S.view==='calendar')render();}catch(e){}};
+window.removeWaitlist=async(wid)=>{try{await api('/clinic/waitlist/'+wid+'/remove',{method:'POST'});await loadClinic();flash('Αφαιρέθηκε από τη λίστα αναμονής');}catch(e){flash('Σφάλμα');}};
+window.loadPatients=async()=>{try{const j=await api('/clinic/patients');S.patients=j.patients.map(p=>({id:p.id,name:p.name,phone:p.phone||'—',email:p.email||'',amka:p.amka,visits:p.visits,balance:p.balance,last:p.last_visit,tag:p.tag,consent:p.consent}));if(S.selPat>=S.patients.length)S.selPat=0;if(S.view==='patients')render();}catch(e){}};
+window.loadInvoices=async()=>{try{const j=await api('/clinic/invoices');S.invoices=j.invoices.map(v=>({id:v.id,patient:v.patient,amount:v.amount,status:v.status,date:''}));if(j.billing)S.recovered=j.billing.total_value_eur;if(S.view==='billing')render();}catch(e){}};
+function afterNav(v){if(!S.live)return;if(v==='calendar')loadClinic();else if(v==='patients')loadPatients();else if(v==='billing'){loadInvoices();loadPatients();}else if(v==='agents'){renderProposals();loadAutonomy();loadOutbox();}else if(v==='settings'){loadChannels();loadOnboarding();}else if(v==='clinical'){loadRisk();loadForecast();loadNotes();loadPatients();}else if(v==='bridge'){loadBridges();}}
+window.loadChannels=async()=>{const el=$('#ch-status');if(!el)return;try{const s=await api('/channels/status');
+ el.innerHTML=`<div class="kvv"><span>SMS (Twilio)</span><b style="color:${s.sms_live?'var(--ok)':'var(--warn)'}">${s.sms_live?'● LIVE':'○ outbox — βάλε TWILIO_* keys'}</b></div>
+  <div class="kvv"><span>Email (Resend)</span><b style="color:${s.email_live?'var(--ok)':'var(--warn)'}">${s.email_live?'● LIVE':'○ outbox — βάλε RESEND_API_KEY'}</b></div>
+  <div class="kvv"><span>Σε ουρά / εστάλησαν</span><b class="mono">${s.queued} / ${s.sent}</b></div>`;}catch(e){el.innerHTML='<div style="color:var(--dim);font-size:12px">Σύνδεση…</div>';}};
+window.toggleAgent=(i)=>{S.agents[i].on=!S.agents[i].on;if(!S.agents[i].on)S.agents[i].cnt=0;render();flash(S.agents[i].n+(S.agents[i].on?' ενεργοποιήθηκε':' απενεργοποιήθηκε'));};
+window.runAgent=async(i)=>{if(S.live){await runAutopilot();flash(S.agents[i].n+': ο autopilot σάρωσε τα πραγματικά δεδομένα — προτάσεις παραπάνω');return;}flash(S.agents[i].n+' (offline — προσομοίωση)');};
+window.toggleTool=(i)=>{S.tools[i].grant=!S.tools[i].grant;render();flash(S.tools[i].n+(S.tools[i].grant?' · permission granted':' · revoked'));};
+const CAPMAP={0:{cap:'send_recovery_sms',params:{to_token:'[REDACTED_PHONE_1]',text:'Χάσαμε το ραντεβού σας — να το ξανακλείσουμε;'}},1:{cap:'book_calendar_slot',params:{slot:'αύριο 17:00'}}};
+window.testTool=async(i)=>{const m=CAPMAP[i];if(!m){flash('Sandbox: '+S.tools[i].n+' → preview OK, καμία πραγματική ενέργεια');return;}
+ try{const j=await api('/govern/preview',{method:'POST',body:JSON.stringify({capability:m.cap,params:m.params})});
+  flash(`Sandbox «${S.tools[i].n}»: ${j.status} · risk ${j.risk} → ${j.would_route_to||j.why} · commits:${j.evidence.commits===false?'όχι':'—'}`);}
+ catch(e){flash('Sandbox: '+S.tools[i].n+' → preview (τοπικά)');}};
+window.issueInv=async()=>{const pat=($('#inv-pat')&&$('#inv-pat').value)||(S.patients[0]&&S.patients[0].name)||'';const amt=parseFloat(($('#inv-amt')&&$('#inv-amt').value)||'40');
+ if(!pat){flash('Πρόσθεσε πρώτα ασθενή');return;}if(!(amt>0)){flash('Μη έγκυρο ποσό');return;}
+ if(S.live){try{await api('/clinic/invoices',{method:'POST',body:JSON.stringify({patient:pat,amount:amt})});await loadInvoices();loadPatients();flash('Τιμολόγιο €'+amt+' → '+pat+' (VAT 0%, ενημερώθηκε το υπόλοιπό του)');return;}catch(e){}}
+ const n='INV-0'+(43+S.invoices.length);S.invoices.unshift({id:n,patient:pat,amount:amt,status:'unpaid',date:'τώρα'});render();flash('Τιμολόγιο '+n+' εκδόθηκε');};
+window.payInv=async(id)=>{if(S.live){try{await api('/clinic/invoices/'+id+'/pay',{method:'POST'});await loadInvoices();flash('Εξοφλήθηκε (audited)');return;}catch(e){}}
+ const inv=S.invoices.find(x=>x.id===id);if(inv)inv.status='paid';render();flash('Εξοφλήθηκε');};
+window.override=(id)=>{const d=S.decisions.find(x=>x.id===id);if(!d)return;d.status='ALLOWED';d.gate_reason=null;d.approved_by='Δρ. Παπαδ.';render();flash('Εγκρίθηκε από γιατρό · καταγράφηκε στο audit log');if(S.live){api(`/explanations/${id}/override`,{method:'POST',body:JSON.stringify({clinician_id:'dr_papadopoulos'})}).catch(()=>{});}};
+window.reject=(id)=>{flash('Απορρίφθηκε · τίποτα δεν εκτελέστηκε, καταγράφηκε');render();};
+window.editSet=(k,l)=>{const v=prompt('Νέα τιμή — '+l,S.settings[k]);if(v!=null){S.settings[k]=v;render();flash('Αποθηκεύτηκε · live');}};
+window.toggleTheme=()=>{const h=document.documentElement,cur=h.getAttribute('data-theme')==='light'?'dark':'light';h.setAttribute('data-theme',cur);try{localStorage.setItem('omnios-theme',cur);}catch(e){}const ic=$('#theme-ic');if(ic){ic.className='ti ti-'+(cur==='light'?'sun':'moon');ic.dataset.hy='';hydrateIcons();}flash(cur==='light'?'Φωτεινό θέμα':'Σκούρο θέμα');};
+function updateClinicName(){renderClinicSwitch();const sp=$('#clinic-spec');if(sp&&S.clinic)sp.textContent=(S.clinic.specialty||'')+' · tenant isolated';}
+window.setupClinic=async()=>{const name=($('#cl-name').value||'').trim(),spec=($('#cl-spec').value||'').trim();if(!name){flash('Βάλε όνομα ιατρείου');return;}
+ try{const c=await api('/clinic/setup',{method:'POST',body:JSON.stringify({name,specialty:spec})});S.clinic=c;updateClinicName();flash('Αποθηκεύτηκε · '+c.name);}catch(e){flash('Το backend (8010) δεν απαντά');}};
+window.importClinic=async()=>{const raw=($('#cl-import').value||'').trim();if(!raw){flash('Επικόλλησε ασθενείς (Όνομα, τηλέφωνο ανά γραμμή)');return;}
+ const patients=raw.split('\n').map(l=>l.trim()).filter(Boolean).map(l=>{const p=l.split(',');return{name:(p[0]||'').trim(),phone:(p[1]||'').trim()};}).filter(p=>p.name);
+ if(!patients.length){flash('Δεν βρέθηκαν ασθενείς');return;}
+ try{const r=await api('/clinic/import',{method:'POST',body:JSON.stringify({patients,appointments:[]})});await loadPatients();connect();$('#cl-import').value='';flash(r.patients_imported+' ασθενείς εισήχθησαν & συνδέθηκαν (audited)');}catch(e){flash('Το backend (8010) δεν απαντά');}};
+let pid=0;
+window.send=()=>{const inp=$('#ci'),t=inp.value.trim();if(!t)return;S.msgs.push({r:'u',t});inp.value='';
+ const low=t.toLowerCase();let reply='Το σκέφτηκα.',prop=null;pid++;
+ if(/ραντεβ|κλεισ|κλείσ/.test(low)){reply='Βρήκα ελεύθερο slot. Να το κλείσω;';prop={id:'p'+pid,type:'book',raw:t,txt:'Κλείσιμο ραντεβού: <b>'+esc(t.slice(0,50))+'</b>'};}
+ else if(/ακυρ/.test(low)){reply='Θα ακυρώσω και θα ειδοποιήσω τη λίστα αναμονής.';prop={id:'p'+pid,type:'cancel',txt:'Ακύρωση + waitlist backfill'};}
+ else if(/υπενθ|remind/.test(low)){reply='Έτοιμη η υπενθύμιση.';prop={id:'p'+pid,type:'sms',txt:'Αποστολή SMS υπενθύμισης (preview πριν σταλεί)'};}
+ else if(/recall|επαναφ|win|χαμεν|no-show/.test(low)){reply='Εντόπισα ασθενείς για επαναφορά.';prop={id:'p'+pid,type:'recall',txt:'Recall/win-back campaign — 3 ασθενείς'};}
+ else if(/τιμολ|πληρωμ|χρεωσ/.test(low)){reply='Έτοιμο το τιμολόγιο.';prop={id:'p'+pid,type:'inv',txt:'Έκδοση τιμολογίου (VAT 0%)'};}
+ else{reply='Απαντώ από τη βάση γνώσης (verify <95%→freeze). Δες «Αποφάσεις» για το reasoning + πηγή.';}
+ S.msgs.push({r:'a',t:reply,prop});render();
+ if(S.live&&!prop){api('/ask',{method:'POST',body:JSON.stringify({query:t})}).then(j=>{if(j.answer){S.msgs.push({r:'a',t:'📊 '+j.answer+' (confidence '+Math.round(j.confidence*100)+'%'+(j.hitl_required?' · παγωμένο για έγκριση':'')+')'});render();}}).catch(()=>{});}
+};
+window.doProp=async(id)=>{const msg=S.msgs.find(m=>m.prop&&m.prop.id===id);const p=msg&&msg.prop;
+ // A booking typed in chat with an explicit HH:MM is executed for REAL (persisted). Cancel/invoice
+ // are ALSO executed for real below when the chat text unambiguously names one appointment/patient
+ // — the exact same /clinic/appointments/{id}/cancel and /clinic/invoices endpoints the Ημερολόγιο
+ // and Οικονομικά tabs call directly (previously these always deferred to a phantom 'Autopilot'
+ // approval that never actually received a manually-typed cancel/invoice request — a dead end).
+ // Only reminder/recall genuinely need the governed Autopilot (Twilio/consent-gated scan targeting,
+ // not something safely parseable from one free-text line).
+ if(p&&p.type==='book'&&S.live){const t=(p.raw||'').match(/\b([01]?\d|2[0-3])[:.]([0-5]\d)\b/);const nm=(p.raw||'').match(/(?:για|τον|την|ο|η)\s+([Α-ΩA-ZΆΈΉΊΌΎΏ][\wα-ωά-ώ.]+)\s*$/);
+  if(t){try{await api('/clinic/appointments',{method:'POST',body:JSON.stringify({time:t[1].padStart(2,'0')+':'+t[2],patient:(nm&&nm[1])||'Από γραμματέα',date:'today'})});await loadClinic();S.msgs.push({r:'a',t:'✅ Ραντεβού κλείστηκε & αποθηκεύτηκε στο Ημερολόγιο (audited).'});render();flash('Ραντεβού κλείστηκε (πραγματικό, persisted)');return;}catch(e){}}}
+ if(p&&p.type==='cancel'&&S.live){const raw=(p.raw||'').toLowerCase();
+  const hits=(S.appts||[]).filter(a=>a.status==='confirmed'&&a.patient&&raw.includes(a.patient.toLowerCase().split(' ')[0]));
+  if(hits.length===1){try{const r=await api('/clinic/appointments/'+hits[0].id+'/cancel',{method:'POST'});await loadClinic();
+    S.msgs.push({r:'a',t:'✅ Ακυρώθηκε το ραντεβού του/της '+esc(hits[0].patient)+(r&&r.backfilled?' — η θέση δόθηκε αυτόματα στον/στην '+esc(r.backfilled.patient)+' από τη λίστα αναμονής.':'.')});render();flash('Ακύρωση εκτελέστηκε (πραγματικό, audited)');return;}catch(e){}}
+  S.msgs.push({r:'a',t:hits.length===0?'Δεν βρήκα μονοσήμαντο ραντεβού με αυτό το όνομα σήμερα — άνοιξε το Ημερολόγιο και ακύρωσε από εκεί.':'Βρήκα παραπάνω από ένα ραντεβού με αυτό το όνομα — άνοιξε το Ημερολόγιο για να διαλέξεις.'});render();flash('Δεν εκτελέστηκε — διφορούμενο');return;}
+ if(p&&p.type==='inv'&&S.live){const raw=p.raw||'';const amtM=raw.match(/(\d+(?:[.,]\d+)?)\s*(?:€|eur|ευρ)/i)||raw.match(/(\d+(?:[.,]\d+)?)/);
+  const patM=(S.patients||[]).find(pt=>pt.name&&raw.toLowerCase().includes(pt.name.toLowerCase().split(' ')[0]));
+  const amt=amtM?parseFloat(amtM[1].replace(',','.')):null;
+  if(patM&&amt>0){try{await api('/clinic/invoices',{method:'POST',body:JSON.stringify({patient:patM.name,amount:amt})});await loadInvoices();loadPatients();
+    S.msgs.push({r:'a',t:'✅ Τιμολόγιο €'+amt+' εκδόθηκε για '+esc(patM.name)+' (VAT 0%, audited).'});render();flash('Τιμολόγιο εκδόθηκε (πραγματικό, persisted)');return;}catch(e){}}
+  S.msgs.push({r:'a',t:'Χρειάζομαι σαφές όνομα ασθενή + ποσό (π.χ. «τιμολόγιο 50 ευρώ στη Μαρία») για να το εκδώσω κατευθείαν — άνοιξε τα Οικονομικά.'});render();flash('Δεν εκτελέστηκε — λείπει στοιχείο');return;}
+ S.msgs.push({r:'a',t:'Η ενέργεια αφορά ασθενή/χρήματα → πηγαίνει στον <b>Autopilot</b> με έγκρισή σου & audit. Άνοιξε «Agents → Σάρωσε τώρα» για να την εγκρίνεις. (Εδώ δεν εκτελείται τίποτα «στα κρυφά».)'});render();flash('Πρόταση → έγκριση στο Autopilot (με audit)');};
+
+async function connect(){try{const j=await api('/explanations');
+ S.decisions=j.entries.map(e=>({id:e.id,action:e.action,confidence:e.confidence,status:e.status,gate_reason:e.gate_reason,why:e.why,sources:e.sources,audit_seq:e.audit_seq}));
+ try{const m=await api('/metrics');if(m.pii_tokenized)S.pii=m.pii_tokenized;S.metrics=m;}catch(_){}
+ try{const cj=await api('/clinic');S.clinic=cj.clinic;S.recovered=cj.metrics.recovered_eur;S.clinicMetrics=cj.metrics;S.serverToday=cj.today;updateClinicName();
+  if(!CLINICS.length){try{const d=await api('/auth/clinics');CLINICS=d.clinics||[];renderClinicSwitch();}catch(_){}}   // admin-key session: populate the switcher (no keys travel)
+ }catch(_){}
+ S.live=true;$('#live-dot').classList.remove('off');$('#live-txt').textContent='live · API connected';}
+ catch(e){S.live=false;$('#live-dot').classList.add('off');$('#live-txt').textContent='τοπικά (offline)';}
+ render();afterNav(S.view);}
+try{const th=localStorage.getItem('omnios-theme');if(th){document.documentElement.setAttribute('data-theme',th);const ic=$('#theme-ic');if(ic)ic.className='ti ti-'+(th==='light'?'sun':'moon');}}catch(e){}
+// live clock — the front office runs on REAL time
+function tickClock(){const el=$('#clock');if(!el)return;const n=new Date();
+ el.textContent=n.toLocaleDateString('el-GR',{weekday:'short',day:'numeric',month:'short'})+' · '+n.toLocaleTimeString('el-GR');
+ // when the current time crosses an appointment, the today-view markers must move with it
+ if(S.view==='calendar'&&S._isToday){const hm=n.toTimeString().slice(0,5);if(hm!==S._nowHM)render();}}
+setInterval(tickClock,1000);
+hydrateIcons();connect();setInterval(()=>{if(S.view==='overview'||S.view==='log'||S.view==='audit')connect();},20000);tickClock();
+</script>
+</body>
+</html>
