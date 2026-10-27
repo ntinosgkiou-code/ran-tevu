@@ -1,7 +1,8 @@
 # OmniOS
 
-A privacy-first, verifiable agentic operating layer for clinics — live pilot at
-**omnios-production.up.railway.app** (password-gated; ask for access).
+A privacy-first, verifiable agentic operating layer for clinics. *Earlier experiment, offline since
+October 2026; the general-purpose successor is
+[ntinosgkiou-code/omnios](https://github.com/ntinosgkiou-code/omnios).*
 
 Documents are ingested with patient data stripped **at the edge**; questions are answered by an
 adversarially-verified retrieval loop that **rejects unsupported claims and escalates to a human
@@ -11,8 +12,7 @@ audit log any clinic can independently verify.
 
 > **On language:** this README is in English, and code (function/variable names, architecture) is
 > English throughout. Clinical note content, some code comments, and the gate/UI copy are Greek —
-> the actual target market — since this is a real system for Greek clinics, not an English-only
-> demo build.
+> the intended target market.
 
 ## Architecture
 
