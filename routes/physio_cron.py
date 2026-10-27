@@ -35,7 +35,7 @@ Core one-liner: "Reminder προλαμβάνει. Recovery επανακτά."
 6. CTA: "Αν σε ενδιαφέρει, απάντησε με ένα 'ναι' και σου το στήνω δωρεάν 14 μέρες."
 7. ΟΧΙ "Σας γράφω γιατί...", ΟΧΙ formal Greek. ΟΧΙ ιατρικές παροτρύνσεις ("πρέπει να συνεχίσει τη θεραπεία") — μόνο "θες να τον ξανακλείσεις;" (booking-only, όχι medical advice).
 
-Signature: — Κωνσταντίνος\n📞 6987747434\n🌐 ran-tevu.gr
+Signature: — Κωνσταντίνος\n📞 6900000000\n🌐 ran-tevu.gr
 
 Επιστρέφεις μόνο JSON: {"subject": "...", "body": "..."}"""
 
@@ -110,7 +110,7 @@ def _send_resend(to_email, subject, body):
     payload = json.dumps({
         "from": "Κωνσταντίνος <noreply@ran-tevu.gr>",
         "to": [to_email],
-        "reply_to": "ntinosgkiou@gmail.com",
+        "reply_to": "owner@example.com",
         "subject": subject,
         "text": body,
         "html": body_html,

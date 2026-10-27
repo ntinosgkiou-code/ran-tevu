@@ -20,7 +20,8 @@ engineering).
 > comments are in Greek, because the target market was Greek clinics.
 
 This repository is a source snapshot: secrets, patient data and internal business documents are
-intentionally excluded (see `.gitignore`).
+intentionally excluded (see `.gitignore`). Contact details in the source (email address, phone
+number) are replaced with placeholders.
 
 ## What it does
 

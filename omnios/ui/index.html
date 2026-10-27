@@ -229,12 +229,9 @@ body::before{content:"";position:fixed;inset:-25%;z-index:0;pointer-events:none;
 </div>
 <div class="flash" id="flash"><i class="ti ti-check"></i><span></span></div>
 <script>
-// Opened as a local file (double-click / old bookmark) → there is no backend running on this
-// machine at :8010, so every fetch would silently fail ("backend δεν απαντά"). Go straight to
-// the real, live, password-gated deployment instead of guessing at a local server that isn't there.
-if (location.protocol === 'file:') {
-  location.replace('https://omnios-production.up.railway.app/');
-}
+// Opened as a local file there is no backend on this machine at :8010, so every fetch would
+// silently fail. The hosted demo that used to be linked here is offline (October 2026);
+// run the API locally (uvicorn on :8010) and serve this page from it.
 // API base auto-detects: served by FastAPI (prod/Railway) → same origin (''); standalone UI on
 // :8098 (local dev, a real uvicorn server running on :8010) → that local API.
 const API=(location.port==='8098')?'http://localhost:8010':'', DEV_KEY=null;

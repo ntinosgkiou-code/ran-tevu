@@ -65,7 +65,7 @@ def build_functions(business_slug: str) -> list:
                     "customer_name": {"type": "string"},
                     "customer_phone": {
                         "type": "string",
-                        "description": "Ελληνικό τηλέφωνο, π.χ. '6987747434'",
+                        "description": "Ελληνικό τηλέφωνο, π.χ. '6900000000'",
                     },
                     "notes": {
                         "type": "string",
@@ -106,7 +106,7 @@ def build_functions(business_slug: str) -> list:
                 "properties": {
                     "customer_phone": {
                         "type": "string",
-                        "description": "Τηλέφωνο πελάτη, π.χ. '6987747434'",
+                        "description": "Τηλέφωνο πελάτη, π.χ. '6900000000'",
                     },
                 },
                 "required": ["customer_phone"],

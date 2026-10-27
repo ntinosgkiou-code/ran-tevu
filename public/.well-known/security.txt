@@ -1,4 +1,4 @@
-Contact: mailto:ntinosgkiou@gmail.com
+Contact: mailto:owner@example.com
 Expires: 2027-12-31T23:59:59.000Z
 Preferred-Languages: el, en
 Canonical: https://www.ran-tevu.gr/.well-known/security.txt

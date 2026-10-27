@@ -745,7 +745,7 @@ def weekly_db_backup():
             print(f"[BACKUP] refusing to send UNENCRYPTED backup ({_ce.__class__.__name__}) — set RANTEVU_ENC_KEY")
             return
 
-        owner_email = os.environ.get("BACKUP_EMAIL", "ntinosgkiou@gmail.com")
+        owner_email = os.environ.get("BACKUP_EMAIL", "owner@example.com")
         resend_key  = os.environ.get("RESEND_API_KEY", "")
         if not resend_key:
             print("[BACKUP] RESEND_API_KEY not set — skipping")
@@ -891,10 +891,10 @@ def auto_cold_email_batch():
 <tr><td style="background:#7C3AED;border-radius:10px"><a href="{demo_url_en}" style="display:block;padding:14px 28px;color:#fff;font-size:15px;font-weight:700;text-decoration:none">See live demo →</a></td></tr>
 </table>
 <p style="margin:12px 0;font-size:14px;color:#374151">📹 90-sec video walkthrough: <a href="{video_url}" style="color:#7C3AED">loom.com/...</a></p>
-<p style="margin:12px 0 0;font-size:14px;color:#374151">If interested, reply here or contact me at <strong>+30 6987747434</strong>.</p>
+<p style="margin:12px 0 0;font-size:14px;color:#374151">If interested, reply here or contact me at <strong>+30 6900000000</strong>.</p>
 </td></tr>
 <tr><td style="background:#F9FAFB;padding:16px 32px;border-top:1px solid #E5E7EB">
-<p style="margin:0;font-size:11px;color:#9CA3AF">Ran-Tevu · {sender_name_en} Gkioulbaxiotis · Rethymno, Greece · +30 6987747434<br>
+<p style="margin:0;font-size:11px;color:#9CA3AF">Ran-Tevu · {sender_name_en} Gkioulbaxiotis · Rethymno, Greece · +30 6900000000<br>
 <a href="{unsub_url}" style="color:#7C3AED">One-click unsubscribe</a> · <a href="{privacy_url}" style="color:#7C3AED">Privacy</a></p>
 </td></tr>
 </table></td></tr></table></body></html>"""
@@ -906,7 +906,7 @@ def auto_cold_email_batch():
                     f"Try it FREE for 14 days. After that €179/month flat. No commitment.\n\n"
                     f"Demo: {demo_url_en}\nVideo: {video_url}\n\n"
                     f"— {sender_name_en}\n"
-                    f"+30 6987747434\n\n"
+                    f"+30 6900000000\n\n"
                     f"---\nUnsubscribe: {unsub_url}\n"
                 )
                 from_header = f"{sender_name_en} <noreply@ran-tevu.gr>"
@@ -926,10 +926,10 @@ def auto_cold_email_batch():
 <tr><td style="background:#7C3AED;border-radius:10px"><a href="{demo_url_el}" style="display:block;padding:14px 28px;color:#fff;font-size:15px;font-weight:700;text-decoration:none">Δείτε live demo →</a></td></tr>
 </table>
 <p style="margin:12px 0;font-size:14px;color:#374151">📹 Video εξήγηση 90 sec: <a href="{video_url}" style="color:#7C3AED">loom.com/...</a></p>
-<p style="margin:12px 0 0;font-size:14px;color:#374151">Αν σας ενδιαφέρει, απαντήστε εδώ ή καλέστε με στο <strong>6987747434</strong>.</p>
+<p style="margin:12px 0 0;font-size:14px;color:#374151">Αν σας ενδιαφέρει, απαντήστε εδώ ή καλέστε με στο <strong>6900000000</strong>.</p>
 </td></tr>
 <tr><td style="background:#F9FAFB;padding:16px 32px;border-top:1px solid #E5E7EB">
-<p style="margin:0;font-size:11px;color:#9CA3AF">Ran-Tevu · Κωνσταντίνος Γκιουλμπαξιώτης · Ρέθυμνο · 6987747434<br>
+<p style="margin:0;font-size:11px;color:#9CA3AF">Ran-Tevu · Κωνσταντίνος Γκιουλμπαξιώτης · Ρέθυμνο · 6900000000<br>
 <a href="{unsub_url}" style="color:#7C3AED">Διαγραφή με ένα κλικ</a> · <a href="{privacy_url}" style="color:#7C3AED">Πολιτική</a></p>
 </td></tr>
 </table></td></tr></table></body></html>"""
@@ -941,7 +941,7 @@ def auto_cold_email_batch():
                     f"Δοκιμάστε ΔΩΡΕΑΝ 14 ημέρες. Μετά €179/μήνα flat. Καμία δέσμευση.\n\n"
                     f"Demo: {demo_url_el}\nVideo: {video_url}\n\n"
                     f"— {sender_name}\n"
-                    f"📞 6987747434\n\n"
+                    f"📞 6900000000\n\n"
                     f"---\nΔιαγραφή: {unsub_url}\n"
                 )
                 from_header = "Κωνσταντίνος <noreply@ran-tevu.gr>"
@@ -949,7 +949,7 @@ def auto_cold_email_batch():
             payload = json.dumps({
                 "from":     from_header,
                 "to":       [email_addr],
-                "reply_to": "ntinosgkiou@gmail.com",
+                "reply_to": "owner@example.com",
                 "subject":  subject,
                 "html":     html,
                 "text":     text,
@@ -1056,7 +1056,7 @@ def check_founder_reminders():
 
                 payload = json.dumps({
                     "from":    "Reminder <noreply@ran-tevu.gr>",
-                    "to":      ["ntinosgkiou@gmail.com"],
+                    "to":      ["owner@example.com"],
                     "subject": f"⚠️ {title} — σε {days_until} {'ημέρα' if days_until == 1 else 'ημέρες'}",
                     "html":    html,
                 }).encode("utf-8")
@@ -1145,7 +1145,7 @@ def send_founder_daily_report():
 </ol>
 
 <div style="background:#F0FDF4;border-left:4px solid #10B981;padding:14px 16px;border-radius:8px;margin-top:20px">
-<p style="margin:0;font-size:13px;color:#065F46"><b>💡 Reminder:</b> Pricing είναι €179/μήνα (Standard) / €299 (Premium) + 14 ημέρες ΔΩΡΕΑΝ χωρίς κάρτα. Phone: 6987747434.</p>
+<p style="margin:0;font-size:13px;color:#065F46"><b>💡 Reminder:</b> Pricing είναι €179/μήνα (Standard) / €299 (Premium) + 14 ημέρες ΔΩΡΕΑΝ χωρίς κάρτα. Phone: 6900000000.</p>
 </div>
 
 </td></tr>
@@ -1161,8 +1161,8 @@ Auto-generated από Claude · Ran-Tevu · Κωνσταντίνος Γκιου�
 
         payload = json.dumps({
             "from":    "Claude (Daily) <noreply@ran-tevu.gr>",
-            "to":      ["ntinosgkiou@gmail.com"],
-            "reply_to": "ntinosgkiou@gmail.com",
+            "to":      ["owner@example.com"],
+            "reply_to": "owner@example.com",
             "subject": f"📊 Daily Report — {today_str}",
             "html":    html,
         }).encode("utf-8")
@@ -2739,7 +2739,7 @@ def run_campaign():
     demo_url     = "https://www.ran-tevu.gr/universal-demo"
     video_url    = "https://www.loom.com/share/a42066026aac476f80663667c84338cf"
     privacy_url  = "https://www.ran-tevu.gr/privacy"
-    reply_to     = "ntinosgkiou@gmail.com"
+    reply_to     = "owner@example.com"
     sender_name  = "Κωνσταντίνος"
 
     results = {"ok": [], "fail": [], "skipped_unsub": 0, "skipped_sent": 0}
@@ -2793,7 +2793,7 @@ def run_campaign():
 </td></tr>
 <tr><td style="background:#F9FAFB;padding:20px 32px;border-top:1px solid #E5E7EB">
   <p style="margin:0 0 8px;font-size:12px;color:#9CA3AF;line-height:1.6">
-    Ran-Tevu · Κωνσταντίνος Γκιουλέκας · Ελλάδα · 📞 6987747434<br>
+    Ran-Tevu · Κωνσταντίνος Γκιουλέκας · Ελλάδα · 📞 6900000000<br>
     Λάβατε αυτό το email επειδή η επιχείρησή σας έχει δημόσια διεύθυνση επικοινωνίας. Νομική βάση: έννομο συμφέρον B2B (άρ. 6§1στ GDPR).
   </p>
   <p style="margin:8px 0 0;font-size:12px;color:#9CA3AF">
@@ -2812,9 +2812,9 @@ def run_campaign():
             f"Δείτε live demo: {demo_url}\n"
             f"Δείτε το βίντεο (90 sec): {video_url}\n\n"
             f"Setup σε 5 λεπτά, χωρίς δέσμευση. Αν σας ενδιαφέρει, απαντήστε εδώ "
-            f"ή καλέστε με στο 6987747434.\n\n"
+            f"ή καλέστε με στο 6900000000.\n\n"
             f"— {sender_name}\n"
-            f"📞 6987747434\n\n"
+            f"📞 6900000000\n\n"
             f"---\n"
             f"Διαγραφή: {unsub_url}\n"
             f"Πολιτική απορρήτου: {privacy_url}"
@@ -3414,7 +3414,7 @@ def admin_setup_sales_demo():
         return jsonify({"error": "unauthorized"}), 401
     try:
         slug = "book-demo"
-        owner_email = os.environ.get("FOUNDER_EMAIL", "ntinosgkiou@gmail.com")
+        owner_email = os.environ.get("FOUNDER_EMAIL", "owner@example.com")
         biz = get_business(slug)
         cfg = {
             "name": "Ran-Tevu — Κλείσε το Demo σου",
@@ -3539,7 +3539,7 @@ def admin_email_raw():
         return jsonify({"error": "empty"}), 400
     try:
         from email_service import send_email_via_resend
-        to = os.environ.get("FOUNDER_EMAIL", "ntinosgkiou@gmail.com")
+        to = os.environ.get("FOUNDER_EMAIL", "owner@example.com")
         ok = send_email_via_resend(to, subject, html)
         return jsonify({"sent": bool(ok), "to": to})
     except Exception as e:
@@ -3572,7 +3572,7 @@ def admin_email_techdoc():
         from_domain = os.environ.get("FROM_DOMAIN", "ran-tevu.gr")
         payload = json.dumps({
             "from": f"Ran-Tevu <noreply@{from_domain}>",
-            "to": ["ntinosgkiou@gmail.com"], "reply_to": "ntinosgkiou@gmail.com",
+            "to": ["owner@example.com"], "reply_to": "owner@example.com",
             "subject": "Τεχνικη Τεκμηριωση - πως δουλευει καθε αυτοματοποιηση",
             "html": html, "attachments": atts,
         }).encode("utf-8")
@@ -3583,7 +3583,7 @@ def admin_email_techdoc():
             "Accept": "application/json"}, method="POST")
         try:
             with _ur.urlopen(req, timeout=20) as r:
-                return jsonify({"sent": True, "to": "ntinosgkiou@gmail.com", "files": len(atts), "status": r.status})
+                return jsonify({"sent": True, "to": "owner@example.com", "files": len(atts), "status": r.status})
         except _ue.HTTPError as e:
             return jsonify({"sent": False, "error": f"HTTP {e.code}", "detail": e.read().decode()[:300]}), 200
         except Exception as e:
@@ -3617,7 +3617,7 @@ def admin_email_decision():
         from_domain = os.environ.get("FROM_DOMAIN", "ran-tevu.gr")
         payload = json.dumps({
             "from": f"Ran-Tevu <noreply@{from_domain}>",
-            "to": ["ntinosgkiou@gmail.com"], "reply_to": "ntinosgkiou@gmail.com",
+            "to": ["owner@example.com"], "reply_to": "owner@example.com",
             "subject": "Decision Dashboard - που παμε απο τα 4 verticals (Excel)",
             "html": html, "attachments": [{"filename": "Ran-Tevu_Decision_Dashboard.xlsx", "content": b64}],
         }).encode("utf-8")
@@ -3628,7 +3628,7 @@ def admin_email_decision():
             "Accept": "application/json"}, method="POST")
         try:
             with _ur.urlopen(req, timeout=20) as r:
-                return jsonify({"sent": True, "to": "ntinosgkiou@gmail.com", "status": r.status})
+                return jsonify({"sent": True, "to": "owner@example.com", "status": r.status})
         except _ue.HTTPError as e:
             return jsonify({"sent": False, "error": f"HTTP {e.code}", "detail": e.read().decode()[:300]}), 200
         except Exception as e:
@@ -3664,7 +3664,7 @@ def admin_email_diary():
         from_domain = os.environ.get("FROM_DOMAIN", "ran-tevu.gr")
         payload = json.dumps({
             "from": f"Ran-Tevu <noreply@{from_domain}>",
-            "to": ["ntinosgkiou@gmail.com"], "reply_to": "ntinosgkiou@gmail.com",
+            "to": ["owner@example.com"], "reply_to": "owner@example.com",
             "subject": "Πληρης αναλυση - πως λειτουργει καθε επιχειρηση (4 verticals)",
             "html": html, "attachments": atts,
         }).encode("utf-8")
@@ -3675,7 +3675,7 @@ def admin_email_diary():
             "Accept": "application/json"}, method="POST")
         try:
             with _ur.urlopen(req, timeout=20) as r:
-                return jsonify({"sent": True, "to": "ntinosgkiou@gmail.com", "files": len(atts), "status": r.status})
+                return jsonify({"sent": True, "to": "owner@example.com", "files": len(atts), "status": r.status})
         except _ue.HTTPError as e:
             return jsonify({"sent": False, "error": f"HTTP {e.code}", "detail": e.read().decode()[:300]}), 200
         except Exception as e:
@@ -3710,7 +3710,7 @@ def admin_email_ops():
         from_domain = os.environ.get("FROM_DOMAIN", "ran-tevu.gr")
         payload = json.dumps({
             "from": f"Ran-Tevu <noreply@{from_domain}>",
-            "to": ["ntinosgkiou@gmail.com"], "reply_to": "ntinosgkiou@gmail.com",
+            "to": ["owner@example.com"], "reply_to": "owner@example.com",
             "subject": "Verticals Operations - 4 niches breakdown (Excel)",
             "html": html,
             "attachments": [{"filename": "Ran-Tevu_Verticals_Operations.xlsx", "content": b64}],
@@ -3722,7 +3722,7 @@ def admin_email_ops():
             "Accept": "application/json"}, method="POST")
         try:
             with _ur.urlopen(req, timeout=15) as r:
-                return jsonify({"sent": True, "to": "ntinosgkiou@gmail.com", "status": r.status})
+                return jsonify({"sent": True, "to": "owner@example.com", "status": r.status})
         except _ue.HTTPError as e:
             return jsonify({"sent": False, "error": f"HTTP {e.code}", "detail": e.read().decode()[:300]}), 200
         except Exception as e:
@@ -3917,8 +3917,8 @@ def admin_email_leads():
         from_domain = os.environ.get("FROM_DOMAIN", "ran-tevu.gr")
         payload = json.dumps({
             "from": f"Ran-Tevu <noreply@{from_domain}>",
-            "to": ["ntinosgkiou@gmail.com"],
-            "reply_to": "ntinosgkiou@gmail.com",
+            "to": ["owner@example.com"],
+            "reply_to": "owner@example.com",
             "subject": f"{len(rows)} fysiotherapeutes gia klhseis - lista",
             "html": html,
             "attachments": [{"filename": "Ran-Tevu_Leads_CALLS.csv", "content": b64}],
@@ -3930,7 +3930,7 @@ def admin_email_leads():
                                    "Accept": "application/json"}, method="POST")
         try:
             with _ur.urlopen(req, timeout=15) as r:
-                return jsonify({"sent": True, "to": "ntinosgkiou@gmail.com", "leads": len(rows), "status": r.status})
+                return jsonify({"sent": True, "to": "owner@example.com", "leads": len(rows), "status": r.status})
         except _ue.HTTPError as e:
             return jsonify({"sent": False, "error": f"HTTP {e.code}", "detail": e.read().decode()[:300]}), 200
         except Exception as e:
@@ -4426,7 +4426,7 @@ def academy_page():
     resp.headers["Cache-Control"] = "public, max-age=300"
     return resp
 
-FOUNDING_TEST_EMAILS = ("ntinosgkiou@gmail.com",)
+FOUNDING_TEST_EMAILS = ("owner@example.com",)
 
 @app.get("/api/founding/spots")
 def founding_spots():
@@ -4491,7 +4491,7 @@ def onboarding_submit():
 <p style="margin-top:20px;color:#666;font-size:13px;">Submitted: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</p>"""
 
         send_email_via_resend(
-            to_email="ntinosgkiou@gmail.com",
+            to_email="owner@example.com",
             subject=f"🆕 Νέος πελάτης: {biz_name} ({biz_type})",
             html=html,
             from_name="Ran-Tevu Onboarding",
@@ -4557,7 +4557,7 @@ def admin_email_playbook():
         return jsonify({"error": "unauthorized"}), 401
     try:
         from email_service import send_email_via_resend
-        to = os.environ.get("OUTREACH_OWNER_EMAIL", "ntinosgkiou@gmail.com")
+        to = os.environ.get("OUTREACH_OWNER_EMAIL", "owner@example.com")
         S = "font-family:Arial,Helvetica,sans-serif;color:#1a1d24;"
         H = lambda t: f'<h2 style="{S}font-size:18px;margin:26px 0 10px;border-left:4px solid #6d8bff;padding-left:10px;">{t}</h2>'
         html = f"""<div style="{S}max-width:640px;margin:0 auto;font-size:15px;line-height:1.6;">
@@ -4654,7 +4654,7 @@ def admin_email_content():
             body = "<pre style='white-space:pre-wrap'>" + raw.replace("<", "&lt;") + "</pre>"
         html = ('<div style="font-family:Arial,Helvetica,sans-serif;max-width:680px;margin:0 auto;'
                 'font-size:15px;line-height:1.6;color:#1a1d24;">' + body + "</div>")
-        to = os.environ.get("OUTREACH_OWNER_EMAIL", "ntinosgkiou@gmail.com")
+        to = os.environ.get("OUTREACH_OWNER_EMAIL", "owner@example.com")
         sent = send_email_via_resend(to_email=to, subject=subj, html=html, from_name="Ran-Tevu Content")
         return jsonify({"sent": bool(sent), "to": to, "chars": len(raw)})
     except Exception as e:

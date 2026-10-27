@@ -1,7 +1,7 @@
 /* TEAM */
 Founder: Konstantinos Gkioulbaxiotis
   Site:    https://www.ran-tevu.gr
-  Email:   ntinosgkiou@gmail.com
+  Email:   owner@example.com
   GitHub:  ntinosgkiou-code
   From:    Rethymno, Crete, Greece
 

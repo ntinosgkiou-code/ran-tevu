@@ -62,7 +62,7 @@ def openai_plugin_manifest():
             "is_user_authenticated": False,
         },
         "logo_url": f"{base}/static/logo.png",
-        "contact_email": "ntinosgkiou@gmail.com",
+        "contact_email": "owner@example.com",
         "legal_info_url": f"{base}/legal/terms",
     })
 
