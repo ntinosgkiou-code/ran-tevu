@@ -1,15 +1,8 @@
 # Ran-Tevu
 
-![status](https://img.shields.io/badge/status-portfolio%20project%2C%20offline%20since%20October%202026-lightgrey)
-
 AI booking and back-office platform for Greek doctors and clinics. Patients book through an AI chat
 instead of calling; the clinic gets a secretary-style back office with patient files, invoicing with
 Greek VAT rules, no-show recovery and a revenue dashboard.
-
-> **Status: portfolio project.** Ran-Tevu was deployed on Railway and offered to Greek clinics as a
-> pilot. It did not reach paying customers and was taken offline in October 2026. The source is
-> published as a record of the work, not as a running service. Nothing here has been re-run for
-> this update.
 
 About 39,500 lines of Python, 64 test files, built and directed by one person (architecture,
 security review and shipping decisions are mine; implementation was done through AI-assisted
